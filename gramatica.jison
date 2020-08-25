@@ -26,7 +26,8 @@
 "boolean"         return 'boolean';
 "string"          return 'string';
 "void"            return 'void';
-
+"true"            return 'true';
+"false"           return 'false';
 "="               return 'igual';
 "{"               return 'curlyBraceOpen';
 "}"               return 'curlyBraceClose';
@@ -61,7 +62,9 @@
 [ \r\t]+            {}
 \n                  {}
 
-[0-9]+("."[0-9]+)?\b    return 'NUMBER';
+[0-9]+("."[0-9]+)?\b            return 'NUMBER';
+\"[^\"]*\"|\'[^\']*\'           return 'STRING';
+([a-zA-Z$._])[a-zA-Z0-9_$.]*	return 'id';
 
 <<EOF>>                 return 'EOF';
 
@@ -70,8 +73,8 @@
 
 
 
-%left 'MAS' 'MENOS'
-%left 'POR' 'DIVIDIDO'
+%left 'mas' 'menos'
+%left 'por' 'division'
 %left UMENOS
 
 %start S
@@ -249,9 +252,10 @@ exp: exp mas exp
 	| exp decrement
 	| NUMBER
 	| STRING
-	| BOOLEAN
+	| true
+	| false
 	| null
-	| undefined
+	//| undefined
 	| id point id
 	| id
 	| id bracketOpen paramFunc bracketClose
