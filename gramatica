@@ -1,0 +1,161 @@
+S -> Bloque
+
+Bloque -> Bloque Instruccion
+		 |Instruccion
+
+Instruccion -> llamadaFuncion
+			|variables
+			|type id = {parsObj}
+			|funciones
+			|IF
+			|WHILE
+			|DOWHILE
+			|SWITCH
+			|FOR
+
+llamadaFuncion -> id(paramFunc)
+
+paramFunc -> paramFuncList
+			|
+
+paramFuncList -> paramFuncList , exp
+				|exp
+
+funciones -> function id funcDec
+
+funcDec -> :types {Content}
+			|{Content}
+
+Content -> funciones Content
+		  |STMT Content
+		  |
+
+STMT -> STMT InstruccionI
+		|InstruccionI
+
+InstruccionI -> llamadFuncion
+				|variables
+				|IF
+				|WHILE
+				|DOWHILE
+				|SWITCH
+				|FOR
+				|break
+				|continue
+				|return;
+				|return exp;
+
+IF -> if(exp){STMT} IFLAST
+
+IFLAST -> else IFCOND
+		|
+
+IFCOND -> if (exp) {STMT} IFLAST
+		 |{STMT}
+
+WHILE -> while ( exp ) { STMT }
+
+DOWHILE -> do { STMT } while(exp);
+
+SWITCH -> switch ( exp ) { FIRSTCASE LASTCASE }
+
+FIRSTCASE -> CASE
+			|
+
+CASE -> CASE case exp : STMT
+	   |case exp : STMT
+
+LASTCASE -> DEFCASE ENDCASE
+
+DEFCASE -> default : STMT
+
+ENDCASE -> CASE
+		  |
+
+FOR -> For (variables;exp;exp) {STMT}
+	  |For (forDec forOP id) {STMT}
+
+forOP -> in
+		|of
+
+forDec -> let id
+		 |id
+
+variables -> defType id defLast ;
+			|id asgnLast ;
+
+
+asignLast -> . id = exp
+			| = exp
+
+parsObj = objType
+		  |
+
+objType -> objType opkv keyvalueT
+		  |keyvalueT
+
+
+opkv -> ,
+	  | ;
+
+keyvalueT -> id : types
+
+defType -> let
+		 | const
+
+defLast -> :types = exp
+          | = exp
+          |
+
+
+types -> number
+	    |boolean
+	    |string
+	    |void
+	    |id
+
+exp -> exp + exp
+	| exp - exp
+	| exp * exp
+	| exp / exp
+	| - exp
+	| exp ** exp
+	| exp % exp
+	| exp > exp
+	| exp < exp
+	| exp >= exp
+	| exp <= exp
+	| exp == exp
+	| exp != exp
+	| exp && exp
+	| exp || exp
+	| !exp
+	| exp ? exp : exp
+	| exp++
+	| exp--
+	| numero
+	| string
+	| boolean
+	| null
+	| undefined
+	| id.id
+	| id
+	| id(paramFunc)
+	| [arrParam]
+	| {objetoParam}
+
+arrParam -> listArrParam
+			|
+
+listArrParam -> listArrParam , Exp
+			   |Exp
+
+objetoParam -> objetoParamList
+			  |
+
+
+objetoParamList -> objetoParamList opkv keyvalue
+		  		  |keyvalue
+
+keyvalue -> id : exp
+
