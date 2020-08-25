@@ -71,11 +71,15 @@
 .                       { console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
 /lex
 
-
-
+%right 'question'
+%left 'or'
+%left 'and'
+%left 'mayorque' 'menorque' 'mayorigualque' 'menorigualque' 'igualdad' 'diferencia'
 %left 'mas' 'menos'
-%left 'por' 'division'
-%left UMENOS
+%left 'por' 'division' 'modulo'
+%left 'potencia'
+%right 'unary'
+%right 'not'
 
 %start S
 
@@ -235,7 +239,7 @@ exp: exp mas exp
 	| exp menos exp
 	| exp por exp
 	| exp division exp
-	| menos exp
+	| menos exp %prec unary
 	| exp potencia exp
 	| exp modulo exp
 	| exp mayorque exp
