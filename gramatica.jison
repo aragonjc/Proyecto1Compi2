@@ -7,7 +7,7 @@
 "continue"        return 'Continue';
 "break"           return 'Break';
 "null"            return 'null';
-"type"            return 'type';
+"type"            return 'Type';
 "const"           return 'const';
 "let"             return 'let';
 "const"           return 'const';
@@ -28,6 +28,7 @@
 "void"            return 'void';
 "true"            return 'true';
 "false"           return 'false';
+"undefined"       return 'undefined';
 "="               return 'igual';
 "{"               return 'curlyBraceOpen';
 "}"               return 'curlyBraceClose';
@@ -77,6 +78,7 @@
 %left 'mayorque' 'menorque' 'mayorigualque' 'menorigualque' 'igualdad' 'diferencia'
 %left 'mas' 'menos'
 %left 'por' 'division' 'modulo'
+%left  'increment' 'decrement'
 %left 'potencia'
 %right 'unary'
 %right 'not'
@@ -94,7 +96,7 @@ Bloque: Bloque Instruccion
 
 Instruccion: llamadaFuncion
             |variables
-            |type id igual curlyBraceOpen parsObj curlyBraceClose
+            |Type id igual curlyBraceOpen parsObj curlyBraceClose
 			|funciones
 			|IF
 			|WHILE
@@ -117,14 +119,16 @@ paramFuncList: paramFuncList comma exp
 funciones: function id funcDec
 ;
 
-funcDec: dosPuntos types curlyBraceOpen Content curlyBraceClose
-		|curlyBraceOpen Content curlyBraceClose
+funcDec: dosPuntos types curlyBraceOpen STMT curlyBraceClose
+		|curlyBraceOpen STMT curlyBraceClose
 ;
 
+/*
 Content: funciones Content
 		|STMT Content
 		|
-;
+;*/
+
 
 STMT: STMT InstruccionI
 	 |InstruccionI
@@ -132,6 +136,7 @@ STMT: STMT InstruccionI
 
 InstruccionI: llamadFuncion
             |variables
+			|funciones
             |IF
             |WHILE
             |DOWHILE
@@ -183,15 +188,17 @@ ENDCASE: CASE
 
 FOR: for bracketOpen variables semicolon exp semicolon exp bracketClose curlyBraceOpen STMT curlyBraceClose
 	|for bracketOpen forDec forOP id bracketClose curlyBraceOpen STMT curlyBraceClose
+	
 ;
 
 forOP: in
 	  |of
 ;
 
-forDec: let id
+forDec: variables
 	   |id
 ;
+
 
 variables: defType id defLast semicolon
 		  |id asgnLast semicolon
@@ -259,7 +266,7 @@ exp: exp mas exp
 	| true
 	| false
 	| null
-	//| undefined
+	| undefined
 	| id point id
 	| id
 	| id bracketOpen paramFunc bracketClose
@@ -271,8 +278,8 @@ arrParam: listArrParam
 		 |
 ;
 
-listArrParam: listArrParam comma Exp
-			|Exp
+listArrParam: listArrParam comma exp
+			|exp
 ;
 
 objetoParam: objetoParamList
