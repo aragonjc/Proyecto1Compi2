@@ -83,6 +83,12 @@
 %right 'unary'
 %right 'not'
 
+%{
+
+    const callFunction = require('./callFunction.js');
+    const TObject = require('./TObject.js');
+%}
+
 %start S
 
 %% /*Gramática*/
