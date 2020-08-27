@@ -112,11 +112,14 @@ llamadaFuncion: id bracketOpen paramFunc bracketClose
 ;
 
 paramFunc: paramFuncList
-		|
+{$$ = $1;}
+		|{$$ = null;}
 ;
 
 paramFuncList: paramFuncList comma exp
+			  {$1.push($3); $$=$1;}
 			  |exp
+			  {$$ = [$1];}
 ;
 
 funciones: function id funcDec
@@ -266,7 +269,7 @@ exp: exp mas exp
 	| exp decrement
 	| NUMBER
 	| STRING
-	{ $$ = $1; }
+	{ $$ = new TObject($1,"STRING"); }
 	| true
 	| false
 	| null
