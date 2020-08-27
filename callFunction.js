@@ -8,7 +8,11 @@ class callFunction extends Node{
     run(scope) {
         
         if(id == "console.log") {
-            
+            if(this.params != null) {
+
+            } else {
+                //error
+            }
         } else {
 
         }
