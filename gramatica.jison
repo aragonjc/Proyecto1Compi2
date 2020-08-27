@@ -88,13 +88,15 @@
 %% /*Gramática*/
 
 S: Bloque EOF
+{ return $1; }
 ;
 
-Bloque: Bloque Instruccion
-	| Instruccion
+Bloque: Bloque Instruccion {$1.push($2); $$=$1;}
+	| Instruccion          { $$=[$1]; }
 ;
 
 Instruccion: llamadaFuncion
+			{ $$ = $1; }
             |variables
             |Type id igual curlyBraceOpen parsObj curlyBraceClose
 			|funciones
@@ -106,6 +108,7 @@ Instruccion: llamadaFuncion
 ;
 
 llamadaFuncion: id bracketOpen paramFunc bracketClose
+{ $$ = new callFunction($1,$3); }
 ;
 
 paramFunc: paramFuncList
@@ -263,6 +266,7 @@ exp: exp mas exp
 	| exp decrement
 	| NUMBER
 	| STRING
+	{ $$ = $1; }
 	| true
 	| false
 	| null
