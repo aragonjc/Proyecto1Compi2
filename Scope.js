@@ -4,7 +4,7 @@ class Scope {
         this.table = new Map();
         this.functionTable = new Map();
     }
-
+/*
     get existLocalVariable(id) {
 
     }
@@ -47,6 +47,6 @@ class Scope {
 
     get globalScope() {
 
-    }
+    }*/
 }
 module.exports = Scope;

@@ -1,4 +1,4 @@
-class Node {
+class Nodo {
     constructor(line,column,value) {
         this.line = line;
         this.column = column;
@@ -6,4 +6,4 @@ class Node {
     }
 
 }
-module.exports = Node;
+module.exports = Nodo;

@@ -113,8 +113,8 @@ Instruccion: llamadaFuncion
 			|FOR
 ;
 
-llamadaFuncion: id bracketOpen paramFunc bracketClose
-{ $$ = new callFunction($1,$3); }
+llamadaFuncion: id bracketOpen paramFunc bracketClose semicolon
+{ $$ = new callFunction(0,0,$1,$3); }
 ;
 
 paramFunc: paramFuncList

@@ -1,6 +1,6 @@
-const Node = require('./Node.js');
+const Nodo = require('./Nodo.js');
 const TObject = require('./TObject.js');
-class callFunction extends Node{
+class callFunction extends Nodo{
     constructor(line, column,id,params) {
         super(line,column,id);
         this.params = params;
@@ -8,7 +8,7 @@ class callFunction extends Node{
 
     run(scope) {
         
-        if(id == "console.log") {
+        if(this.value == "console.log") {
             if(this.params != null) {
                 if(this.params.length == 1) {
                     
@@ -31,7 +31,8 @@ class callFunction extends Node{
                 console.log("-------ERROR----------");
             }
         } else {
-
+            console.log("ERROR");
+            console.log(this.value);
         }
 
     }
