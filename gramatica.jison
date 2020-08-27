@@ -269,7 +269,7 @@ exp: exp mas exp
 	| exp decrement
 	| NUMBER
 	| STRING
-	{ $$ = new TObject($1,"STRING"); }
+	{ $$ = new TObject(0,0,$1,"STRING"); }
 	| true
 	| false
 	| null
