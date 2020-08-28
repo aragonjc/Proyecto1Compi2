@@ -3,7 +3,7 @@ const Scope = require('./Scope.js');
 const fs = require('fs');
 let entrada;
 
-let ast = parser.parse("console.log('adios');");
+let ast = parser.parse('console.log(5%2);');
 
 let scope = new Scope(null);
 

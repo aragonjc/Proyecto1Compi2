@@ -40,9 +40,9 @@
 "."               return 'point';
 "+"               return 'mas';
 "-"               return 'menos';
+"**"              return 'potencia';
 "*"               return 'por';
 "/"               return 'division';
-"**"              return 'potencia';
 "%"               return 'modulo';
 ">"               return 'mayorque';
 "<"               return 'menorque';
@@ -87,6 +87,7 @@
 
     const callFunction = require('./callFunction.js');
     const TObject = require('./TObject.js');
+	const Operation = require('./Operation.js');
 %}
 
 %start S
@@ -255,12 +256,19 @@ types: number
 ;
 
 exp: exp mas exp
+	{ $$ = new Operation(0,0,$1,$3,"+"); }
 	| exp menos exp
+	{ $$ = new Operation(0,0,$1,$3,"-"); }
 	| exp por exp
+	{ $$ = new Operation(0,0,$1,$3,"*"); }
 	| exp division exp
+	{ $$ = new Operation(0,0,$1,$3,"/"); }
 	| menos exp %prec unary
+	{ $$ = new Operation(0,0,$2,null,"unary"); }
 	| exp potencia exp
+	{ $$ = new Operation(0,0,$1,$3,"**"); }
 	| exp modulo exp
+	{ $$ = new Operation(0,0,$1,$3,"%"); }
 	| exp mayorque exp
 	| exp menorque exp
 	| exp mayorigualque exp
@@ -274,12 +282,17 @@ exp: exp mas exp
 	| exp increment
 	| exp decrement
 	| NUMBER
+	{ $$ = new TObject(0,0,$1,"NUMBER"); }
 	| STRING
-	{ $$ = new TObject(0,0,$1,"STRING"); }
+	{ $$ = new TObject(0,0,$1.substring(1,$1.length-1),"STRING"); }
 	| true
+	{ $$ = new TObject(0,0,$1,"BOOL"); }
 	| false
+	{ $$ = new TObject(0,0,$1,"BOOL"); }
 	| null
+	{ $$ = new TObject(0,0,$1,"NULL"); }
 	| undefined
+	{ $$ = new TObject(0,0,$1,"UNDEFINED"); }
 	| id point id
 	| id
 	| id bracketOpen paramFunc bracketClose
