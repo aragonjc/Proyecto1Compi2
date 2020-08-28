@@ -37,6 +37,8 @@
 ";"               return 'semicolon';
 ":"               return 'dosPuntos';
 "."               return 'point';
+"++"              return 'increment';
+"--"              return 'decrement';
 "+"               return 'mas';
 "-"               return 'menos';
 "**"              return 'potencia';
@@ -54,8 +56,6 @@
 "||"              return 'or';
 "!"               return 'not';
 "?"               return 'question';
-"++"              return 'increment';
-"--"              return 'decrement';
 "["               return 'sqBracketOpen';
 "]"               return 'sqBracketClose';
 
@@ -105,6 +105,8 @@ Bloque: Bloque Instruccion {$1.push($2); $$=$1;}
 Instruccion: llamadaFuncion
 			{ $$ = $1; }
             |variables
+			|id++ semicolon
+			|id-- semicolon
             |Type id igual curlyBraceOpen parsObj curlyBraceClose
 			|funciones
 			|IF
@@ -149,6 +151,8 @@ STMT: STMT InstruccionI
 
 InstruccionI: llamadFuncion
             |variables
+			|id++ semicolon
+			|id-- semicolon
 			|funciones
             |IF
             |WHILE
@@ -291,7 +295,9 @@ exp: exp mas exp
 	{ $$ = $2; }
 	| exp question exp dosPuntos exp
 	| exp increment
+	{ $$ = new Operation(0,0,$1,null,"INC"); }
 	| exp decrement
+	{ $$ = new Operation(0,0,$1,null,"DEC"); }
 	| NUMBER
 	{ $$ = new TObject(0,0,$1,"NUMBER"); }
 	| STRING
