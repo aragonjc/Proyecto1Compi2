@@ -29,7 +29,6 @@
 "true"            return 'true';
 "false"           return 'false';
 "undefined"       return 'undefined';
-"="               return 'igual';
 "{"               return 'curlyBraceOpen';
 "}"               return 'curlyBraceClose';
 "("               return 'bracketOpen';
@@ -44,11 +43,12 @@
 "*"               return 'por';
 "/"               return 'division';
 "%"               return 'modulo';
-">"               return 'mayorque';
-"<"               return 'menorque';
 ">="              return 'mayorigualque';
 "<="              return 'menorigualque';
+">"               return 'mayorque';
+"<"               return 'menorque';
 "=="              return 'igualdad';
+"="               return 'igual';
 "!="              return 'diferencia';
 "&&"              return 'and';
 "||"              return 'or';
@@ -270,14 +270,25 @@ exp: exp mas exp
 	| exp modulo exp
 	{ $$ = new Operation(0,0,$1,$3,"%"); }
 	| exp mayorque exp
+	{ $$ = new Operation(0,0,$1,$3,">"); }
 	| exp menorque exp
+	{ $$ = new Operation(0,0,$1,$3,"<"); }
 	| exp mayorigualque exp
+	{ $$ = new Operation(0,0,$1,$3,">="); }
 	| exp menorigualque exp
+	{ $$ = new Operation(0,0,$1,$3,"<="); }
 	| exp igualdad exp
+	{ $$ = new Operation(0,0,$1,$3,"=="); }
 	| exp diferencia exp
+	{ $$ = new Operation(0,0,$1,$3,"!="); }
 	| exp and exp
+	{ $$ = new Operation(0,0,$1,$3,"&&"); }
 	| exp or exp
+	{ $$ = new Operation(0,0,$1,$3,"||"); }
 	| not exp
+	{ $$ = new Operation(0,0,$2,null,"!"); }
+	| bracketOpen exp bracketClose
+	{ $$ = $2; }
 	| exp question exp dosPuntos exp
 	| exp increment
 	| exp decrement
@@ -286,9 +297,9 @@ exp: exp mas exp
 	| STRING
 	{ $$ = new TObject(0,0,$1.substring(1,$1.length-1),"STRING"); }
 	| true
-	{ $$ = new TObject(0,0,$1,"BOOL"); }
+	{ $$ = new TObject(0,0,$1,"BOOLEAN"); }
 	| false
-	{ $$ = new TObject(0,0,$1,"BOOL"); }
+	{ $$ = new TObject(0,0,$1,"BOOLEAN"); }
 	| null
 	{ $$ = new TObject(0,0,$1,"NULL"); }
 	| undefined

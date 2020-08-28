@@ -14,7 +14,10 @@ class callFunction extends Nodo{
                     
                     let tobj = this.params.pop();
                     console.log("----------------------");
-                    console.log(tobj.run(scope).value);
+                    let newTObj = tobj.run(scope);
+                    //console.log(newTObj.type)
+                    console.log(newTObj.value);
+
 
                 } else {
                     new Error(this.params.line,
