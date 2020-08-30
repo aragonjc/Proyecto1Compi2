@@ -65,7 +65,7 @@
 
 [0-9]+("."[0-9]+)?\b            return 'NUMBER';
 \"[^\"]*\"|\'[^\']*\'           return 'STRING';
-([a-zA-Z$._])[a-zA-Z0-9_$.]*	return 'id';
+([a-zA-Z$_])[a-zA-Z0-9_$]*	return 'id';
 
 <<EOF>>                 return 'EOF';
 
@@ -106,10 +106,6 @@ Instruccion: llamadaFuncion
 			{ $$ = $1 + "\n"; }
             |variables
 			{ $$ = $1 + "\n"; }
-			|id increment semicolon
-			{ $$ = $1 + $2 + $3 + "\n"; }
-			|id decrement semicolon
-			{ $$ = $1 + $2 + $3 + "\n"; }
             |Type id igual curlyBraceOpen parsObj curlyBraceClose
 			{ $$ = $1 + " " + $2 +" "+ $3 + " "+ $4 + "\n" + $5 + "\n" + $6 + "\n\n";}
 			|funciones
@@ -127,18 +123,16 @@ Instruccion: llamadaFuncion
 ;
 
 llamadaFuncion: id bracketOpen paramFunc bracketClose semicolon
-{ $$ = new callFunction(0,0,$1,$3); }
+{ $$ = $1 + $2 + $3 +$4 +$5; }
 ;
 
-paramFunc: paramFuncList
-{$$ = $1;}
-		|{$$ = null;}
+paramFunc: paramFuncList {$$ = $1;}
+		|                {$$ = "";}
 ;
 
 paramFuncList: paramFuncList comma exp
-			  {$1.push($3); $$=$1;}
-			  |exp
-			  {$$ = [$1];}
+			  {$$ = $1 + $2 + " " + $3;}
+			  |exp {$$ = $1;}
 ;
 
 funciones: function id bracketOpen funcParam bracketClose funcDec
@@ -169,8 +163,6 @@ STMT: STMT InstruccionI
 
 InstruccionI: llamadFuncion
             |variables
-			|id++ semicolon
-			|id-- semicolon
 			|funciones
             |IF
             |WHILE
@@ -237,13 +229,25 @@ forDec: variables
 
 variables: defType id defLast semicolon
 		   { $$ = new Variable(0,0,$1,$2,); }
-		  |id asgnLast semicolon
+		  |id asignLast semicolon
 ;
 
 
-asignLast: point id igual exp
-		 | igual exp
+asignLast: point id asignLastF
+		 | asignLastF
 ;
+
+asignLastF:  igual exp
+			|increment
+			{ $$ = $1; }
+			|decrement
+			{ $$ = $1; }	
+;
+
+
+
+
+
 
 parsObj: objType {$$ = $1;}
 		|{$$ = "";}

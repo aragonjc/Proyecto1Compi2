@@ -1,10 +1,10 @@
-type AVLNode = {
-    left: AVLNode,
-    right: AVLNode,
-    height: number,
-    value: number
-}
-
-type AVLTree = {
-    root: AVLNode
-}
+insert(tree.root, 19);
+insert(tree.root, 29);
+insert(tree.root, 99);
+insert(tree.root, 9);
+insert(tree.root, 2);
+insert(tree.root, 32);
+insert(tree.root, 4);
+insert(tree.root, 0);
+insert(tree.root, 1);
+preOrder(tree.root);
