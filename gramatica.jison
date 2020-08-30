@@ -103,17 +103,27 @@ Bloque: Bloque Instruccion {$1.push($2); $$=$1;}
 ;
 
 Instruccion: llamadaFuncion
-			{ $$ = $1; }
+			{ $$ = $1 + "\n"; }
             |variables
-			|id++ semicolon
-			|id-- semicolon
+			{ $$ = $1 + "\n"; }
+			|id increment semicolon
+			{ $$ = $1 + $2 + $3 + "\n"; }
+			|id decrement semicolon
+			{ $$ = $1 + $2 + $3 + "\n"; }
+			//FALTA
             |Type id igual curlyBraceOpen parsObj curlyBraceClose
 			|funciones
+			{ $$ = $1 + "\n"; }
 			|IF
+			{ $$ = $1 + "\n"; }
 			|WHILE
+			{ $$ = $1 + "\n"; }
 			|DOWHILE
+			{ $$ = $1 + "\n"; }
 			|SWITCH
+			{ $$ = $1 + "\n"; }
 			|FOR
+			{ $$ = $1 + "\n"; }
 ;
 
 llamadaFuncion: id bracketOpen paramFunc bracketClose semicolon
@@ -261,11 +271,11 @@ defLast: dosPuntos types igual exp
 ;
 
 
-types: number
-      |boolean
-      |string
-      |void
-      |id
+types: number { $$ = $1;}
+      |boolean { $$ = $1;}
+      |string { $$ = $1;}
+      |void { $$ = $1;}
+      |id { $$ = $1;}
 ;
 
 exp: exp mas exp
@@ -325,12 +335,13 @@ exp: exp mas exp
 	| id
 	{ $$ = String($1);}
 	| id bracketOpen paramFunc bracketClose
-	| sqBracketOpen arrParam sqBracketClose
+	//AGREGAR ARREGLOS multivariable
+	| sqBracketOpen arrParam sqBracketClose 
 	| curlyBraceOpen objetoParam curlyBraceClose
 ;
 
 arrParam: listArrParam
-		 |
+		 |{$$ = "";}
 ;
 
 listArrParam: listArrParam comma exp
@@ -346,4 +357,5 @@ objetoParamList: objetoParamList opkv keyvalue
 ;
 
 keyvalue: id dosPuntos exp
+		 { $$ = String($1+$2+$3); }
 ;
