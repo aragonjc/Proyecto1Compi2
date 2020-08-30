@@ -98,8 +98,8 @@ S: Bloque EOF
 { return $1; }
 ;
 
-Bloque: Bloque Instruccion {$1.push($2); $$=$1;}
-	| Instruccion          { $$=[$1]; }
+Bloque: Bloque Instruccion {$$=$1 + $2;}
+	| Instruccion          { $$=$1; }
 ;
 
 Instruccion: llamadaFuncion
@@ -110,8 +110,8 @@ Instruccion: llamadaFuncion
 			{ $$ = $1 + $2 + $3 + "\n"; }
 			|id decrement semicolon
 			{ $$ = $1 + $2 + $3 + "\n"; }
-			//FALTA
             |Type id igual curlyBraceOpen parsObj curlyBraceClose
+			{ $$ = $1 + " " + $2 +" "+ $3 + " "+ $4 + "\n" + $5 + "\n" + $6 + "\n";}
 			|funciones
 			{ $$ = $1 + "\n"; }
 			|IF
@@ -245,20 +245,21 @@ asignLast: point id igual exp
 		 | igual exp
 ;
 
-parsObj: objType
-		|
+parsObj: objType {$$ = $1;}
+		|{$$ = "";}
 ;
 
-objType: objType opkv keyvalueT
-		|keyvalueT
+objType: objType opkv keyvalueT {$$ = $1 + $2 + "\n" + $3;}
+		|keyvalueT {$$ = $1;}
 ;
 
 
-opkv: comma
-	 | semicolon
+opkv: comma      {$$ = $1;}
+	 | semicolon {$$ = $1;}
 ;
 
 keyvalueT: id dosPuntos types
+	      { $$ = "\t" + $1 + $2 + $3; }
 ;
 
 defType: let { $$ = String($1); }

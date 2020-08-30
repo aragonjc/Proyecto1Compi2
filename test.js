@@ -5,8 +5,8 @@ let entrada;
 
 let ast = parser.parse('console.log(5--);');
 
-let scope = new Scope(null);
+/*let scope = new Scope(null);
 
 ast.forEach(element => {
     let r = element.run(scope);
-});
+});*/
