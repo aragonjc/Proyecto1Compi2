@@ -243,8 +243,8 @@ opkv: comma
 keyvalueT: id dosPuntos types
 ;
 
-defType: let { $$ = String($1); }
-	    |const { $$ = String($1); }
+defType: let { $$ = $1; }
+	    |const { $$ = $1; }
 ;
 
 defLast: dosPuntos types igual exp
@@ -261,61 +261,58 @@ types: number
 ;
 
 exp: exp mas exp
-	{ $$ = String($1 + $2 + $3); }
+	{ $$ = new Operation(0,0,$1,$3,"+"); }
 	| exp menos exp
-	{ $$ = String($1 + $2 + $3); }
+	{ $$ = new Operation(0,0,$1,$3,"-"); }
 	| exp por exp
-	{ $$ = String($1 + $2 + $3); }
+	{ $$ = new Operation(0,0,$1,$3,"*"); }
 	| exp division exp
-	{ $$ = String($1 + $2 + $3); }
+	{ $$ = new Operation(0,0,$1,$3,"/"); }
 	| menos exp %prec unary
-	{ $$ = String($1 + $2); }
+	{ $$ = new Operation(0,0,$2,null,"unary"); }
 	| exp potencia exp
-	{ $$ = String($1 + $2 + $3); }
+	{ $$ = new Operation(0,0,$1,$3,"**"); }
 	| exp modulo exp
-	{ $$ = String($1 + $2 + $3); }
+	{ $$ = new Operation(0,0,$1,$3,"%"); }
 	| exp mayorque exp
-	{ $$ = String($1 + $2 + $3); }
+	{ $$ = new Operation(0,0,$1,$3,">"); }
 	| exp menorque exp
-	{ $$ = String($1 + $2 + $3); }
+	{ $$ = new Operation(0,0,$1,$3,"<"); }
 	| exp mayorigualque exp
-	{ $$ = String($1 + $2 + $3); }
+	{ $$ = new Operation(0,0,$1,$3,">="); }
 	| exp menorigualque exp
-	{ $$ = String($1 + $2 + $3); }
+	{ $$ = new Operation(0,0,$1,$3,"<="); }
 	| exp igualdad exp
-	{ $$ = String($1 + $2 + $3); }
+	{ $$ = new Operation(0,0,$1,$3,"=="); }
 	| exp diferencia exp
-	{ $$ = String($1 + $2 + $3); }
+	{ $$ = new Operation(0,0,$1,$3,"!="); }
 	| exp and exp
-	{ $$ = String($1 + $2 + $3); }
+	{ $$ = new Operation(0,0,$1,$3,"&&"); }
 	| exp or exp
-	{ $$ = String($1 + $2 + $3); }
+	{ $$ = new Operation(0,0,$1,$3,"||"); }
 	| not exp
-	{ $$ = String($1 + $2); }
+	{ $$ = new Operation(0,0,$2,null,"!"); }
 	| bracketOpen exp bracketClose
-	{ $$ = String($1 + $2 + $3); }
+	{ $$ = $2; }
 	| exp question exp dosPuntos exp
-	{ $$ = String($1 + $2 + $3 + $4 + $5); }
 	| exp increment
-	{ $$ = String($1 + $2); }
+	{ $$ = new Operation(0,0,$1,null,"INC"); }
 	| exp decrement
-	{ $$ = String($1 + $2); }
+	{ $$ = new Operation(0,0,$1,null,"DEC"); }
 	| NUMBER
-	{ $$ = String($1);}
+	{ $$ = new TObject(0,0,$1,"NUMBER"); }
 	| STRING
-	{ $$ = String($1);}
+	{ $$ = new TObject(0,0,$1.substring(1,$1.length-1),"STRING"); }
 	| true
-	{ $$ = String($1);}
+	{ $$ = new TObject(0,0,$1,"BOOLEAN"); }
 	| false
-	{ $$ = String($1);}
+	{ $$ = new TObject(0,0,$1,"BOOLEAN"); }
 	| null
-	{ $$ = String($1);}
+	{ $$ = new TObject(0,0,$1,"NULL"); }
 	| undefined
-	{ $$ = String($1);}
+	{ $$ = new TObject(0,0,$1,"UNDEFINED"); }
 	| id point id
-	{$$ = String($1 + $2 + $3);}
 	| id
-	{ $$ = String($1);}
 	| id bracketOpen paramFunc bracketClose
 	| sqBracketOpen arrParam sqBracketClose
 	| curlyBraceOpen objetoParam curlyBraceClose
