@@ -111,7 +111,7 @@ Instruccion: llamadaFuncion
 			|id decrement semicolon
 			{ $$ = $1 + $2 + $3 + "\n"; }
             |Type id igual curlyBraceOpen parsObj curlyBraceClose
-			{ $$ = $1 + " " + $2 +" "+ $3 + " "+ $4 + "\n" + $5 + "\n" + $6 + "\n";}
+			{ $$ = $1 + " " + $2 +" "+ $3 + " "+ $4 + "\n" + $5 + "\n" + $6 + "\n\n";}
 			|funciones
 			{ $$ = $1 + "\n"; }
 			|IF
@@ -259,7 +259,7 @@ opkv: comma      {$$ = $1;}
 ;
 
 keyvalueT: id dosPuntos types
-	      { $$ = "\t" + $1 + $2 + $3; }
+	      { $$ = "\t" + $1 + $2 + " "+ $3; }
 ;
 
 defType: let { $$ = String($1); }
