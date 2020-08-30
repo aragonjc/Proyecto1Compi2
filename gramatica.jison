@@ -131,11 +131,19 @@ paramFuncList: paramFuncList comma exp
 			  {$$ = [$1];}
 ;
 
-funciones: function id funcDec
+funciones: function id bracketOpen funcParam bracketClose funcDec
 ;
 
 funcDec: dosPuntos types curlyBraceOpen STMT curlyBraceClose
 		|curlyBraceOpen STMT curlyBraceClose
+;
+
+funcParam: funcParamList
+		  |
+;
+
+funcParamList: funcParamList comma id dosPuntos types
+			  |id dosPuntos types
 ;
 
 /*
