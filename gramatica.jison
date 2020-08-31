@@ -3,6 +3,8 @@
 %options case-sensitive
 
 %%
+"//".*   //Comentario Linea
+[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/] //Comentaio Multilinea
 
 "continue"        return 'Continue';
 "break"           return 'Break';
@@ -67,15 +69,16 @@
 "]"               return 'sqBracketClose';
 
 /* Espacios en blanco */
-[ \r\t]+            {}
-\n                  {}
+\s+                     {}
+\t+                     {}
+\r+                     {}
+\n+                     {}
 
 [0-9]+("."[0-9]+)?\b            return 'NUMBER';
 \"[^\"]*\"|\'[^\']*\'           return 'STRING';
 ([a-zA-Z$_])[a-zA-Z0-9_$]*	return 'id';
 
-"//".*   //Comentario Linea
-[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/] //Comentaio Multilinea
+
 
 <<EOF>>                 return 'EOF';
 
