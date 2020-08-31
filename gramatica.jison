@@ -74,6 +74,9 @@
 \"[^\"]*\"|\'[^\']*\'           return 'STRING';
 ([a-zA-Z$_])[a-zA-Z0-9_$]*	return 'id';
 
+"//".*   //Comentario Linea
+[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/] //Comentaio Multilinea
+
 <<EOF>>                 return 'EOF';
 
 .                       { console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
