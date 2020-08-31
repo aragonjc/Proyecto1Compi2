@@ -29,6 +29,11 @@
 "true"            return 'true';
 "false"           return 'false';
 "undefined"       return 'undefined';
+"return"		  return 'return';
+"+="              return 'masIgual';
+"-="              return 'menosIgual';
+"*="              return 'porIgual';
+"/="              return 'divisionIgual';
 "{"               return 'curlyBraceOpen';
 "}"               return 'curlyBraceClose';
 "("               return 'bracketOpen';
@@ -45,6 +50,7 @@
 "*"               return 'por';
 "/"               return 'division';
 "%"               return 'modulo';
+
 ">="              return 'mayorigualque';
 "<="              return 'menorigualque';
 ">"               return 'mayorque';
@@ -52,6 +58,7 @@
 "=="              return 'igualdad';
 "="               return 'igual';
 "!="              return 'diferencia';
+
 "&&"              return 'and';
 "||"              return 'or';
 "!"               return 'not';
@@ -122,17 +129,20 @@ Instruccion: llamadaFuncion
 			{ $$ = $1 + "\n"; }
 ;
 
-llamadaFuncion: id bracketOpen paramFunc bracketClose semicolon
+llamadaFuncion: id PL bracketOpen paramFunc bracketClose semicolon
 { $$ = $1 + $2 + $3 +$4 +$5; }
 ;
+ PL:POI
+	|;
+
 
 paramFunc: paramFuncList {$$ = $1;}
 		|                {$$ = "";}
 ;
 
-paramFuncList: paramFuncList comma exp
+paramFuncList: paramFuncList comma E
 			  {$$ = $1 + $2 + " " + $3;}
-			  |exp {$$ = $1;}
+			  |E {$$ = $1;}
 ;
 
 funciones: function id bracketOpen funcParam bracketClose funcDec
@@ -157,33 +167,51 @@ Content: funciones Content
 ;*/
 
 
-STMT: STMT InstruccionI
-	 |InstruccionI
+STMT: STMT InstruccionI   {$$=$1 + $2;}
+	 |InstruccionI        { $$=$1; }
 ;
 
-InstruccionI: llamadFuncion
+InstruccionI: llamadaFuncion
+			{ $$ = $1 + "\n"; }
             |variables
+			{ $$ = $1 + "\n"; }
 			|funciones
+			{ $$ = $1 + "\n"; }
             |IF
+			{ $$ = $1 + "\n"; }
             |WHILE
+			{ $$ = $1 + "\n"; }
             |DOWHILE
+			{ $$ = $1 + "\n"; }
             |SWITCH
+			{ $$ = $1 + "\n"; }
             |FOR
+			{ $$ = $1 + "\n"; }
             |Break
+
             |Continue
-            |return semicolon
-            |return exp semicolon
+            |return OP
+			{ $$ = $1 + " " + $2;}
+
 ;
+
+OP: E semicolon
+	|semicolon
+	;
 
 IF: if bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose IFLAST
+	{ $$ = $1 + " " + $2 + $3 + $4 + " " + $5 + "\n" + $6 + "\n" + $7 + $8; }
 ;
 
 IFLAST: else IFCOND
-	  |
+		{ $$ = " " + $1 + " " + $2; }
+	  |{ $$ = "\n\n"; }
 ;
 
 IFCOND: if bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose IFLAST
-		 |curlyBraceOpen STMT curlyBraceClose
+	   { $$ = $1 + $2 + $3 + $4 + " " + $5 + "\n" + $6 + "\n" + $7 + $8;  }
+	   |curlyBraceOpen STMT curlyBraceClose
+	   { $$ = $1 + "\n" + $2 + "\n" + $3 + "\n";} 
 ;
 
 WHILE: while bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose
@@ -228,26 +256,33 @@ forDec: variables
 
 
 variables: defType id defLast semicolon
-		   { $$ = new Variable(0,0,$1,$2,); }
+		   { $$ = $1 + " " + $2 + $3 + $4; }
 		  |id asignLast semicolon
+		  { $$ = $1 + $2 + $3;}
+		 |id asignLast
+		  { $$ = $1 + $2;}
 ;
 
+scNot: semicolon {$$=$1;}
+		|{$$ = "";};
 
 asignLast: point id asignLastF
+		  { $$ = $1 + $2 + $3;}
 		 | asignLastF
+		 { $$ = $1; }
 ;
 
-asignLastF:  igual exp
+asignLastF:  igual E
+			{ $$ = " " + $1 + " " + $2;}
+			|masIgual E
+			|menosIgual E
+			|porIgual E
+			|divisionIgual E
 			|increment
 			{ $$ = $1; }
 			|decrement
 			{ $$ = $1; }	
 ;
-
-
-
-
-
 
 parsObj: objType {$$ = $1;}
 		|{$$ = "";}
@@ -270,11 +305,12 @@ defType: let { $$ = String($1); }
 	    |const { $$ = String($1); }
 ;
 
-defLast: dosPuntos types igual exp
-        | igual exp
-        |
+defLast: dosPuntos types igual E
+		 { $$ = $1 + " " + $2 + " " + $3 + " " + $4}
+        | igual E
+		 { $$ = " " + $1 + " " + $2; }
+        |{ $$ = ""; }
 ;
-
 
 types: number { $$ = $1;}
       |boolean { $$ = $1;}
@@ -282,6 +318,11 @@ types: number { $$ = $1;}
       |void { $$ = $1;}
       |id { $$ = $1;}
 ;
+
+E: exp { $$ = $1; }
+	| curlyBraceOpen objetoParam curlyBraceClose
+	{ $$ = " " + $1 + "\n" + $2 + "\n" + $3}
+	;
 
 exp: exp mas exp
 	{ $$ = String($1 + $2 + $3); }
@@ -335,32 +376,47 @@ exp: exp mas exp
 	{ $$ = String($1);}
 	| undefined
 	{ $$ = String($1);}
-	| id point id
-	{$$ = String($1 + $2 + $3);}
+	| id POI
+	{$$ = String($1 + $2);}
 	| id
 	{ $$ = String($1);}
-	| id bracketOpen paramFunc bracketClose
+	| id PL bracketOpen paramFunc bracketClose
 	//AGREGAR ARREGLOS multivariable
-	| sqBracketOpen arrParam sqBracketClose 
-	| curlyBraceOpen objetoParam curlyBraceClose
+	| sqBracketOpen arrParam sqBracketClose sqBCKFIN
+	
 ;
+
+sqBCKFIN: sqBckList
+		|
+;
+
+sqBckList: sqBckList sqBracketOpen arrParam sqBracketClose
+		|sqBracketOpen arrParam sqBracketClose
+		;
+
+POI: POI point id
+	{ $$ = $1 + $2 + $3;}
+	|point id
+	{ $$ = $1 + $2;}
+	;
 
 arrParam: listArrParam
 		 |{$$ = "";}
 ;
 
-listArrParam: listArrParam comma exp
-			|exp
+listArrParam: listArrParam comma E
+			|E
 ;
 
-objetoParam: objetoParamList
-			|
+objetoParam: objetoParamList { $$ = $1; }
+			|{$$="\n";}
 ;
 
 objetoParamList: objetoParamList opkv keyvalue
+				{ $$ = $1 + $2 + "\n" +$3; }
 		  		|keyvalue
 ;
 
-keyvalue: id dosPuntos exp
-		 { $$ = String($1+$2+$3); }
+keyvalue: id dosPuntos E
+		 { $$ = "\t" + $1 + " " + $2 + $3; }
 ;
