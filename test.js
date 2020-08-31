@@ -12,7 +12,7 @@ try {
     return;
 }
 let ast = parser.parse(entrada.toString());
-//console.log(ast);
+console.log(ast);
 /*let scope = new Scope(null);
 
 ast.forEach(element => {
