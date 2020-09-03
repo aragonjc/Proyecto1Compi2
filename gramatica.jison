@@ -253,10 +253,23 @@ ENDCASE: CASE { $$ = $1; }
 		|{ $$ = ""; }
 ;
 
-FOR: for bracketOpen variables semicolon exp semicolon exp bracketClose curlyBraceOpen STMT curlyBraceClose
-	{ $$ = $1 + $2 + $3 + $4 + $5 + $6 + $7 + $8 + " " + $9 + "\n" + $10 + $11 +"\n"; }
+/*FOR: for bracketOpen id semicolon exp semicolon exp semicolon exp bracketClose curlyBraceOpen STMT curlyBraceClose
+	//{ $$ = $1 + $2 + $3 + $4 + $5 + $6 + $7 + $8 + " " + $9 + "\n" + $10 + $11 +"\n"; }
+	|for bracketOpen variables exp semicolon exp semicolon exp bracketClose curlyBraceOpen STMT curlyBraceClose
 	|for bracketOpen forDec forOP id bracketClose curlyBraceOpen STMT curlyBraceClose
 	{ $$ = $1 + $2 + $3 + $4 +$5 + $6 + " " + $7 + "\n" + $8 + $9 + "\n"; }
+;*/
+
+FOR: for bracketOpen let id igual exp semicolon exp semicolon exp bracketClose curlyBraceOpen STMT curlyBraceClose
+	|for bracketOpen exp igual exp semicolon exp semicolon exp bracketClose curlyBraceOpen STMT curlyBraceClose
+	|for bracketOpen exp semicolon exp semicolon exp bracketClose curlyBraceOpen STMT curlyBraceClose
+	|for bracketOpen let id forOP exp bracketClose curlyBraceOpen STMT curlyBraceClose
+	|for bracketOpen exp forOP exp bracketClose curlyBraceOpen STMT curlyBraceClose
+
+;
+forFDeclaracion: let id igual exp
+				|id igual exp
+				|id
 ;
 
 forOP: in { $$ = $1; }
