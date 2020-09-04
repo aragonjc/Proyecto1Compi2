@@ -1,3 +1,4 @@
+%{let s = null;let st;let aux;let funcList = [];let callFunc=[]; const chalk = require('chalk');%}
 %lex
 
 %options case-sensitive
@@ -122,7 +123,15 @@ Instruccion: llamadaFuncion
             |Type id igual curlyBraceOpen parsObj curlyBraceClose
 			{ $$ = $1 + " " + $2 +" "+ $3 + " "+ $4 + "\n" + $5 + "\n" + $6 + "\n\n";}
 			|funciones
-			{ $$ = $1 + "\n"; }
+			{ 
+				callFunc = [];
+				aux = funcList.length != 0?funcList.join('\n'):"";
+				funcList = [];
+				/*console.log(chalk.blue("este es en func------"))
+				console.log(chalk.blue(aux))*/
+				$$ = $1 + "\n"+aux; 
+				aux = "";
+			}
 			|IF
 			{ $$ = $1 + "\n"; }
 			|WHILE
@@ -152,13 +161,62 @@ paramFuncList: paramFuncList comma E
 ;
 
 funciones: function id bracketOpen funcParam bracketClose funcDec
-		   { $$ = $1 + " " + $2 + $3 + $4 + $5 + $6; }
+		   { 
+			   
+			   for(let i =0;i<callFunc.length;i++) {
+				   $6 = String($6).replace(callFunc[i].id,callFunc[i].new_id);
+			   }
+				
+			   $$ = $1 + " " + $2 + $3 + $4 + $5 + $6;
+			   
+			   }
 ;
 
 funcDec: dosPuntos types curlyBraceOpen STMT curlyBraceClose
-		{ $$ = $1 + " " + $2 + " " +$3 + "\n" + $4 + $5 + "\n"; }
+		{ 
+			s = eval('$$');
+			st = s.slice(s.indexOf("function")+1,s.length);
+			s = st[0]
+			aux = st.indexOf("function");
+			st = aux != -1?st.slice(aux,st.length):"";
+			aux = st != ""?"__" + s +"__"+st[1]:"";
+			if(st != "") {
+				callFunc.push({id:st[1],new_id:aux});
+				st[1] = aux;
+				let tab = st.indexOf("{");
+				st[tab] = "{\n";
+				
+			}
+			st = st != ""?st.join(' '):"";
+			funcList.push(st);
+			s="";
+			st = "";
+			aux = "";
+			$$ = $1 + " " + $2 + " " +$3 + "\n" + $4 + $5 + "\n";
+				
+		}
 		|curlyBraceOpen STMT curlyBraceClose
-		{ $$ = " " + $1 + "\n" + $2 + "\n" +$3 +"\n"; }
+		{
+			s = eval('$$');
+			st = s.slice(s.indexOf("function")+1,s.length);
+			s = st[0]
+			aux = st.indexOf("function");
+			st = aux != -1?st.slice(aux,st.length):"";
+			aux = st != ""?"__" + s +"__"+st[1]:"";
+			if(st != "") {
+				callFunc.push({id:st[1],new_id:aux});
+				st[1] = aux;
+				let tab = st.indexOf("{");
+				st[tab] = "{\n";
+				
+			}
+			st = st != ""?st.join(' '):"";
+			funcList.push(st);
+			s="";
+			st = "";
+			aux = "";
+			$$ = " " + $1 + "\n" + $2 + "\n" +$3 +"\n";
+		}
 ;
 
 funcParam: funcParamList { $$ = $1; }
@@ -166,7 +224,7 @@ funcParam: funcParamList { $$ = $1; }
 ;
 
 funcParamList: funcParamList comma id dosPuntos types
-			   { $1 + $2 + " " + $3 + $4 + " " + $4;}
+			   { $$=$1 + $2 + " " + $3 + $4 + " " + $5;}
 			  |id dosPuntos types
 			  { $$ = $1 + $2 + " " + $3; }
 ;
@@ -180,7 +238,8 @@ InstruccionI: llamadaFuncion
             |variables
 			{ $$ = $1 + "\n"; }
 			|funciones
-			{ $$ = $1 + "\n"; }
+			//{ $$ = $1 + "\n"; }
+			{$$="";}
             |IF
 			{ $$ = $1 + "\n"; }
             |WHILE
@@ -261,11 +320,15 @@ ENDCASE: CASE { $$ = $1; }
 ;*/
 
 FOR: for bracketOpen let id igual exp semicolon exp semicolon exp bracketClose curlyBraceOpen STMT curlyBraceClose
+	{ $$ = $1 + $2 + $3 + " " + $4+ " " +$5+ " "+$6+$7+" "+$8+$9+ " " +$10 + $11 + " " + $12 + "\n" + $13 + $14 + "\n";}
 	|for bracketOpen exp igual exp semicolon exp semicolon exp bracketClose curlyBraceOpen STMT curlyBraceClose
+	{ $$ = $1 + $2 + $3+ " " +$4+ " "+$5+$6+" "+$7+$8+ " " +$9 + $10 + " " + $11 + "\n" + $12 + $13 + "\n";}
 	|for bracketOpen exp semicolon exp semicolon exp bracketClose curlyBraceOpen STMT curlyBraceClose
+	{ $$ = $1 + $2 + $3 + $4 + " " + $5 + $6 + " " + $7 + $8 + " " + $9 +"\n" + $10 + $11 + "\n";}
 	|for bracketOpen let id forOP exp bracketClose curlyBraceOpen STMT curlyBraceClose
+	{ $$ = $1 + $2 + $3 + " " + $4 + " " + $5 + " " + $6 + $7 + " " + $8 + "\n" + $9 + $10 + "\n" }
 	|for bracketOpen exp forOP exp bracketClose curlyBraceOpen STMT curlyBraceClose
-
+	{ $$ = $1 + $2 + $3 + " " + $4 + " " + $5 + $6 + " " + $7 + "\n" + $8 + $9 + "\n" }
 ;
 forFDeclaracion: let id igual exp
 				|id igual exp

@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/aragonjc/Proyecto1Compi2/issues"
   },
-  "homepage": "https://github.com/aragonjc/Proyecto1Compi2#readme"
+  "homepage": "https://github.com/aragonjc/Proyecto1Compi2#readme",
+  "dependencies": {
+    "chalk": "^4.1.0"
+  }
 }

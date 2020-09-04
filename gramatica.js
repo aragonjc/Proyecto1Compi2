@@ -92,11 +92,22 @@ break;
 case 3:
  this.$=$$[$0]; 
 break;
-case 4: case 5: case 7: case 8: case 9: case 10: case 11: case 12: case 29: case 30: case 31: case 32: case 33: case 34: case 35: case 36:
+case 4: case 5: case 8: case 9: case 10: case 11: case 12: case 29: case 30: case 32: case 33: case 34: case 35: case 36:
  this.$ = $$[$0] + "\n"; 
 break;
 case 6:
  this.$ = $$[$0-5] + " " + $$[$0-4] +" "+ $$[$0-3] + " "+ $$[$0-2] + "\n" + $$[$0-1] + "\n" + $$[$0] + "\n\n";
+break;
+case 7:
+ 
+				callFunc = [];
+				aux = funcList.length != 0?funcList.join('\n'):"";
+				funcList = [];
+				/*console.log(chalk.blue("este es en func------"))
+				console.log(chalk.blue(aux))*/
+				this.$ = $$[$0] + "\n"+aux; 
+				aux = "";
+			
 break;
 case 13:
  this.$ = $$[$0-5] + $$[$0-4] + " " + $$[$0-3] +$$[$0-2] +$$[$0-1] + $$[$0]; 
@@ -117,25 +128,77 @@ case 18:
 this.$ = $$[$0-2] + $$[$0-1] + " " + $$[$0];
 break;
 case 20:
- this.$ = $$[$0-5] + " " + $$[$0-4] + $$[$0-3] + $$[$0-2] + $$[$0-1] + $$[$0]; 
+ 
+			   
+			   for(let i =0;i<callFunc.length;i++) {
+				   $$[$0] = String($$[$0]).replace(callFunc[i].id,callFunc[i].new_id);
+			   }
+				
+			   this.$ = $$[$0-5] + " " + $$[$0-4] + $$[$0-3] + $$[$0-2] + $$[$0-1] + $$[$0];
+			   
+			   
 break;
 case 21:
- this.$ = $$[$0-4] + " " + $$[$0-3] + " " +$$[$0-2] + "\n" + $$[$0-1] + $$[$0] + "\n"; 
+ 
+			s = eval('$$');
+			st = s.slice(s.indexOf("function")+1,s.length);
+			s = st[0]
+			aux = st.indexOf("function");
+			st = aux != -1?st.slice(aux,st.length):"";
+			aux = st != ""?"__" + s +"__"+st[1]:"";
+			if(st != "") {
+				callFunc.push({id:st[1],new_id:aux});
+				st[1] = aux;
+				let tab = st.indexOf("{");
+				st[tab] = "{\n";
+				
+			}
+			st = st != ""?st.join(' '):"";
+			funcList.push(st);
+			s="";
+			st = "";
+			aux = "";
+			this.$ = $$[$0-4] + " " + $$[$0-3] + " " +$$[$0-2] + "\n" + $$[$0-1] + $$[$0] + "\n";
+				
+		
 break;
 case 22:
- this.$ = " " + $$[$0-2] + "\n" + $$[$0-1] + "\n" +$$[$0] +"\n"; 
+
+			s = eval('$$');
+			st = s.slice(s.indexOf("function")+1,s.length);
+			s = st[0]
+			aux = st.indexOf("function");
+			st = aux != -1?st.slice(aux,st.length):"";
+			aux = st != ""?"__" + s +"__"+st[1]:"";
+			if(st != "") {
+				callFunc.push({id:st[1],new_id:aux});
+				st[1] = aux;
+				let tab = st.indexOf("{");
+				st[tab] = "{\n";
+				
+			}
+			st = st != ""?st.join(' '):"";
+			funcList.push(st);
+			s="";
+			st = "";
+			aux = "";
+			this.$ = " " + $$[$0-2] + "\n" + $$[$0-1] + "\n" +$$[$0] +"\n";
+		
 break;
 case 24: case 51: case 57: case 95: case 102: case 138:
  this.$ = ""; 
 break;
 case 25:
- $$[$0-4] + $$[$0-3] + " " + $$[$0-2] + $$[$0-1] + " " + $$[$0-1];
+ this.$=$$[$0-4] + $$[$0-3] + " " + $$[$0-2] + $$[$0-1] + " " + $$[$0];
 break;
 case 26: case 145:
  this.$ = $$[$0-2] + $$[$0-1] + " " + $$[$0]; 
 break;
 case 27: case 72: case 142:
  this.$ = $$[$0-1] + $$[$0];
+break;
+case 31:
+this.$="";
 break;
 case 37: case 38:
  this.$ = $$[$0-1] + $$[$0] + "\n"; 
@@ -178,6 +241,21 @@ case 53:
 break;
 case 55: case 149:
  this.$ = $$[$0-2] + $$[$0-1] + "\n" +$$[$0]; 
+break;
+case 58:
+ this.$ = $$[$0-13] + $$[$0-12] + $$[$0-11] + " " + $$[$0-10]+ " " +$$[$0-9]+ " "+$$[$0-8]+$$[$0-7]+" "+$$[$0-6]+$$[$0-5]+ " " +$$[$0-4] + $$[$0-3] + " " + $$[$0-2] + "\n" + $$[$0-1] + $$[$0] + "\n";
+break;
+case 59:
+ this.$ = $$[$0-12] + $$[$0-11] + $$[$0-10]+ " " +$$[$0-9]+ " "+$$[$0-8]+$$[$0-7]+" "+$$[$0-6]+$$[$0-5]+ " " +$$[$0-4] + $$[$0-3] + " " + $$[$0-2] + "\n" + $$[$0-1] + $$[$0] + "\n";
+break;
+case 60:
+ this.$ = $$[$0-10] + $$[$0-9] + $$[$0-8] + $$[$0-7] + " " + $$[$0-6] + $$[$0-5] + " " + $$[$0-4] + $$[$0-3] + " " + $$[$0-2] +"\n" + $$[$0-1] + $$[$0] + "\n";
+break;
+case 61:
+ this.$ = $$[$0-9] + $$[$0-8] + $$[$0-7] + " " + $$[$0-6] + " " + $$[$0-5] + " " + $$[$0-4] + $$[$0-3] + " " + $$[$0-2] + "\n" + $$[$0-1] + $$[$0] + "\n" 
+break;
+case 62:
+ this.$ = $$[$0-8] + $$[$0-7] + $$[$0-6] + " " + $$[$0-5] + " " + $$[$0-4] + $$[$0-3] + " " + $$[$0-2] + "\n" + $$[$0-1] + $$[$0] + "\n" 
 break;
 case 70:
  this.$ = $$[$0-3] + " " + $$[$0-2] + $$[$0-1] + $$[$0]; 
@@ -392,7 +470,7 @@ parse: function parse(input) {
     }
     return true;
 }};
-
+let s = null;let st;let aux;let funcList = [];let callFunc=[]; const chalk = require('chalk');
 
     const callFunction = require('./callFunction.js');
     const TObject = require('./TObject.js');
