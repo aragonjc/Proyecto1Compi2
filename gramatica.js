@@ -158,6 +158,8 @@ case 21:
 			s="";
 			st = "";
 			aux = "";
+			console.log(chalk.green("TABLA DE SIMBOLOS"));
+			console.log(table);
 			this.$ = $$[$0-4] + " " + $$[$0-3] + " " +$$[$0-2] + "\n" + $$[$0-1] + $$[$0] + "\n";
 				
 		
@@ -258,7 +260,7 @@ case 62:
  this.$ = $$[$0-8] + $$[$0-7] + $$[$0-6] + " " + $$[$0-5] + " " + $$[$0-4] + $$[$0-3] + " " + $$[$0-2] + "\n" + $$[$0-1] + $$[$0] + "\n" 
 break;
 case 70:
- this.$ = $$[$0-3] + " " + $$[$0-2] + $$[$0-1] + $$[$0]; 
+  table.push({tipo:"variable",valor:$$[$0-2]}) ;this.$ = $$[$0-3] + " " + $$[$0-2] + $$[$0-1] + $$[$0]; 
 break;
 case 71: case 75: case 141:
  this.$ = $$[$0-2] + $$[$0-1] + $$[$0];
@@ -470,7 +472,13 @@ parse: function parse(input) {
     }
     return true;
 }};
-let s = null;let st;let aux;let funcList = [];let callFunc=[]; const chalk = require('chalk');
+let s = null;
+  let st;
+  let aux;
+  let funcList = [];
+  let callFunc=[];
+  let table = [];
+  const chalk = require('chalk');
 
     const callFunction = require('./callFunction.js');
     const TObject = require('./TObject.js');

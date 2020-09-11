@@ -1,4 +1,13 @@
-%{let s = null;let st;let aux;let funcList = [];let callFunc=[]; const chalk = require('chalk');%}
+%{let s = null;
+  let st;
+  let aux;
+  let funcList = [];
+  let callFunc=[];
+  let table = [];
+  const chalk = require('chalk');
+  let auxTable = [];
+  let innerTable = [];
+  %}
 %lex
 
 %options case-sensitive
@@ -192,6 +201,8 @@ funcDec: dosPuntos types curlyBraceOpen STMT curlyBraceClose
 			s="";
 			st = "";
 			aux = "";
+			console.log(chalk.green("TABLA DE SIMBOLOS"));
+			console.log(table);
 			$$ = $1 + " " + $2 + " " +$3 + "\n" + $4 + $5 + "\n";
 				
 		}
@@ -339,11 +350,11 @@ forDec: variables { $$ = $1; }
 
 
 variables: defType id defLast semicolon
-		   { $$ = $1 + " " + $2 + $3 + $4; }
+		   {  table.push({tipo:"variable",valor:$2}) ;$$ = $1 + " " + $2 + $3 + $4; }
 		  |id asignLast semicolon
-		  { $$ = $1 + $2 + $3;}
+		  { innerTable.push({tipo:"uso",valor:$1});$$ = $1 + $2 + $3;}
 		  |id asignLast
-		  { $$ = $1 + $2;}
+		  { innerTable.push({tipo:"uso",valor:$1});$$ = $1 + $2;}
 ;
 
 scNot: semicolon {$$=$1;}
