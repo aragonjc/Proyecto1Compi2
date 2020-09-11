@@ -352,7 +352,7 @@ forDec: variables { $$ = $1; }
 variables: defType id defLast semicolon
 		   {  table.push({tipo:"variable",valor:$2}) ;$$ = $1 + " " + $2 + $3 + $4; }
 		  |id asignLast semicolon
-		  { innerTable.push({tipo:"uso",valor:$1});$$ = $1 + $2 + $3;}
+		  { innerTable.push({tipo:"Uso",valor:$1});$$ = $1 + $2 + $3;}
 		  |id asignLast
 		  { innerTable.push({tipo:"uso",valor:$1});$$ = $1 + $2;}
 ;
