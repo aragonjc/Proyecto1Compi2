@@ -84,15 +84,15 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- return $$[$0-1]; 
+ console.log(functionTable);return $$[$0-1]; 
 break;
 case 2:
- this.$=$$[$0-1] + $$[$0];
+ $$[$0-1].push($$[$0]); this.$=$$[$0-1];/*this.$=$$[$0-1] + $$[$0];*/
 break;
 case 3:
- this.$=$$[$0]; 
+ this.$ = [$$[$0]];/*this.$=$$[$0];*/ 
 break;
-case 4: case 5: case 8: case 9: case 10: case 11: case 12: case 29: case 30: case 32: case 33: case 34: case 35: case 36:
+case 4: case 5: case 8: case 9: case 10: case 11: case 12: case 32: case 33: case 34: case 35: case 36:
  this.$ = $$[$0] + "\n"; 
 break;
 case 6:
@@ -100,19 +100,27 @@ case 6:
 break;
 case 7:
  
-				callFunc = [];
+				/*callFunc = [];
 				aux = funcList.length != 0?funcList.join('\n'):"";
-				funcList = [];
+				funcList = [];*/
+				//ESTO NO
 				/*console.log(chalk.blue("este es en func------"))
 				console.log(chalk.blue(aux))*/
-				this.$ = $$[$0] + "\n"+aux; 
-				aux = "";
+				/*for(let a in table)
+					console.log(table[a]);
+				console.log("------------------------------------");*/
+				/*this.$ = $$[$0] + "\n"+aux; 
+				aux = "";*/
+
+				this.$ = $$[$0];
 			
 break;
 case 13:
- this.$ = $$[$0-5] + $$[$0-4] + " " + $$[$0-3] +$$[$0-2] +$$[$0-1] + $$[$0]; 
+ 
+	this.$ = new tLlamadaFunciones($$[$0-5],$$[$0-5] + $$[$0-4] + " " + $$[$0-3] +$$[$0-2] +$$[$0-1] + $$[$0]);
+	/*this.$ = $$[$0-5] + $$[$0-4] + " " + $$[$0-3] +$$[$0-2] +$$[$0-1] + $$[$0];*/ 
 break;
-case 14: case 23: case 28: case 41: case 50: case 56: case 66: case 67: case 68: case 69: case 76: case 82: case 83: case 101: case 105: case 137: case 143: case 146: case 147: case 150:
+case 14: case 23: case 41: case 50: case 56: case 66: case 67: case 68: case 69: case 76: case 82: case 83: case 101: case 105: case 137: case 143: case 146: case 147: case 150:
  this.$ = $$[$0]; 
 break;
 case 15:
@@ -130,18 +138,49 @@ break;
 case 20:
  
 			   
-			   for(let i =0;i<callFunc.length;i++) {
+			   /*for(let i =0;i<callFunc.length;i++) {
 				   $$[$0] = String($$[$0]).replace(callFunc[i].id,callFunc[i].new_id);
 			   }
 				
-			   this.$ = $$[$0-5] + " " + $$[$0-4] + $$[$0-3] + $$[$0-2] + $$[$0-1] + $$[$0];
+			   this.$ = $$[$0-5] + " " + $$[$0-4] + $$[$0-3] + $$[$0-2] + $$[$0-1] + $$[$0];*/
+			   /*var a6 = $$[$0].tree
+			  	if($$[$0].inner != undefined) {
+					  functionTable.push({parent:$$[$0-4],function:$$[$0]});
+				}*/	
+			   this.$ = new translateFunction($$[$0-4],$$[$0],$$[$0-5] + " " + $$[$0-4] + $$[$0-3] + $$[$0-2] + $$[$0-1] + $$[$0]);
 			   
-			   
+			
 break;
 case 21:
  
-			s = eval('$$');
-			st = s.slice(s.indexOf("function")+1,s.length);
+			/*console.log(chalk.green("FUNCION"));*/
+			//s = eval('$$');
+			var f = eval('$$');
+			//console.log(chalk.red("LA PILA"))
+			var value;
+			var index = 0;
+			var parentId = f[2];
+			for(let i in f) {
+				if(Array.isArray(f[i])) {
+					value = f[i];
+				}
+			}
+			if(index != 0) {
+				//console.log(chalk.blue(f[index]));
+			}
+			console.log(chalk.red("-----------------------"))
+			var listStmt = [];
+			var innerFunctions = [];
+			for(let i in value) {
+				//console.log(value[i])
+				if(value[i].constructor.name == "translateFunction")
+					functionTable.push({parent:parentId,function:value[i]})
+				else
+					listStmt.push(value[i]);
+				//console.log(chalk.green("#########"));
+			}
+			//console.log(chalk.red(" -----------------------------"))
+			/*st = s.slice(s.indexOf("function")+1,s.length);
 			s = st[0]
 			aux = st.indexOf("function");
 			st = aux != -1?st.slice(aux,st.length):"";
@@ -158,10 +197,13 @@ case 21:
 			s="";
 			st = "";
 			aux = "";
-			console.log(chalk.green("TABLA DE SIMBOLOS"));
-			console.log(table);
-			this.$ = $$[$0-4] + " " + $$[$0-3] + " " +$$[$0-2] + "\n" + $$[$0-1] + $$[$0] + "\n";
+			//console.log(chalk.green("TABLA DE SIMBOLOS"));
+			//console.log(table);
+			this.$ = $$[$0-4] + " " + $$[$0-3] + " " +$$[$0-2] + "\n" + $$[$0-1] + $$[$0] + "\n";*/
+			this.$ =  new funcDec(listStmt,$$[$0-4] + " " + $$[$0-3] + " " +$$[$0-2] + "\n" + $$[$0-1] + $$[$0])
 				
+					
+					
 		
 break;
 case 22:
@@ -196,25 +238,45 @@ break;
 case 26: case 145:
  this.$ = $$[$0-2] + $$[$0-1] + " " + $$[$0]; 
 break;
-case 27: case 72: case 142:
- this.$ = $$[$0-1] + $$[$0];
+case 27:
+ $$[$0-1].push($$[$0]); this.$=$$[$0-1];/*this.$ = $$[$0-1] + $$[$0];*/
+break;
+case 28:
+ this.$ = [$$[$0]];/*this.$ = $$[$0];*/ 
+break;
+case 29:
+ this.$=$$[$0];/*this.$ = $$[$0] + "\n";*/ 
+break;
+case 30:
+this.$=$$[$0];/*auxTable = deepcopy(innerTable); innerTable=[]; this.$ = $$[$0] + "\n";*/ 
 break;
 case 31:
-this.$="";
+
+				
+				/*table.push({"func":JSON.parse(JSON.stringify(innerTable))});
+				
+				innerTable = [];
+				
+				this.$="";*/
+				this.$ = $$[$0];
+			
 break;
 case 37: case 38:
  this.$ = $$[$0-1] + $$[$0] + "\n"; 
 break;
 case 39:
- this.$ = $$[$0-1] + " " + $$[$0] + "\n";
+ 
+				this.$ = new tReturn($$[$0],$$[$0-1] + " " + $$[$0] + "\n");
+				/*console.log(chalk.red("RETURN"));;
+				this.$ = $$[$0-1] + " " + $$[$0] + "\n";*/
 break;
-case 40: case 54: case 104:
- this.$ = $$[$0-1] + $$[$0]; 
+case 40:
+ this.$ = $$[$0-1];/*this.$ = $$[$0-1] + $$[$0];*/ 
 break;
 case 42:
  this.$ = $$[$0-7] + " " + $$[$0-6] + $$[$0-5] + $$[$0-4] + " " + $$[$0-3] + "\n" + $$[$0-2] + $$[$0-1] + $$[$0]; 
 break;
-case 43: case 94:
+case 43:
  this.$ = " " + $$[$0-1] + " " + $$[$0]; 
 break;
 case 44:
@@ -241,6 +303,9 @@ break;
 case 53:
  this.$ = $$[$0-3] + " " + $$[$0-2] + $$[$0-1] + "\n" + $$[$0] + "\n"; 
 break;
+case 54: case 104:
+ this.$ = $$[$0-1] + $$[$0]; 
+break;
 case 55: case 149:
  this.$ = $$[$0-2] + $$[$0-1] + "\n" +$$[$0]; 
 break;
@@ -260,15 +325,41 @@ case 62:
  this.$ = $$[$0-8] + $$[$0-7] + $$[$0-6] + " " + $$[$0-5] + " " + $$[$0-4] + $$[$0-3] + " " + $$[$0-2] + "\n" + $$[$0-1] + $$[$0] + "\n" 
 break;
 case 70:
-  table.push({tipo:"variable",valor:$$[$0-2]}) ;this.$ = $$[$0-3] + " " + $$[$0-2] + $$[$0-1] + $$[$0]; 
+  
+			   
+			   /*console.log("declaracion " + $$[$0-2]);
+			   //table.push({tipo:"variable",valor:$$[$0-2]}); 
+			   innerTable.push({tipo:"asignacion",valor:$$[$0-2]});
+			   this.$ = $$[$0-3] + " " + $$[$0-2] + $$[$0-1] + $$[$0]; */
+				this.$ = new tAsignVariables($$[$0-2],$$[$0-1],$$[$0-3] + " " + $$[$0-2] + $$[$0-1] + $$[$0]);
+			
 break;
-case 71: case 75: case 141:
- this.$ = $$[$0-2] + $$[$0-1] + $$[$0];
+case 71:
+ 
+			  /*console.log("uso " + $$[$0-2]);
+			  innerTable.push({tipo:"uso",valor:$$[$0-2]});
+			  this.$ = $$[$0-2] + $$[$0-1] + $$[$0];*/
+			  this.$ = new tVariables($$[$0-2],$$[$0-1],$$[$0-2] + $$[$0-1] + $$[$0]);
+			
+break;
+case 72:
+ 
+			  /*console.log("uso " + $$[$0-1]);
+			  innerTable.push({tipo:"uso",valor:$$[$0-1]});
+			  this.$ = $$[$0-1] + $$[$0];*/
+			  this.$ = new tVariables($$[$0-1],$$[$0],$$[$0-1] + $$[$0] + $$[$01]);
+		  
 break;
 case 73:
 this.$=$$[$0];
 break;
-case 77: case 78: case 79: case 80: case 81:
+case 75: case 141:
+ this.$ = $$[$0-2] + $$[$0-1] + $$[$0];
+break;
+case 77:
+ this.$=$$[$0];/*this.$ = " " + $$[$0-1] + " " + $$[$0];*/
+break;
+case 78: case 79: case 80: case 81:
  this.$ = " " + $$[$0-1] + " " + $$[$0];
 break;
 case 86:
@@ -283,6 +374,9 @@ break;
 case 93:
  this.$ = $$[$0-3] + " " + $$[$0-2] + " " + $$[$0-1] + " " + $$[$0]
 break;
+case 94:
+ this.$=$$[$0];/*this.$ = " " + $$[$0-1] + " " + $$[$0];*/ 
+break;
 case 96: case 97: case 98: case 99: case 100:
  this.$ = $$[$0-1];
 break;
@@ -292,8 +386,18 @@ break;
 case 106:
  this.$ = " " + $$[$0-2] + "\n" + $$[$0-1] + "\n" + $$[$0]
 break;
-case 107: case 108: case 109: case 110: case 112: case 113: case 114: case 115: case 116: case 117: case 118: case 119: case 120: case 121: case 123:
+case 107:
+ 
+		this.$ = new tOperation($$[$0-2],$$[$0-1],$$[$0],$$[$0-2] + $$[$0-1] + $$[$0]);
+	/*this.$ = String($$[$0-2] + $$[$0-1] + $$[$0]); */
+break;
+case 108: case 110: case 112: case 113: case 114: case 115: case 116: case 117: case 118: case 119: case 120: case 121: case 123:
  this.$ = String($$[$0-2] + $$[$0-1] + $$[$0]); 
+break;
+case 109:
+ 
+		this.$ = new tOperation($$[$0-2],$$[$0-1],$$[$0],$$[$0-2] + $$[$0-1] + $$[$0]);
+		/*this.$ = String($$[$0-2] + $$[$0-1] + $$[$0]);*/ 
 break;
 case 111: case 122: case 125: case 126:
  this.$ = String($$[$0-1] + $$[$0]); 
@@ -301,20 +405,37 @@ break;
 case 124:
  this.$ = String($$[$0-4] + $$[$0-3] + $$[$0-2] + $$[$0-1] + $$[$0]); 
 break;
-case 127: case 128: case 129: case 130: case 131: case 132: case 134:
+case 127:
+ 
+		this.$ = new tnumber($$[$0],$$[$0]);
+		/*this.$ = String($$[$0]);*/
+break;
+case 128: case 129: case 130: case 131: case 132:
  this.$ = String($$[$0]);
 break;
 case 133:
 this.$ = String($$[$0-1] + $$[$0]);
 break;
+case 134:
+ 
+		this.$ = new tId($$[$0],null,$$[$0]);
+		/*innerTable.push({tipo:"uso",valor:$$[$0]});
+		this.$ = String($$[$0]);*/
+	
+break;
 case 135:
- this.$ = $$[$0-4] + $$[$0-3] + " " + $$[$0-2] + $$[$0-1] + $$[$0]; 
+ 
+		this.$ = new tLlamadaFunciones($$[$0-4],"");
+		/*this.$ = $$[$0-4] + $$[$0-3] + " " + $$[$0-2] + $$[$0-1] + $$[$0]; */
 break;
 case 136:
  this.$ = $$[$0-3] + $$[$0-2] + $$[$0-1] + $$[$0] ; 
 break;
 case 139:
  this.$ = $$[$0-3] + $$[$0-2] + $$[$0-1] + $$[$0]; 
+break;
+case 142:
+ this.$ = $$[$0-1] + $$[$0];
 break;
 case 148:
 this.$="\n";
@@ -479,10 +600,22 @@ let s = null;
   let callFunc=[];
   let table = [];
   const chalk = require('chalk');
+  const deepcopy = require('deepcopy');
+  let auxTable = [];
+  let innerTable = [];
+  let functionTable = [];
+  
 
-    const callFunction = require('./callFunction.js');
-    const TObject = require('./TObject.js');
-	const Operation = require('./Operation.js');
+    const funcDec = require('./traductor/funcDec.js');
+	const tAsignVariables = require('./traductor/tAsignVariables.js');
+	const tId = require('./traductor/tId.js');
+	const tLlamadaFunciones = require('./traductor/tLlamadaFunciones.js');
+	const tOperation = require('./traductor/tOperation.js');
+	const translateFunction = require('./traductor/translateFunction.js');
+	const tVariables = require('./traductor/tVariables.js');
+	const tReturn = require('./traductor/tReturn.js');
+	const tnumber = require('./traductor/tnumber.js');
+	
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/aragonjc/Proyecto1Compi2#readme",
   "dependencies": {
-    "chalk": "^4.1.0"
+    "chalk": "^4.1.0",
+    "deepcopy": "^2.1.0"
   }
 }
