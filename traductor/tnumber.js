@@ -5,7 +5,7 @@ class tnumber {
         this.str = str;
     }
 
-    translate(scope) {
+    translate(scope,cond,sTable,funcId) {
         
         return this.exp;
     }

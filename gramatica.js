@@ -84,7 +84,7 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- console.log(functionTable);return $$[$0-1]; 
+ return {ast:$$[$0-1],inner:functionTable}; 
 break;
 case 2:
  $$[$0-1].push($$[$0]); this.$=$$[$0-1];/*this.$=$$[$0-1] + $$[$0];*/
@@ -92,8 +92,11 @@ break;
 case 3:
  this.$ = [$$[$0]];/*this.$=$$[$0];*/ 
 break;
-case 4: case 5: case 8: case 9: case 10: case 11: case 12: case 32: case 33: case 34: case 35: case 36:
+case 4: case 8: case 9: case 10: case 11: case 12: case 32: case 33: case 34: case 35: case 36:
  this.$ = $$[$0] + "\n"; 
+break;
+case 5:
+ this.$ = $$[$0] /*+ "\n"*/; 
 break;
 case 6:
  this.$ = $$[$0-5] + " " + $$[$0-4] +" "+ $$[$0-3] + " "+ $$[$0-2] + "\n" + $$[$0-1] + "\n" + $$[$0] + "\n\n";
@@ -147,6 +150,12 @@ case 20:
 			  	if($$[$0].inner != undefined) {
 					  functionTable.push({parent:$$[$0-4],function:$$[$0]});
 				}*/	
+				if(auxTable.length != 0) {
+					for(var i in auxTable) {
+						functionTable.push({parent:$$[$0-4],func:auxTable[i]});
+					}
+					auxTable = [];
+				}
 			   this.$ = new translateFunction($$[$0-4],$$[$0],$$[$0-5] + " " + $$[$0-4] + $$[$0-3] + $$[$0-2] + $$[$0-1] + $$[$0]);
 			   
 			
@@ -168,13 +177,13 @@ case 21:
 			if(index != 0) {
 				//console.log(chalk.blue(f[index]));
 			}
-			console.log(chalk.red("-----------------------"))
+			//console.log(chalk.red("-----------------------"))
 			var listStmt = [];
 			var innerFunctions = [];
 			for(let i in value) {
 				//console.log(value[i])
 				if(value[i].constructor.name == "translateFunction")
-					functionTable.push({parent:parentId,function:value[i]})
+					auxTable.push(value[i])
 				else
 					listStmt.push(value[i]);
 				//console.log(chalk.green("#########"));
@@ -601,7 +610,7 @@ let s = null;
   let table = [];
   const chalk = require('chalk');
   const deepcopy = require('deepcopy');
-  let auxTable = [];
+  var auxTable = [];
   let innerTable = [];
   let functionTable = [];
   

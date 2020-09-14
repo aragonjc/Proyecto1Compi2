@@ -7,9 +7,9 @@ class tOperation {
         this.str = str;
     }
 
-    translate(scope) {
-        var a1 = this.exp1.translate(scope);
-        var a2 = this.exp2.translate(scope);
+    translate(scope,cond,sTable,funcId) {
+        var a1 = this.exp1.translate(scope,cond,sTable,funcId);
+        var a2 = this.exp2.translate(scope,cond,sTable,funcId);
         
         
         return String(a1 + this.op + a2);

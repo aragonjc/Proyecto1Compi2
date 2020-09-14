@@ -5,11 +5,11 @@ class funcDec {
         this.str = str;
     }
 
-    translate(scope) {
+    translate(scope,cond,sTable,funcId) {
         
          var r = "";
          this.STMT.forEach(element => {
-             r += element.translate(scope) + "\n";
+             r += element.translate(scope,cond,sTable,funcId) + "\n";
          });
          return r;
     }

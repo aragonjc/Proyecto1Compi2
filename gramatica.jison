@@ -6,7 +6,7 @@
   let table = [];
   const chalk = require('chalk');
   const deepcopy = require('deepcopy');
-  let auxTable = [];
+  var auxTable = [];
   let innerTable = [];
   let functionTable = [];
   %}
@@ -127,7 +127,7 @@
 %% /*Gramática*/
 
 S: Bloque EOF
-{ console.log(functionTable);return $1; }
+{ return {ast:$1,inner:functionTable}; }
 ;
 
 Bloque: Bloque Instruccion { $1.push($2); $$=$1;/*$$=$1 + $2;*/}
@@ -137,7 +137,7 @@ Bloque: Bloque Instruccion { $1.push($2); $$=$1;/*$$=$1 + $2;*/}
 Instruccion: llamadaFuncion
 			{ $$ = $1 + "\n"; }
             |variables
-			{ $$ = $1 + "\n"; }
+			{ $$ = $1 /*+ "\n"*/; }
             |Type id igual curlyBraceOpen parsObj curlyBraceClose
 			{ $$ = $1 + " " + $2 +" "+ $3 + " "+ $4 + "\n" + $5 + "\n" + $6 + "\n\n";}
 			|funciones
@@ -198,6 +198,12 @@ funciones: function id bracketOpen funcParam bracketClose funcDec
 			  	if($6.inner != undefined) {
 					  functionTable.push({parent:$2,function:$6});
 				}*/	
+				if(auxTable.length != 0) {
+					for(var i in auxTable) {
+						functionTable.push({parent:$2,func:auxTable[i]});
+					}
+					auxTable = [];
+				}
 			   $$ = new translateFunction($2,$6,$1 + " " + $2 + $3 + $4 + $5 + $6);
 			   
 			}
@@ -220,13 +226,13 @@ funcDec: dosPuntos types curlyBraceOpen STMT curlyBraceClose
 			if(index != 0) {
 				//console.log(chalk.blue(f[index]));
 			}
-			console.log(chalk.red("-----------------------"))
+			//console.log(chalk.red("-----------------------"))
 			var listStmt = [];
 			var innerFunctions = [];
 			for(let i in value) {
 				//console.log(value[i])
 				if(value[i].constructor.name == "translateFunction")
-					functionTable.push({parent:parentId,function:value[i]})
+					auxTable.push(value[i])
 				else
 					listStmt.push(value[i]);
 				//console.log(chalk.green("#########"));
@@ -485,7 +491,7 @@ defType: let   { $$ = String($1); }
 defLast: dosPuntos types igual E
 		          { $$ = $1 + " " + $2 + " " + $3 + " " + $4}
         | igual E { $$=$2;/*$$ = " " + $1 + " " + $2;*/ }
-        |         { $$ = ""; }
+        |         { $$ = null; }
 ;
 
 types: number  typesList{ $$ = $1;}

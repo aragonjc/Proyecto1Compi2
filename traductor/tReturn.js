@@ -5,8 +5,8 @@ class tReturn {
         this.str = str;
     }
 
-    translate(scope) {
-        var a = this.exp.translate(scope);
+    translate(scope,cond,sTable,funcId) {
+        var a = this.exp.translate(scope,cond,sTable,funcId);
         return "return " + a;
     }
 

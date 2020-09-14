@@ -6,8 +6,8 @@ class tVariables {
         this.str = str;
     }
 
-    translate(scope) {
-        var ex = this.exp.translate(scope)
+    translate(scope,cond,sTable,funcId) {
+        var ex = this.exp.translate(scope,cond,sTable,funcId)
         return this.id + "=" + ex;
     }
 

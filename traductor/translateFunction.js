@@ -5,8 +5,14 @@ class translateFunction {
         this.funcparam = funcparam;
         this.str = str;
     }
-    translate(scope) {
-        return this.id + " "+  this.funcparam.translate(scope);
+    translate(scope,cond,sTable,funcId) {
+
+        if(cond != null || cond != undefined) {
+            scope.insertFunctionGlobally(this.id,cond);
+            return "function " + cond + "__" + this.id + " "+ "() {\n" + this.funcparam.translate(scope,cond,sTable,funcId) + "\n}\n";
+        }
+
+        return "function " + this.id + " "+ "() {\n" + this.funcparam.translate(scope,cond,sTable,this.id) + "\n}\n";
         
     }
 }
