@@ -358,7 +358,10 @@ IFCOND: if bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose IFLA
 ;
 
 WHILE: while bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose
-	   { $$ = $1 + $2 + $3 + $4 + " " + $5 + "\n" + $6  + $7 + "\n"; }
+	   { 
+		   
+		   $$ = $1 + $2 + $3 + $4 + " " + $5 + "\n" + $6  + $7 + "\n";
+		}
 ;
 
 DOWHILE: do curlyBraceOpen STMT curlyBraceClose while bracketOpen exp bracketClose semicolon

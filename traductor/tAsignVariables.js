@@ -22,7 +22,7 @@ class tAsignVariables {
                 });
 
                 if(b.length > 0) {
-                    scope.insertVariableGlobally(funcId+"__"+this.id,"let");
+                    scope.insertVariableGlobally(funcId+"__"+this.id,"let","");
                     var a = "";
                     if(this.exp != null) {
                         a = this.exp.translate(scope,cond,sTable,funcId);
@@ -31,7 +31,14 @@ class tAsignVariables {
                 }
             }
         } else {
-            scope.insertVariable(this.id,"let");
+            var a = "";
+            if(this.exp != null) {
+                a = this.exp.translate(scope,cond,sTable,funcId);
+            }
+            if(a != "") {
+                a = " = " + a;
+            }
+            scope.insertVariable(this.id,"let",a);
         }
         var a;
         if(this.exp != null) {

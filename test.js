@@ -14,9 +14,6 @@ try {
 let result = parser.parse(entrada.toString());
 var scopeT = new Scope(null);
 var scopeST = new Scope(null);
-//console.log(ast);
-/*let scope = new Scope(null);
-*/
 var ast = result.ast;
 var a = "";
 var innerFunction = result.inner;
@@ -35,25 +32,25 @@ if(innerFunction.length != 0) {
         //scopeST.varUse = [];
     });
 }
-//console.log(scopeST.innerFunc);
-//console.log(usedVars);
-//console.log(innerF);
-//console.log(scopeST)
+
 ast.forEach(element => {
     if(!(element.constructor.name == "tAsignVariables")) {
         a += element.translate(scopeST,null,usedVars,null);
     }
     
 });
-//console.log(scopeST)
+
 var global = "";
 if(scopeST.table.length > 0) {
     scopeST.table.forEach(element => {
-        global += element.varDec + " " + element.id + ";\n";
+        global += element.varDec + " " + element.id + element.value+ ";\n";
     })
+    global += "\n"
 }
 
 console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-console.log(global)
+var translateDoc = global + innerF + a;
+/*console.log(global)
 console.log(innerF)
-console.log(a);
+console.log(a);*/
+console.log(translateDoc)

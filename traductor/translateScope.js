@@ -22,17 +22,17 @@ class translateScope{
         return false;
     }
 
-    insertVariable(id,varDec) {
-        this.table.push({id:id,varDec});
+    insertVariable(id,varDec,value) {
+        this.table.push({id:id,varDec,value:value});
     }
 
-    insertVariableGlobally(id,varDec) {
+    insertVariableGlobally(id,varDec,value) {
         var sc= this;
         while(sc.prev != null || sc.prev != undefined) {
          
             sc = sc.prev;
         }
-        sc.insertVariable(id,varDec);
+        sc.insertVariable(id,varDec,value);
     }
 
     insertFunctionGlobally(id,parentF) {
@@ -50,9 +50,9 @@ class translateScope{
          
             sc = sc.prev;
         }
-        if(this.innerFunc.length > 0) {
-            for(let i in this.innerFunc) {
-                var element = this.innerFunc[i];
+        if(sc.innerFunc.length > 0) {
+            for(let i in sc.innerFunc) {
+                var element = sc.innerFunc[i];
                 if(element.parent == parent && element.id == id) {
                     return true;
                 }
