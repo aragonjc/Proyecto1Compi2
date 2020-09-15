@@ -12,6 +12,8 @@ try {
     return;
 }
 let result = parser.parse(entrada.toString());
+
+/*
 var scopeT = new Scope(null);
 var scopeST = new Scope(null);
 var ast = result.ast;
@@ -50,7 +52,4 @@ if(scopeST.table.length > 0) {
 
 console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 var translateDoc = global + innerF + a;
-/*console.log(global)
-console.log(innerF)
-console.log(a);*/
-console.log(translateDoc)
+console.log(translateDoc)*/

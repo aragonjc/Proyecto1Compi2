@@ -119,6 +119,7 @@
 	const tVariables = require('./traductor/tVariables.js');
 	const tReturn = require('./traductor/tReturn.js');
 	const tnumber = require('./traductor/tnumber.js');
+	const tminus = require('./traductor/tminus.js');
 	
 %}
 
@@ -130,14 +131,14 @@ S: Bloque EOF
 { return {ast:$1,inner:functionTable}; }
 ;
 
-Bloque: Bloque Instruccion { $1.push($2); $$=$1;/*$$=$1 + $2;*/}
-	| Instruccion          { $$ = [$1];/*$$=$1;*/ }
+Bloque: Bloque Instruccion { $1.push($2); $$=$1;}
+	| Instruccion          { $$ = [$1]; }
 ;
 
 Instruccion: llamadaFuncion
-			{ $$ = $1 + "\n"; }
+			{ $$ = $1; }
             |variables
-			{ $$ = $1 /*+ "\n"*/; }
+			{ $$ = $1; }
             |Type id igual curlyBraceOpen parsObj curlyBraceClose
 			{ $$ = $1 + " " + $2 +" "+ $3 + " "+ $4 + "\n" + $5 + "\n" + $6 + "\n\n";}
 			|funciones
@@ -170,20 +171,20 @@ Instruccion: llamadaFuncion
 
 llamadaFuncion: id PL bracketOpen paramFunc bracketClose semicolon
 { 
-	$$ = new tLlamadaFunciones($1,$1 + $2 + " " + $3 +$4 +$5 + $6);
-	/*$$ = $1 + $2 + " " + $3 +$4 +$5 + $6;*/ }
+	$$ = new tLlamadaFunciones($1,$2,$4,";");
+}
 ;
- PL:POI  { $$ = $1; }
-	|    { $$ = "" };
+ PL:varLast  { $$ = $1; }
+	|    { $$ = null };
 
 
 paramFunc: paramFuncList {$$ = $1;}
-		|                {$$ = "";}
+		|                {$$ = null;}
 ;
 
 paramFuncList: paramFuncList comma E
-			  {$$ = $1 + $2 + " " + $3;}
-			  |E {$$ = $1;}
+			  {$$ = new paramFuncList($1,$2);}
+			  |E {$$ = new paramFuncList(null,$1);}
 ;
 
 funciones: function id bracketOpen funcParam bracketClose funcDec
@@ -259,31 +260,36 @@ funcDec: dosPuntos types curlyBraceOpen STMT curlyBraceClose
 			//console.log(table);
 			$$ = $1 + " " + $2 + " " +$3 + "\n" + $4 + $5 + "\n";*/
 			$$ =  new funcDec(listStmt,$1 + " " + $2 + " " +$3 + "\n" + $4 + $5)
-				
-					
-					
+	
 		}
 		|curlyBraceOpen STMT curlyBraceClose
 		{
-			s = eval('$$');
-			st = s.slice(s.indexOf("function")+1,s.length);
-			s = st[0]
-			aux = st.indexOf("function");
-			st = aux != -1?st.slice(aux,st.length):"";
-			aux = st != ""?"__" + s +"__"+st[1]:"";
-			if(st != "") {
-				callFunc.push({id:st[1],new_id:aux});
-				st[1] = aux;
-				let tab = st.indexOf("{");
-				st[tab] = "{\n";
-				
+			var f = eval('$$');
+			//console.log(chalk.red("LA PILA"))
+			var value;
+			var index = 0;
+			var parentId = f[2];
+			for(let i in f) {
+				if(Array.isArray(f[i])) {
+					value = f[i];
+				}
 			}
-			st = st != ""?st.join(' '):"";
-			funcList.push(st);
-			s="";
-			st = "";
-			aux = "";
-			$$ = " " + $1 + "\n" + $2 + "\n" +$3 +"\n";
+			if(index != 0) {
+				//console.log(chalk.blue(f[index]));
+			}
+			//console.log(chalk.red("-----------------------"))
+			var listStmt = [];
+			var innerFunctions = [];
+			for(let i in value) {
+				//console.log(value[i])
+				if(value[i].constructor.name == "translateFunction")
+					auxTable.push(value[i])
+				else
+					listStmt.push(value[i]);
+				//console.log(chalk.green("#########"));
+			}
+			$$ =  new funcDec(listStmt,$1 + " " + $2 + " " +$3 + "\n" + $4 + $5)
+				
 		}
 ;
 
@@ -302,7 +308,7 @@ STMT: STMT InstruccionI   { $1.push($2); $$=$1;/*$$ = $1 + $2;*/}
 ;
 
 InstruccionI: llamadaFuncion
-			{ $$=$1;/*$$ = $1 + "\n";*/ }
+			{ $$=$1;}
             |variables
 			{$$=$1;/*auxTable = deepcopy(innerTable); innerTable=[]; $$ = $1 + "\n";*/ }
 			|funciones
@@ -334,7 +340,8 @@ InstruccionI: llamadaFuncion
 			{ 
 				$$ = new tReturn($2,$1 + " " + $2 + "\n");
 				/*console.log(chalk.red("RETURN"));;
-				$$ = $1 + " " + $2 + "\n";*/}
+				$$ = $1 + " " + $2 + "\n";*/
+			}
 
 ;
 
@@ -419,43 +426,56 @@ forDec: variables { $$ = $1; }
 	   |id        { $$ = $1; }
 ;
 
+defVarLast: comma defVarLastP
+		|;
 
-variables: defType id defLast semicolon
+defVarLastP: id defLast comma id defLast
+			|id defLast;
+
+variables: defType id defLast defVarLast semicolon
 		   {  
 			   
 			   /*console.log("declaracion " + $2);
 			   //table.push({tipo:"variable",valor:$2}); 
 			   innerTable.push({tipo:"asignacion",valor:$2});
 			   $$ = $1 + " " + $2 + $3 + $4; */
-				$$ = new tAsignVariables($2,$3,$1 + " " + $2 + $3 + $4);
+				$$ = new tAsignVariables($2,$3,$1,";");
 			}
 		  |id asignLast semicolon
 		  { 
 			  /*console.log("uso " + $1);
 			  innerTable.push({tipo:"uso",valor:$1});
 			  $$ = $1 + $2 + $3;*/
-			  $$ = new tVariables($1,$2,$1 + $2 + $3);
+			  $$ = new tVariables($1,$2,";");
 			}
 		  |id asignLast
 		  { 
 			  /*console.log("uso " + $1);
 			  innerTable.push({tipo:"uso",valor:$1});
 			  $$ = $1 + $2;*/
-			  $$ = new tVariables($1,$2,$1 + $2 + $3);
+			  $$ = new tVariables($1,$2,"");
 		  }
 ;
 
 scNot: semicolon {$$=$1;}
 		|{$$ = "";};
 
-asignLast: point id asignLastF
-		  { $$ = $1 + $2 + $3;}
+asignLast: varLast asignLastF
+		  { $$ = $1 + $2 ;}
 		 | asignLastF
 		 { $$ = $1; }
 ;
 
+varLast: sqBracketOpen exp sqBracketClose  auxP { $$ = new varArrList($2,$4);}
+		| point id  auxP { $$ = new varIdList($2,$3); }
+;
+		
+auxP:varLast { $$ = $1}
+	| { $$ = null}
+	;
+
 asignLastF:  igual E
-			{ $$=$2;/*$$ = " " + $1 + " " + $2;*/}
+			{ $$=$2;}
 			|masIgual E
 			{ $$ = " " + $1 + " " + $2;}
 			|menosIgual E
@@ -516,119 +536,167 @@ typesL: typesL sqBracketOpen sqBracketClose
 
 E: exp { $$ = $1; }
 	| curlyBraceOpen objetoParam curlyBraceClose
-	{ $$ = " " + $1 + "\n" + $2 + "\n" + $3}
+	{    $$ = new expObject($2);	}
 	;
 
 exp: exp mas exp
 	{ 
 		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
-	/*$$ = String($1 + $2 + $3); */}
+	}
 	| exp menos exp
-	{ $$ = String($1 + $2 + $3); }
+	{ 
+		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
+	}
 	| exp por exp
 	{ 
 		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
-		/*$$ = String($1 + $2 + $3);*/ }
+	}
 	| exp division exp
-	{ $$ = String($1 + $2 + $3); }
+	{ 
+		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
+	}
 	| menos exp %prec unary
-	{ $$ = String($1 + $2); }
+	{ 
+		$$ = new tminus($1,$2);
+	}
 	| exp potencia exp
-	{ $$ = String($1 + $2 + $3); }
+	{ 
+		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
+	}
 	| exp modulo exp
-	{ $$ = String($1 + $2 + $3); }
+	{ 
+		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
+	}
 	| exp mayorque exp
-	{ $$ = String($1 + $2 + $3); }
+	{ 
+		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
+	}
 	| exp menorque exp
-	{ $$ = String($1 + $2 + $3); }
+	{ 
+		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
+	}
 	| exp mayorigualque exp
-	{ $$ = String($1 + $2 + $3); }
+	{ 
+		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
+	}
 	| exp menorigualque exp
-	{ $$ = String($1 + $2 + $3); }
+	{ 
+		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
+	}
 	| exp igualdad exp
-	{ $$ = String($1 + $2 + $3); }
+	{ 
+		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
+	}
 	| exp diferencia exp
-	{ $$ = String($1 + $2 + $3); }
+	{ 
+		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
+	}
 	| exp and exp
-	{ $$ = String($1 + $2 + $3); }
+	{ 
+		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
+	}
 	| exp or exp
-	{ $$ = String($1 + $2 + $3); }
+	{ 
+		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
+	}
 	| not exp
-	{ $$ = String($1 + $2); }
+	{ 
+		$$ = new tminus($1,$2);
+	}
 	| bracketOpen exp bracketClose
-	{ $$ = String($1 + $2 + $3); }
+	{ 
+		$$ = new expBracket($2);
+	}
 	| exp question exp dosPuntos exp
-	{ $$ = String($1 + $2 + $3 + $4 + $5); }
+	{ 
+		$$ = new ternaryOp($1,$3,$5);
+	}
 	| exp increment
-	{ $$ = String($1 + $2); }
+	{
+		$$ = new expRight($1,$2);
+	}
 	| exp decrement
-	{ $$ = String($1 + $2); }
+	{ 
+		$$ = new expRight($1,$2);
+	}
 	| NUMBER
 	{ 
 		$$ = new tnumber($1,$1);
-		/*$$ = String($1);*/}
+	}
 	| STRING
-	{ $$ = String($1);}
+	{ 
+		$$ = new tnumber($1,$1);
+	}
 	| true
-	{ $$ = String($1);}
+	{ 
+		$$ = new tnumber($1,$1);
+	}
 	| false
-	{ $$ = String($1);}
+	{ 
+		$$ = new tnumber($1,$1);
+	}
 	| null
-	{ $$ = String($1);}
+	{ 
+		$$ = new tnumber($1,$1);
+	}
 	| undefined
-	{ $$ = String($1);}
-	| id POI
-	{$$ = String($1 + $2);}
+	{ 
+		$$ = new tnumber($1,$1);
+	}
+	| id varLast
+	{
+		$$ = new expIdList($1,$2);
+	}
 	| id
 	{ 
 		$$ = new tId($1,null,$1);
-		/*innerTable.push({tipo:"uso",valor:$1});
-		$$ = String($1);*/
 	}
 	| id PL bracketOpen paramFunc bracketClose
 	{ 
-		$$ = new tLlamadaFunciones($1,"");
-		/*$$ = $1 + $2 + " " + $3 + $4 + $5; */}
+		$$ = new tLlamadaFunciones($1,$2,$4,"");
+	}
 	| sqBracketOpen arrParam sqBracketClose sqBCKFIN
-	{ $$ = $1 + $2 + $3 + $4 ; }
+	{ 
+		$$ = new expArrList($2,$4);
+	}
 	
 ;
 
 sqBCKFIN: sqBckList { $$ = $1; }
-		|           { $$ = ""; }
+		|           { $$ = null; }
 ;
 
 sqBckList: sqBckList sqBracketOpen arrParam sqBracketClose
-		   { $$ = $1 + $2 + $3 + $4; }
+		{ $$ = new arrList($1,$3); }
 		|sqBracketOpen arrParam sqBracketClose
-		{ $$ = $1 + $2 + $3; }
+		{ $$ = new arrList(null,$2); }
 		;
-
+/*
 POI: POI point id
 	{ $$ = $1 + $2 + $3;}
 	|point id
 	{ $$ = $1 + $2;}
-	;
+	;*/
 
 arrParam: listArrParam { $$ = $1; }
-		 |{$$ = "";}
+		 |{$$ = null;}
 ;
 
 listArrParam: listArrParam comma E
-             { $$ = $1 + $2 + " " + $3; }
+             { $$ = new arrParamList($1,$2); }
 			|E { $$ = $1; }
 ;
 
 objetoParam: objetoParamList { $$ = $1; }
-			|                {$$="\n";}
+			|                {$$= null;}
 ;
 
 objetoParamList: objetoParamList opkv keyvalue
-				{ $$ = $1 + $2 + "\n" +$3; }
+				{ $$ = new tObjectParamList($1,$2,$3); }
 		  		|keyvalue
 				{ $$ = $1; }
 ;
 
 keyvalue: id dosPuntos E
-		 { $$ = "\t" + $1 + " " + $2 + $3; }
+		 { $$ = new tKeyvalue($1,$3); }
 ;
