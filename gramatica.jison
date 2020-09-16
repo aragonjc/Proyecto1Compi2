@@ -139,8 +139,8 @@ Instruccion: llamadaFuncion
 			{ $$ = $1; }
             |variables
 			{ $$ = $1; }
-            |Type id igual curlyBraceOpen parsObj curlyBraceClose
-			{ $$ = $1 + " " + $2 +" "+ $3 + " "+ $4 + "\n" + $5 + "\n" + $6 + "\n\n";}
+            |Type id igual curlyBraceOpen parsObj curlyBraceClose /*; o no*/
+			{ $$ = new declaracionTypes($2,$5); }
 			|funciones
 			{ 
 				/*callFunc = [];
@@ -329,9 +329,9 @@ InstruccionI: llamadaFuncion
             |FOR
 			{ $$ = $1 + "\n"; }
             |Break semicolon
-			{ $$ = $1 + $2 + "\n"; }
+			{ $$ = new scapeT($1); }
             |Continue semicolon
-			{ $$ = $1 + $2 + "\n"; }
+			{ $$ = new scapeT($1); }
             |return OP
 			{ 
 				$$ = new tReturn($2);
@@ -424,7 +424,7 @@ defVarLast: comma defVarLastP
 			{
 				$$ = new defVarLast($2);
 			}
-		|{$$=null;};
+			|{$$=null;};
 
 defVarLastP: defVarLastP comma id defLast
 			{
@@ -498,10 +498,13 @@ asignLastF:  igual E
 ;
 
 parsObj: objType {$$ = $1;}
-		|{$$ = "";}
+		|{$$ = null;}
 ;
 
-objType: objType opkv keyvalueT {$$ = $1 + $2 + "\n" + $3;}
+objType: objType opkv keyvalueT 
+		{
+			$$ = new objType($1,$2,$3);
+		}
 		|keyvalueT {$$ = $1;}
 ;
 
@@ -511,7 +514,7 @@ opkv: comma      {$$ = $1;}
 ;
 
 keyvalueT: id dosPuntos types
-	      { $$ = "\t" + $1 + $2 + " "+ $3; }
+	      { $$ = new tKeyvalueT($1,$3); }
 ;
 
 defType: let   { $$ = $1; }
