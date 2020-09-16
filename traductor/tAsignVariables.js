@@ -1,8 +1,10 @@
 class tAsignVariables {
 
-    constructor(id,exp ,str) {
+    constructor(id,exp, decVar, defVarLast,str) {
         this.id = id;
         this.exp = exp;
+        this.decVar = decVar;
+        this.defVarLast = defVarLast;
         this.str = str;
     }
 
@@ -22,12 +24,20 @@ class tAsignVariables {
                 });
 
                 if(b.length > 0) {
-                    scope.insertVariableGlobally(funcId+"__"+this.id,"let","");
+                    scope.insertVariableGlobally(funcId+"__"+this.id,this.decVar,"");
                     var a = "";
                     if(this.exp != null) {
                         a = this.exp.translate(scope,cond,sTable,funcId);
                     }
-                    return this.id + "=" + a;
+
+                    var defL = "";
+                    if(this.defVarLast != null) {
+                        defL = this.defVarLast.translate(scope,cond,sTable,funcId);
+                        defL = defL.substr(2);
+                        defL = this.decVar +" " + defL;
+                    }
+
+                    return this.id + "=" + a +this.str + "\n"  + defL;
                 }
             }
         } else {
@@ -38,13 +48,19 @@ class tAsignVariables {
             if(a != "") {
                 a = " = " + a;
             }
-            scope.insertVariable(this.id,"let",a);
+            scope.insertVariable(this.id,this.decVar,a);
         }
-        var a;
+        var a = "";
         if(this.exp != null) {
             a = this.exp.translate(scope,cond,sTable,funcId);
         }
-        return "let " + this.id + "=" + a;
+
+        var def = "";
+        if(this.defVarLast != null) {
+            def = this.defVarLast.translate(scope,cond,sTable,funcId);
+        }
+
+        return this.decVar + " " + this.id + "=" + a + def +this.str;
     }
 
 }

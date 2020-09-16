@@ -1,13 +1,16 @@
 class tReturn {
 
-    constructor(exp ,str) {
+    constructor(exp) {
         this.exp = exp;
-        this.str = str;
     }
 
     translate(scope,cond,sTable,funcId) {
-        var a = this.exp.translate(scope,cond,sTable,funcId);
-        return "return " + a;
+        if(this.exp != null) {
+            var a = this.exp.translate(scope,cond,sTable,funcId);
+            return "return " + a + ";";
+        }
+
+        return "return;"
     }
 
 }

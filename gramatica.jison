@@ -308,17 +308,13 @@ STMT: STMT InstruccionI   { $1.push($2); $$=$1;/*$$ = $1 + $2;*/}
 ;
 
 InstruccionI: llamadaFuncion
-			{ $$=$1;}
+			{ $$=$1; }
             |variables
-			{$$=$1;/*auxTable = deepcopy(innerTable); innerTable=[]; $$ = $1 + "\n";*/ }
+			{ $$=$1; }
 			|funciones
-			//{ $$ = $1 + "\n"; }
 			{
-				
 				/*table.push({"func":JSON.parse(JSON.stringify(innerTable))});
-				
 				innerTable = [];
-				
 				$$="";*/
 				$$ = $1;
 			}
@@ -338,15 +334,13 @@ InstruccionI: llamadaFuncion
 			{ $$ = $1 + $2 + "\n"; }
             |return OP
 			{ 
-				$$ = new tReturn($2,$1 + " " + $2 + "\n");
-				/*console.log(chalk.red("RETURN"));;
-				$$ = $1 + " " + $2 + "\n";*/
+				$$ = new tReturn($2);
 			}
 
 ;
 
-OP: E semicolon { $$ = $1;/*$$ = $1 + $2;*/ }
-	|semicolon  { $$ = $1; }
+OP: E semicolon { $$ = $1;}
+	|semicolon  { $$ = null; }
 	;
 
 IF: if bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose IFLAST
@@ -426,42 +420,41 @@ forDec: variables { $$ = $1; }
 	   |id        { $$ = $1; }
 ;
 
-defVarLast: comma defVarLastP
-		|;
+defVarLast: comma defVarLastP 
+			{
+				$$ = new defVarLast($2);
+			}
+		|{$$=null;};
 
-defVarLastP: id defLast comma id defLast
-			|id defLast;
+defVarLastP: defVarLastP comma id defLast
+			{
+				$$ = new defVarLastP($1,$3,$4);
+			}
+			|id defLast
+			{
+				$$ = new defVarLastP(null,$1,$2);
+			};
 
 variables: defType id defLast defVarLast semicolon
-		   {  
-			   
-			   /*console.log("declaracion " + $2);
-			   //table.push({tipo:"variable",valor:$2}); 
-			   innerTable.push({tipo:"asignacion",valor:$2});
-			   $$ = $1 + " " + $2 + $3 + $4; */
-				$$ = new tAsignVariables($2,$3,$1,";");
-			}
+		  {  
+				$$ = new tAsignVariables($2,$3,$1,$4,";");
+		  }
 		  |id asignLast semicolon
 		  { 
-			  /*console.log("uso " + $1);
-			  innerTable.push({tipo:"uso",valor:$1});
-			  $$ = $1 + $2 + $3;*/
 			  $$ = new tVariables($1,$2,";");
-			}
+		  }
 		  |id asignLast
 		  { 
-			  /*console.log("uso " + $1);
-			  innerTable.push({tipo:"uso",valor:$1});
-			  $$ = $1 + $2;*/
 			  $$ = new tVariables($1,$2,"");
 		  }
 ;
 
+/*
 scNot: semicolon {$$=$1;}
-		|{$$ = "";};
+		|{$$ = "";};*/
 
 asignLast: varLast asignLastF
-		  { $$ = $1 + $2 ;}
+		 { $$ = new asignLast($1,$2); }
 		 | asignLastF
 		 { $$ = $1; }
 ;
@@ -470,24 +463,38 @@ varLast: sqBracketOpen exp sqBracketClose  auxP { $$ = new varArrList($2,$4);}
 		| point id  auxP { $$ = new varIdList($2,$3); }
 ;
 		
-auxP:varLast { $$ = $1}
-	| { $$ = null}
+auxP:varLast { $$ = $1;}
+	| { $$ = null;}
 	;
 
 asignLastF:  igual E
-			{ $$=$2;}
+			{ 
+				$$ = new asignLastF($1,$2);
+			}
 			|masIgual E
-			{ $$ = " " + $1 + " " + $2;}
+			{ 
+				$$ = new asignLastF($1,$2);
+			}
 			|menosIgual E
-			{ $$ = " " + $1 + " " + $2;}
+			{ 
+				$$ = new asignLastF($1,$2);
+			}
 			|porIgual E
-			{ $$ = " " + $1 + " " + $2;}
+			{ 
+				$$ = new asignLastF($1,$2);
+			}
 			|divisionIgual E
-			{ $$ = " " + $1 + " " + $2;}
+			{ 
+				$$ = new asignLastF($1,$2);
+			}
 			|increment
-			{ $$ = $1; }
+			{ 
+				$$ = new asignLastF($1,null);
+			}
 			|decrement
-			{ $$ = $1; }	
+			{ 
+				$$ = new asignLastF($1,null);
+			}
 ;
 
 parsObj: objType {$$ = $1;}
@@ -507,31 +514,36 @@ keyvalueT: id dosPuntos types
 	      { $$ = "\t" + $1 + $2 + " "+ $3; }
 ;
 
-defType: let   { $$ = String($1); }
-	    |const { $$ = String($1); }
+defType: let   { $$ = $1; }
+	    |const { $$ = $1; }
 ;
 
 defLast: dosPuntos types igual E
-		          { $$ = $1 + " " + $2 + " " + $3 + " " + $4}
-        | igual E { $$=$2;/*$$ = " " + $1 + " " + $2;*/ }
-        |         { $$ = null; }
+		{ 
+			$$ = new defLast($2,$4);
+		}
+        | igual E 
+		{ 
+			$$= new defLast(null,$2);;  
+		}
+        | { $$ = null; }
 ;
 
-types: number  typesList{ $$ = $1;}
-      |boolean typesList{ $$ = $1;}
-      |string  typesList{ $$ = $1;}
-      |void    typesList{ $$ = $1;}
-      |id      typesList{ $$ = $1;}
+types: number  typesList{ $$ = new types($1,$2);}
+      |boolean typesList{ $$ = new types($1,$2);}
+      |string  typesList{ $$ = new types($1,$2);}
+      |void    typesList{ $$ = new types($1,$2);}
+      |id      typesList{ $$ = new types($1,$2);}
 ;
 
 typesList: typesL  { $$ = $1; }
-		  |{ $$ = ""; }
+		  |{ $$ = null; }
 ;
 
 typesL: typesL sqBracketOpen sqBracketClose
-		{ $$ = $1 + $2 + $3; }
+		{ $$ = new typesL($1); }
 		|sqBracketOpen sqBracketClose
-		{ $$ = $1 + $2; }
+		{ $$ = new typesL(null); }
 ;
 
 E: exp { $$ = $1; }
