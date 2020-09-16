@@ -10,13 +10,13 @@ class translateScope{
 
     existVariable(id) {
         var sc= this;
-        while(sc != null || sc != undefined) {
-            for(let i in this.table) {
-                if(this.table[i].id == id) {
+
+        for(sc = this;sc != null;sc = sc.prev){
+            for(let i in sc.table) {
+                if(sc.table[i].id == id) {
                     return true;
                 }
             }
-            sc = sc.prev;
         }
         return false;
     }
@@ -32,6 +32,13 @@ class translateScope{
             sc = sc.prev;
         }
         sc.insertVariable(id,varDec,value);
+    }
+
+    printScope() {
+        var sc;
+        for(sc = this;sc != null;sc = sc.prev){
+            console.log(sc.table);
+        }
     }
 
     insertFunctionGlobally(id,parentF) {

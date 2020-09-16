@@ -5,14 +5,14 @@ class expArrList {
         this.sqBEnd = sqBEnd;
     }
 
-    transalte(scope,cond,sTable,funcId) {
+    translate(scope,cond,sTable,funcId) {
         var arr = "";
         if(this.arrParam != null) {
-            arr = this.arrParam.transalte(scope,cond,sTable,funcId);
+            arr = this.arrParam.translate(scope,cond,sTable,funcId);
         }
         var sq = "";
         if(this.sqBEnd != null) {
-            sq = this.sqBEnd.transalte(scope,cond,sTable,funcId);
+            sq = this.sqBEnd.translate(scope,cond,sTable,funcId);
         }
         return "[" + arr + "]" + sq;
     }

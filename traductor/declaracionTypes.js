@@ -11,6 +11,7 @@ class declaracionTypes {
             ob = this.obj.translate(scope,cond,sTable,funcId);
         }
 
+        scope.insertVariable(this.id,"type"," = {\n"+ob+"}\n")
         return "Type " + this.id + " = {\n"+ob+"}\n"; 
 
     }

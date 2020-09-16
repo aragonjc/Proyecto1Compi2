@@ -1,3 +1,4 @@
+const tscope = require('./translateScope');
 class tIfCondElse {
 
     constructor(stmt) {
@@ -5,9 +6,10 @@ class tIfCondElse {
     }
 
     translate(scope,cond,sTable,funcId) {
+        var newScope = new tscope(scope);
         var st = "";
         this.stmt.forEach(element => {
-            st += element.translate(scope,cond,sTable,funcId);
+            st += element.translate(newScope,cond,sTable,funcId);
             st += "\n";
         });
 

@@ -8,6 +8,7 @@ class tId {
 
     translate(scope,cond,sTable,funcId) {
         
+        
         if(cond != null) {
             if(!scope.existVariable(this.id)) {
                 if(sTable != null) {

@@ -9,6 +9,7 @@ class tAsignVariables {
     }
 
     translate(scope,cond,sTable,funcId) {
+
         if(funcId != null) {
             let aa = sTable.filter(element => {
                 if(element.parentId == funcId) {
@@ -37,30 +38,31 @@ class tAsignVariables {
                         defL = this.decVar +" " + defL;
                     }
 
-                    return this.id + "=" + a +this.str + "\n"  + defL;
+                    return funcId+"__"+this.id + "" + a +this.str + "\n"  + defL;
                 }
             }
-        } else {
+        } /*else {
             var a = "";
             if(this.exp != null) {
                 a = this.exp.translate(scope,cond,sTable,funcId);
             }
             if(a != "") {
-                a = " = " + a;
+                a = "" + a;
             }
             scope.insertVariable(this.id,this.decVar,a);
-        }
+        }*/
+
         var a = "";
         if(this.exp != null) {
             a = this.exp.translate(scope,cond,sTable,funcId);
         }
-
+        scope.insertVariable(this.id,this.decVar,a);
         var def = "";
         if(this.defVarLast != null) {
             def = this.defVarLast.translate(scope,cond,sTable,funcId);
         }
 
-        return this.decVar + " " + this.id + "=" + a + def +this.str;
+        return this.decVar + " " + this.id + a + def +this.str;
     }
 
 }

@@ -1,6 +1,7 @@
 const parser = require('./gramatica.js');
 const Scope = require('./traductor/translateScope.js');
 const fs = require('fs');
+const chalk = require('chalk');
 let entrada;
 try {
     // leemos nuestro archivo de entrada
@@ -13,7 +14,7 @@ try {
 }
 let result = parser.parse(entrada.toString());
 
-/*
+
 var scopeT = new Scope(null);
 var scopeST = new Scope(null);
 var ast = result.ast;
@@ -22,7 +23,7 @@ var innerFunction = result.inner;
 var innerF = "";
 
 ast.forEach(element => {
-    if(element.constructor.name == "tAsignVariables") {
+    if(element.constructor.name == "tAsignVariables" || element.constructor.name == "declaracionTypes" ) {
         element.translate(scopeST,null,null,null);
     }
 });
@@ -36,7 +37,7 @@ if(innerFunction.length != 0) {
 }
 
 ast.forEach(element => {
-    if(!(element.constructor.name == "tAsignVariables")) {
+    if(!(element.constructor.name == "tAsignVariables" || element.constructor.name == "declaracionTypes")) {
         a += element.translate(scopeST,null,usedVars,null);
     }
     
@@ -52,4 +53,24 @@ if(scopeST.table.length > 0) {
 
 console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 var translateDoc = global + innerF + a;
-console.log(translateDoc)*/
+//console.log(translateDoc)
+fs.writeFile('traducido.ts', translateDoc, function (err) {
+    if (err) throw err;
+    console.log('File is created successfully.');
+  });
+
+var salida;
+try {
+    // leemos nuestro archivo de entrada
+    salida = fs.readFileSync('./traducido.ts');
+    /*console.log("---------Archivo Leido Con Exito--------------");
+    console.log("-------------------------------------");*/
+} catch (e) {
+    console.error(e);
+    return;
+}
+var auxEntrada = entrada.toString().replace(/\s/g, "");
+var traducidoSinEsp = salida.toString().replace(/\s/g, "");
+
+console.log("ES IGUAL: " + (auxEntrada == traducidoSinEsp));
+

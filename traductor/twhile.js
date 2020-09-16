@@ -1,3 +1,4 @@
+const tscope = require('./translateScope');
 class twhile {
 
     constructor(exp,stmt) {
@@ -8,8 +9,10 @@ class twhile {
     translate(scope,cond,sTable,funcId) {
         var e = this.exp.translate(scope,cond,sTable,funcId);
         var s = "";
+
+        var newScope = new tscope(scope);
         this.stmt.forEach(element => {
-            s += element.translate(scope,cond,sTable,funcId);
+            s += element.translate(newScope,cond,sTable,funcId);
             s += "\n";
         });
 

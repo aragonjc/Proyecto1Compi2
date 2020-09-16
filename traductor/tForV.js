@@ -1,3 +1,4 @@
+const tscope = require('./translateScope');
 class tForV {
 
     constructor(variable,op,exp,stmt) {
@@ -8,13 +9,15 @@ class tForV {
     }
 
     translate(scope,cond,sTable,funcId) {
-        var var_ = this.variable.translate(scope,cond,sTable,funcId);
-        var ops = this.op.translate(scope,cond,sTable,funcId);
-        var e = this.exp.translate(scope,cond,sTable,funcId);
+        var newScope = new tscope(scope);
+
+        var var_ = this.variable.translate(newScope,cond,sTable,funcId);
+        var ops = this.op.translate(newScope,cond,sTable,funcId);
+        var e = this.exp.translate(newScope,cond,sTable,funcId);
         var st = "";
 
         this.stmt.forEach(element => {
-            st += element.translate(scope,cond,sTable,funcId);
+            st += element.translate(newScope,cond,sTable,funcId);
             st += "\n";
         });
 

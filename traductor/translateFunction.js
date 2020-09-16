@@ -15,10 +15,10 @@ class translateFunction {
 
         if(cond != null || cond != undefined) {
             scope.insertFunctionGlobally(this.id,cond);
-            return "function " + cond + "__" + this.id + " "+ "("+args+") {\n" + this.funcDec.translate(newScope,cond,sTable,funcId) + "\n}\n";
+            return "function " + cond + "__" + this.id + " "+ "("+args+") " + this.funcDec.translate(newScope,cond,sTable,funcId) + "\n";
         }
 
-        return "function " + this.id + " "+ "("+args+") {\n" + this.funcDec.translate(newScope,cond,sTable,this.id) + "\n}\n";
+        return "function " + this.id + " "+ "("+args+") " + this.funcDec.translate(newScope,cond,sTable,this.id) + "\n";
         
     }
 }

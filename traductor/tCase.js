@@ -1,3 +1,4 @@
+const tscope = require('./translateScope');
 class tCase {
 
     constructor(list,exp,stmt) {
@@ -11,8 +12,9 @@ class tCase {
         var e = this.exp.translate(scope,cond,sTable,funcId);
         var st = "";
 
+        var newScope = new tscope(scope);
         this.stmt.forEach(element => {
-            st += element.translate(scope,cond,sTable,funcId);
+            st += element.translate(newScope,cond,sTable,funcId);
             st += "\n";
         });
 

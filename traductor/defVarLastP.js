@@ -10,6 +10,8 @@ class defVarLastP {
 
     translate(scope,cond,sTable,funcId) {
         var exp = "";
+
+        scope.insertVariable(this.id,"","");
         if(this.deflast != null) {
             exp = this.deflast.translate(scope,cond,sTable,funcId);
         }

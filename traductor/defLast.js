@@ -9,7 +9,7 @@ class defLast {
 
         if(this.types != null) {
             var t = this.types.translate(scope,cond,sTable,funcId);
-            
+           
             return " : " + t + " = " + this.exp.translate(scope,cond,sTable,funcId);
         }
 

@@ -87,7 +87,7 @@
 \n+                     {}
 
 [0-9]+("."[0-9]+)?\b            return 'NUMBER';
-\"[^\"]*\"|\'[^\']*\'           return 'STRING';
+\"[^\"]*\"|\'[^\']*\'|\`[^\`]*\`        return 'STRING';
 ([a-zA-Z$_])[a-zA-Z0-9_$]*	return 'id';
 
 
@@ -179,7 +179,7 @@ Instruccion: llamadaFuncion
 			{ $$ = $1; }
             |variables
 			{ $$ = $1; }
-            |Type id igual curlyBraceOpen parsObj curlyBraceClose /*; o no*/
+            |Type id igual curlyBraceOpen parsObj curlyBraceClose semicolon/*; o no*/
 			{ $$ = new declaracionTypes($2,$5); }
 			|funciones
 			{ 
@@ -223,7 +223,7 @@ paramFunc: paramFuncList {$$ = $1;}
 ;
 
 paramFuncList: paramFuncList comma E
-			  {$$ = new paramFuncList($1,$2);}
+			  {$$ = new paramFuncList($1,$3);}
 			  |E {$$ = new paramFuncList(null,$1);}
 ;
 
