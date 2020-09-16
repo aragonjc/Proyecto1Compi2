@@ -110,16 +110,56 @@
 
 %{
 
+	const arrList = require('./traductor/arrList.js');
+	const arrParamList = require('./traductor/arrParamList.js');
+	const asignLast = require('./traductor/asignLast.js');
+	const asignLastF = require('./traductor/asignLastF.js');
+	const declaracionTypes = require('./traductor/declaracionTypes.js');
+	const defLast = require('./traductor/defLast.js');
+	const defVarLast = require('./traductor/defVarLast.js');
+	const defVarLastP = require('./traductor/defVarLastP.js');
+	const expArrList = require('./traductor/expArrList.js');
+	const expBracket = require('./traductor/expBracket.js');
+	const expIdList = require('./traductor/expIdList.js');
+	const expObject = require('./traductor/expObject.js');
+	const expRight = require('./traductor/expRight.js');
     const funcDec = require('./traductor/funcDec.js');
+	const funcPars = require('./traductor/funcPars.js');
+	const objType = require('./traductor/objType.js');
+	const paramFuncList = require('./traductor/paramFuncList.js');
+	const scapeT = require('./traductor/scapeT.js');
 	const tAsignVariables = require('./traductor/tAsignVariables.js');
+	const tCase = require('./traductor/tCase.js');
+	const tDefcase = require('./traductor/tDefcase.js');
+	const tdowhile = require('./traductor/tdowhile.js');
+	const ternaryOp = require('./traductor/ternaryOp.js');
+	const tFor = require('./traductor/tFor.js');
+	const tFo2 = require('./traductor/tFor2.js');
+	const tFo3 = require('./traductor/tFor3.js');
+	const tFor4 = require('./traductor/tFor4.js');
+	const tForV = require('./traductor/tForV.js');
 	const tId = require('./traductor/tId.js');
+	const tIf = require('./traductor/tIf.js');
+	const tIfCond = require('./traductor/tIfCond.js');
+	const tIfCondElse = require('./traductor/tIfCondElse.js');
+	const tIfLast = require('./traductor/tIfLast.js');
+	const tKeyvalue = require('./traductor/tKeyvalue.js');
+	const tKeyvalueT = require('./traductor/tKeyvalueT.js');
+	const tLastcase = require('./traductor/tLastcase.js');
 	const tLlamadaFunciones = require('./traductor/tLlamadaFunciones.js');
+	const tminus = require('./traductor/tminus.js');
+	const tnumber = require('./traductor/tnumber.js');
+	const tObjectParamList = require('./traductor/tObjectParamList.js');
 	const tOperation = require('./traductor/tOperation.js');
 	const translateFunction = require('./traductor/translateFunction.js');
-	const tVariables = require('./traductor/tVariables.js');
 	const tReturn = require('./traductor/tReturn.js');
-	const tnumber = require('./traductor/tnumber.js');
-	const tminus = require('./traductor/tminus.js');
+	const tSwitch = require('./traductor/tSwitch.js');
+	const tVariables = require('./traductor/tVariables.js');
+	const twhile = require('./traductor/twhile.js');
+	const types = require('./traductor/types.js');
+	const typesL = require('./traductor/typesL.js');
+	const varArrList = require('./traductor/varArrList.js');
+	const varIdList = require('./traductor/varIdList.js');
 	
 %}
 
@@ -158,15 +198,15 @@ Instruccion: llamadaFuncion
 				$$ = $1;
 			}
 			|IF
-			{ $$ = $1 + "\n"; }
+			{ $$ = $1; }
 			|WHILE
-			{ $$ = $1 + "\n"; }
+			{ $$ = $1; }
 			|DOWHILE
-			{ $$ = $1 + "\n"; }
+			{ $$ = $1; }
 			|SWITCH
-			{ $$ = $1 + "\n"; }
+			{ $$ = $1; }
 			|FOR
-			{ $$ = $1 + "\n"; }
+			{ $$ = $1; }
 ;
 
 llamadaFuncion: id PL bracketOpen paramFunc bracketClose semicolon
@@ -205,7 +245,7 @@ funciones: function id bracketOpen funcParam bracketClose funcDec
 					}
 					auxTable = [];
 				}
-			   $$ = new translateFunction($2,$6,$1 + " " + $2 + $3 + $4 + $5 + $6);
+			   $$ = new translateFunction($2,$6,$4);
 			   
 			}
 ;
@@ -259,13 +299,14 @@ funcDec: dosPuntos types curlyBraceOpen STMT curlyBraceClose
 			//console.log(chalk.green("TABLA DE SIMBOLOS"));
 			//console.log(table);
 			$$ = $1 + " " + $2 + " " +$3 + "\n" + $4 + $5 + "\n";*/
-			$$ =  new funcDec(listStmt,$1 + " " + $2 + " " +$3 + "\n" + $4 + $5)
+			$$ =  new funcDec(listStmt,$2)
 	
 		}
 		|curlyBraceOpen STMT curlyBraceClose
 		{
 			var f = eval('$$');
 			//console.log(chalk.red("LA PILA"))
+			
 			var value;
 			var index = 0;
 			var parentId = f[2];
@@ -288,23 +329,23 @@ funcDec: dosPuntos types curlyBraceOpen STMT curlyBraceClose
 					listStmt.push(value[i]);
 				//console.log(chalk.green("#########"));
 			}
-			$$ =  new funcDec(listStmt,$1 + " " + $2 + " " +$3 + "\n" + $4 + $5)
+			$$ =  new funcDec(listStmt,null)
 				
 		}
 ;
 
 funcParam: funcParamList { $$ = $1; }
-		  |{ $$ = ""; }
+		  |{ $$ = null; }
 ;
 
 funcParamList: funcParamList comma id dosPuntos types
-			   { $$=$1 + $2 + " " + $3 + $4 + " " + $5;}
+			   { $$ = new funcPars($1,$3,$5); }
 			  |id dosPuntos types
-			  { $$ = $1 + $2 + " " + $3; }
+			  { $$ = new funcPars(null,$1,$3); }
 ;
 
-STMT: STMT InstruccionI   { $1.push($2); $$=$1;/*$$ = $1 + $2;*/}
-	 |InstruccionI        { $$ = [$1];/*$$ = $1;*/ }
+STMT: STMT InstruccionI   { $1.push($2); $$=$1;}
+	 |InstruccionI        { $$ = [$1]; }
 ;
 
 InstruccionI: llamadaFuncion
@@ -319,15 +360,15 @@ InstruccionI: llamadaFuncion
 				$$ = $1;
 			}
             |IF
-			{ $$ = $1 + "\n"; }
+			{ $$ = $1; }
             |WHILE
-			{ $$ = $1 + "\n"; }
+			{ $$ = $1; }
             |DOWHILE
-			{ $$ = $1 + "\n"; }
+			{ $$ = $1; }
             |SWITCH
-			{ $$ = $1 + "\n"; }
+			{ $$ = $1; }
             |FOR
-			{ $$ = $1 + "\n"; }
+			{ $$ = $1; }
             |Break semicolon
 			{ $$ = new scapeT($1); }
             |Continue semicolon
@@ -344,73 +385,73 @@ OP: E semicolon { $$ = $1;}
 	;
 
 IF: if bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose IFLAST
-	{ $$ = $1 + " " + $2 + $3 + $4 + " " + $5 + "\n" + $6 + $7 + $8; }
+	{ $$ = new tIf($3,$6,$8);}
 ;
 
 IFLAST: else IFCOND
-		{ $$ = " " + $1 + " " + $2; }
-	  |{ $$ = "\n"; }
+		{ $$ = new tIfLast($2); }
+	  |{ $$ = null; }
 ;
 
 IFCOND: if bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose IFLAST
-	   { $$ = $1 + $2 + $3 + $4 + " " + $5 + "\n" + $6 + $7 + $8;  }
+	   { $$ = new tIfCond($3,$6,$8); }
 	   |curlyBraceOpen STMT curlyBraceClose
-	   { $$ = $1 + "\n" + $2 + "\n" + $3 + "\n";} 
+	   { $$ = new tIfCondElse($2);} 
 ;
 
 WHILE: while bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose
-	   { 
-		   
-		   $$ = $1 + $2 + $3 + $4 + " " + $5 + "\n" + $6  + $7 + "\n";
-		}
+	   	{ 
+		   $$ = new twhile($3,$6);
+	 	}
 ;
 
 DOWHILE: do curlyBraceOpen STMT curlyBraceClose while bracketOpen exp bracketClose semicolon
-		{ $$ = $1 + " " + $2 + "\n" + $3  + $4 + " " + $5 + $6 + $7 + $8 + $9 + "\n" }
+		{ $$ = new tdowhile($3,$7); }
 ;
 
 SWITCH: switch bracketOpen exp bracketClose curlyBraceOpen FIRSTCASE LASTCASE curlyBraceClose
-		{ $$ = $1 + $2 + $3 + $4 + " " + $5 + "\n" + $6 + "\n" + $7 + "\n" + $8 + "\n"; }
+		{ $$ = new tSwitch($3,$6,$7); }
 ;
 
 FIRSTCASE: CASE { $$ = $1; }
-		  | { $$ = ""; }
+		  | { $$ = null; }
 ;
 
 CASE: CASE case exp dosPuntos STMT
-	  { $$ = $1 + $2 + " " + $3 + $4 + "\n" + $5 ; }
+	  { $$ = new tCase($1,$3,$5) ; }
 	 |case exp dosPuntos STMT
-	 { $$ = $1 + " " + $2 + $3 + "\n" + $4 + "\n"; }
+	 { $$ = new tCase(null,$2,$4); }
 ;
 
 LASTCASE: DEFCASE ENDCASE
-		 { $$ = $1 + $2; }
+		 { $$ = new tLastcase($1,$2); }
 ;
 
 DEFCASE: default dosPuntos STMT
-		{ $$ = $1 + $2 + "\n" +$3; }
+		{ $$ = new tDefcase($3); }
 ;
 
 ENDCASE: CASE { $$ = $1; }
-		|{ $$ = ""; }
+		|{ $$ = null; }
 ;
 
 
 FOR: for bracketOpen let id igual exp semicolon exp semicolon exp bracketClose curlyBraceOpen STMT curlyBraceClose
-	{ $$ = $1 + $2 + $3 + " " + $4+ " " +$5+ " "+$6+$7+" "+$8+$9+ " " +$10 + $11 + " " + $12 + "\n" + $13 + $14 + "\n";}
+	{ $$ = new tFor($4,$6,$8,$10,$13);}
 	|for bracketOpen exp igual exp semicolon exp semicolon exp bracketClose curlyBraceOpen STMT curlyBraceClose
-	{ $$ = $1 + $2 + $3+ " " +$4+ " "+$5+$6+" "+$7+$8+ " " +$9 + $10 + " " + $11 + "\n" + $12 + $13 + "\n";}
+	{ $$ = new tFor2($3,$5,$7,$9,$12);}
 	|for bracketOpen exp semicolon exp semicolon exp bracketClose curlyBraceOpen STMT curlyBraceClose
-	{ $$ = $1 + $2 + $3 + $4 + " " + $5 + $6 + " " + $7 + $8 + " " + $9 +"\n" + $10 + $11 + "\n";}
+	{ $$ = new tFor3($3,$5,$7,$10);}
 	|for bracketOpen let id forOP exp bracketClose curlyBraceOpen STMT curlyBraceClose
-	{ $$ = $1 + $2 + $3 + " " + $4 + " " + $5 + " " + $6 + $7 + " " + $8 + "\n" + $9 + $10 + "\n" }
+	{ $$ = new tFor4($4,$5,$6,$9); }
 	|for bracketOpen exp forOP exp bracketClose curlyBraceOpen STMT curlyBraceClose
-	{ $$ = $1 + $2 + $3 + " " + $4 + " " + $5 + $6 + " " + $7 + "\n" + $8 + $9 + "\n" }
+	{  $$ = new tForV($3,$4,$5,$8); }
 ;
+/*
 forFDeclaracion: let id igual exp
 				|id igual exp
 				|id
-;
+;*/
 
 forOP: in { $$ = $1; }
 	  |of { $$ = $1; }

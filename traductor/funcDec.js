@@ -1,17 +1,20 @@
 class funcDec {
 
-    constructor(STMT,str) {
+    constructor(STMT,type) {
         this.STMT = STMT;
-        this.str = str;
+        this.type = type;
     }
 
     translate(scope,cond,sTable,funcId) {
-        
+        var f = "";
+        if(this.type != null) {
+            f = " : " + this.type.translate(scope,cond,sTable,funcId);
+        }
          var r = "";
          this.STMT.forEach(element => {
              r += element.translate(scope,cond,sTable,funcId) + "\n";
          });
-         return r;
+         return f + "{\n"+ r + "\n}\n";
     }
 
 }

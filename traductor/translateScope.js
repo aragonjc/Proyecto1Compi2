@@ -1,4 +1,3 @@
-const translateNode = require('./translateNode.js');
 
 class translateScope{
 

@@ -1,18 +1,24 @@
 const tscope = require('./translateScope');
 class translateFunction {
-    constructor(id,funcparam,str) {
+    constructor(id,funcDec,pars) {
         this.id = id;
-        this.funcparam = funcparam;
-        this.str = str;
+        this.funcDec = funcDec;
+        this.pars = pars;
     }
     translate(scope,cond,sTable,funcId) {
         var newScope = new tscope(scope);
-        if(cond != null || cond != undefined) {
-            scope.insertFunctionGlobally(this.id,cond);
-            return "function " + cond + "__" + this.id + " "+ "() {\n" + this.funcparam.translate(newScope,cond,sTable,funcId) + "\n}\n";
+
+        var args = "";
+        if(this.pars != null) {
+            args = this.pars.translate(newScope,cond,sTable,funcId)
         }
 
-        return "function " + this.id + " "+ "() {\n" + this.funcparam.translate(newScope,cond,sTable,this.id) + "\n}\n";
+        if(cond != null || cond != undefined) {
+            scope.insertFunctionGlobally(this.id,cond);
+            return "function " + cond + "__" + this.id + " "+ "("+args+") {\n" + this.funcDec.translate(newScope,cond,sTable,funcId) + "\n}\n";
+        }
+
+        return "function " + this.id + " "+ "("+args+") {\n" + this.funcDec.translate(newScope,cond,sTable,this.id) + "\n}\n";
         
     }
 }
