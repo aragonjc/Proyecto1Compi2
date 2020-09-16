@@ -9,7 +9,7 @@ class tCase {
     
     translate(scope,cond,sTable,funcId) {
         var l = "";
-        var e = this.exp.translate(scope,cond,sTable,funcId);
+        var ex = this.exp.translate(scope,cond,sTable,funcId);
         var st = "";
 
         var newScope = new tscope(scope);
