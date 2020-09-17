@@ -118,10 +118,10 @@
 
 %start S
 
-%% /*Gramática*/
+%%
 
 S: Bloque EOF
-{ return {ast:$1,inner:functionTable}; }
+{ return $1; }
 ;
 
 Bloque: Bloque Instruccion { $1.push($2); $$=$1;}
@@ -131,170 +131,42 @@ Bloque: Bloque Instruccion { $1.push($2); $$=$1;}
 Instruccion: llamadaFuncion
 			{ $$ = $1; }
             |variables
-			{ $$ = $1; }
             |Type id igual curlyBraceOpen parsObj curlyBraceClose semicolon/*; o no*/
-			{ $$ = new declaracionTypes($2,$5); }
 			|funciones
-			{ 
-				/*callFunc = [];
-				aux = funcList.length != 0?funcList.join('\n'):"";
-				funcList = [];*/
-				//ESTO NO
-				/*console.log(chalk.blue("este es en func------"))
-				console.log(chalk.blue(aux))*/
-				/*for(let a in table)
-					console.log(table[a]);
-				console.log("------------------------------------");*/
-				/*$$ = $1 + "\n"+aux; 
-				aux = "";*/
-
-				$$ = $1;
-			}
 			|IF
-			{ $$ = $1; }
 			|WHILE
-			{ $$ = $1; }
 			|DOWHILE
-			{ $$ = $1; }
 			|SWITCH
-			{ $$ = $1; }
 			|FOR
-			{ $$ = $1; }
 ;
 
 llamadaFuncion: id PL bracketOpen paramFunc bracketClose semicolon
-{ 
-	$$ = new tLlamadaFunciones($1,$2,$4,";");
-}
 ;
- PL:varLast  { $$ = $1; }
-	|    { $$ = null };
+ PL:varLast
+	|    
+;
 
-
-paramFunc: paramFuncList {$$ = $1;}
-		|                {$$ = null;}
+paramFunc: paramFuncList 
+		|                
 ;
 
 paramFuncList: paramFuncList comma E
-			  {$$ = new paramFuncList($1,$3);}
-			  |E {$$ = new paramFuncList(null,$1);}
+			  |E
 ;
 
 funciones: function id bracketOpen funcParam bracketClose funcDec
-		   { 
-			   
-			   /*for(let i =0;i<callFunc.length;i++) {
-				   $6 = String($6).replace(callFunc[i].id,callFunc[i].new_id);
-			   }
-				
-			   $$ = $1 + " " + $2 + $3 + $4 + $5 + $6;*/
-			   /*var a6 = $6.tree
-			  	if($6.inner != undefined) {
-					  functionTable.push({parent:$2,function:$6});
-				}*/	
-				if(auxTable.length != 0) {
-					for(var i in auxTable) {
-						functionTable.push({parent:$2,func:auxTable[i]});
-					}
-					auxTable = [];
-				}
-			   $$ = new translateFunction($2,$6,$4);
-			   
-			}
 ;
 
 funcDec: dosPuntos types curlyBraceOpen STMT curlyBraceClose
-		{ 
-			/*console.log(chalk.green("FUNCION"));*/
-			//s = eval('$$');
-			var f = eval('$$');
-			//console.log(chalk.red("LA PILA"))
-			var value;
-			var index = 0;
-			var parentId = f[2];
-			for(let i in f) {
-				if(Array.isArray(f[i])) {
-					value = f[i];
-				}
-			}
-			if(index != 0) {
-				//console.log(chalk.blue(f[index]));
-			}
-			//console.log(chalk.red("-----------------------"))
-			var listStmt = [];
-			var innerFunctions = [];
-			for(let i in value) {
-				//console.log(value[i])
-				if(value[i].constructor.name == "translateFunction")
-					auxTable.push(value[i])
-				else
-					listStmt.push(value[i]);
-				//console.log(chalk.green("#########"));
-			}
-			//console.log(chalk.red(" -----------------------------"))
-			/*st = s.slice(s.indexOf("function")+1,s.length);
-			s = st[0]
-			aux = st.indexOf("function");
-			st = aux != -1?st.slice(aux,st.length):"";
-			aux = st != ""?"__" + s +"__"+st[1]:"";
-			if(st != "") {
-				callFunc.push({id:st[1],new_id:aux});
-				st[1] = aux;
-				let tab = st.indexOf("{");
-				st[tab] = "{\n";
-				
-			}
-			st = st != ""?st.join(' '):"";
-			funcList.push(st);
-			s="";
-			st = "";
-			aux = "";
-			//console.log(chalk.green("TABLA DE SIMBOLOS"));
-			//console.log(table);
-			$$ = $1 + " " + $2 + " " +$3 + "\n" + $4 + $5 + "\n";*/
-			$$ =  new funcDec(listStmt,$2)
-	
-		}
 		|curlyBraceOpen STMT curlyBraceClose
-		{
-			var f = eval('$$');
-			//console.log(chalk.red("LA PILA"))
-			
-			var value;
-			var index = 0;
-			var parentId = f[2];
-			for(let i in f) {
-				if(Array.isArray(f[i])) {
-					value = f[i];
-				}
-			}
-			if(index != 0) {
-				//console.log(chalk.blue(f[index]));
-			}
-			//console.log(chalk.red("-----------------------"))
-			var listStmt = [];
-			var innerFunctions = [];
-			for(let i in value) {
-				//console.log(value[i])
-				if(value[i].constructor.name == "translateFunction")
-					auxTable.push(value[i])
-				else
-					listStmt.push(value[i]);
-				//console.log(chalk.green("#########"));
-			}
-			$$ =  new funcDec(listStmt,null)
-				
-		}
 ;
 
-funcParam: funcParamList { $$ = $1; }
+funcParam: funcParamList
 		  |{ $$ = null; }
 ;
 
 funcParamList: funcParamList comma id dosPuntos types
-			   { $$ = new funcPars($1,$3,$5); }
 			  |id dosPuntos types
-			  { $$ = new funcPars(null,$1,$3); }
 ;
 
 STMT: STMT InstruccionI   { $1.push($2); $$=$1;}
@@ -304,33 +176,14 @@ STMT: STMT InstruccionI   { $1.push($2); $$=$1;}
 InstruccionI: llamadaFuncion
 			{ $$=$1; }
             |variables
-			{ $$=$1; }
-			|funciones
-			{
-				/*table.push({"func":JSON.parse(JSON.stringify(innerTable))});
-				innerTable = [];
-				$$="";*/
-				$$ = $1;
-			}
             |IF
-			{ $$ = $1; }
             |WHILE
-			{ $$ = $1; }
             |DOWHILE
-			{ $$ = $1; }
             |SWITCH
-			{ $$ = $1; }
             |FOR
-			{ $$ = $1; }
             |Break semicolon
-			{ $$ = new scapeT($1); }
             |Continue semicolon
-			{ $$ = new scapeT($1); }
             |return OP
-			{ 
-				$$ = new tReturn($2);
-			}
-
 ;
 
 OP: E semicolon { $$ = $1;}
@@ -338,32 +191,23 @@ OP: E semicolon { $$ = $1;}
 	;
 
 IF: if bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose IFLAST
-	{ $$ = new tIf($3,$6,$8);}
 ;
 
 IFLAST: else IFCOND
-		{ $$ = new tIfLast($2); }
 	  |{ $$ = null; }
 ;
 
 IFCOND: if bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose IFLAST
-	   { $$ = new tIfCond($3,$6,$8); }
 	   |curlyBraceOpen STMT curlyBraceClose
-	   { $$ = new tIfCondElse($2);} 
 ;
 
 WHILE: while bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose
-	   	{ 
-		   $$ = new twhile($3,$6);
-	 	}
 ;
 
 DOWHILE: do curlyBraceOpen STMT curlyBraceClose while bracketOpen exp bracketClose semicolon
-		{ $$ = new tdowhile($3,$7); }
 ;
 
 SWITCH: switch bracketOpen exp bracketClose curlyBraceOpen FIRSTCASE LASTCASE curlyBraceClose
-		{ $$ = new tSwitch($3,$6,$7); }
 ;
 
 FIRSTCASE: CASE { $$ = $1; }
@@ -371,17 +215,13 @@ FIRSTCASE: CASE { $$ = $1; }
 ;
 
 CASE: CASE case exp dosPuntos STMT
-	  { $$ = new tCase($1,$3,$5) ; }
 	 |case exp dosPuntos STMT
-	 { $$ = new tCase(null,$2,$4); }
 ;
 
 LASTCASE: DEFCASE ENDCASE
-		 { $$ = new tLastcase($1,$2); }
 ;
 
 DEFCASE: default dosPuntos STMT
-		{ $$ = new tDefcase($3); }
 ;
 
 ENDCASE: CASE { $$ = $1; }
@@ -390,57 +230,27 @@ ENDCASE: CASE { $$ = $1; }
 
 
 FOR: for bracketOpen let id igual exp semicolon exp semicolon exp bracketClose curlyBraceOpen STMT curlyBraceClose
-	{ $$ = new tFor($4,$6,$8,$10,$13);}
 	|for bracketOpen exp igual exp semicolon exp semicolon exp bracketClose curlyBraceOpen STMT curlyBraceClose
-	{ $$ = new tFor2($3,$5,$7,$9,$12);}
 	|for bracketOpen exp semicolon exp semicolon exp bracketClose curlyBraceOpen STMT curlyBraceClose
-	{ $$ = new tFor3($3,$5,$7,$10);}
 	|for bracketOpen let id forOP exp bracketClose curlyBraceOpen STMT curlyBraceClose
-	{ $$ = new tFor4($4,$5,$6,$9); }
 	|for bracketOpen exp forOP exp bracketClose curlyBraceOpen STMT curlyBraceClose
-	{  $$ = new tForV($3,$4,$5,$8); }
 ;
-/*
-forFDeclaracion: let id igual exp
-				|id igual exp
-				|id
-;*/
 
 forOP: in { $$ = $1; }
 	  |of { $$ = $1; }
 ;
 
-forDec: variables { $$ = $1; }
-	   |id        { $$ = $1; }
+defVarLast: comma defVarLastP
+			|{$$=null;}
 ;
 
-defVarLast: comma defVarLastP 
-			{
-				$$ = new defVarLast($2);
-			}
-			|{$$=null;};
-
 defVarLastP: defVarLastP comma id defLast
-			{
-				$$ = new defVarLastP($1,$3,$4);
-			}
 			|id defLast
-			{
-				$$ = new defVarLastP(null,$1,$2);
-			};
+;
 
 variables: defType id defLast defVarLast semicolon
-		  {  
-				$$ = new tAsignVariables($2,$3,$1,$4,";");
-		  }
 		  |id asignLast semicolon
-		  { 
-			  $$ = new tVariables($1,$2,";");
-		  }
 		  |id asignLast
-		  { 
-			  $$ = new tVariables($1,$2,"");
-		  }
 ;
 
 /*
@@ -448,13 +258,11 @@ scNot: semicolon {$$=$1;}
 		|{$$ = "";};*/
 
 asignLast: varLast asignLastF
-		 { $$ = new asignLast($1,$2); }
 		 | asignLastF
-		 { $$ = $1; }
 ;
 
-varLast: sqBracketOpen exp sqBracketClose  auxP { $$ = new varArrList($2,$4);}
-		| point id  auxP { $$ = new varIdList($2,$3); }
+varLast: sqBracketOpen exp sqBracketClose  auxP
+		| point id  auxP
 ;
 		
 auxP:varLast { $$ = $1;}
@@ -462,43 +270,19 @@ auxP:varLast { $$ = $1;}
 	;
 
 asignLastF:  igual E
-			{ 
-				$$ = new asignLastF($1,$2);
-			}
 			|masIgual E
-			{ 
-				$$ = new asignLastF($1,$2);
-			}
 			|menosIgual E
-			{ 
-				$$ = new asignLastF($1,$2);
-			}
 			|porIgual E
-			{ 
-				$$ = new asignLastF($1,$2);
-			}
 			|divisionIgual E
-			{ 
-				$$ = new asignLastF($1,$2);
-			}
 			|increment
-			{ 
-				$$ = new asignLastF($1,null);
-			}
 			|decrement
-			{ 
-				$$ = new asignLastF($1,null);
-			}
 ;
 
 parsObj: objType {$$ = $1;}
 		|{$$ = null;}
 ;
 
-objType: objType opkv keyvalueT 
-		{
-			$$ = new objType($1,$2,$3);
-		}
+objType: objType opkv keyvalueT
 		|keyvalueT {$$ = $1;}
 ;
 
@@ -508,7 +292,6 @@ opkv: comma      {$$ = $1;}
 ;
 
 keyvalueT: id dosPuntos types
-	      { $$ = new tKeyvalueT($1,$3); }
 ;
 
 defType: let   { $$ = $1; }
@@ -516,21 +299,15 @@ defType: let   { $$ = $1; }
 ;
 
 defLast: dosPuntos types igual E
-		{ 
-			$$ = new defLast($2,$4);
-		}
-        | igual E 
-		{ 
-			$$= new defLast(null,$2);;  
-		}
+        | igual E
         | { $$ = null; }
 ;
 
-types: number  typesList{ $$ = new types($1,$2);}
-      |boolean typesList{ $$ = new types($1,$2);}
-      |string  typesList{ $$ = new types($1,$2);}
-      |void    typesList{ $$ = new types($1,$2);}
-      |id      typesList{ $$ = new types($1,$2);}
+types: number  typesList
+      |boolean typesList
+      |string  typesList
+      |void    typesList
+      |id      typesList
 ;
 
 typesList: typesL  { $$ = $1; }
@@ -538,137 +315,68 @@ typesList: typesL  { $$ = $1; }
 ;
 
 typesL: typesL sqBracketOpen sqBracketClose
-		{ $$ = new typesL($1); }
 		|sqBracketOpen sqBracketClose
-		{ $$ = new typesL(null); }
 ;
 
 E: exp { $$ = $1; }
 	| curlyBraceOpen objetoParam curlyBraceClose
-	{    $$ = new expObject($2);	}
 	;
 
-exp: exp mas exp
-	{ 
-		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
-	}
+exp:  exp mas exp
+    { $$ = new Operation(0,0,$1,$3,"+"); }
 	| exp menos exp
-	{ 
-		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
-	}
+    { $$ = new Operation(0,0,$1,$3,"-"); }
 	| exp por exp
-	{ 
-		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
-	}
+    { $$ = new Operation(0,0,$1,$3,"*"); }
 	| exp division exp
-	{ 
-		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
-	}
+    { $$ = new Operation(0,0,$1,$3,"/"); }
 	| menos exp %prec unary
-	{ 
-		$$ = new tminus($1,$2);
-	}
+    { $$ = new Operation(0,0,$2,null,"unary"); }
 	| exp potencia exp
-	{ 
-		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
-	}
+    { $$ = new Operation(0,0,$1,$3,"**"); }
 	| exp modulo exp
-	{ 
-		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
-	}
+    { $$ = new Operation(0,0,$1,$3,"%"); }
 	| exp mayorque exp
-	{ 
-		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
-	}
+    { $$ = new Operation(0,0,$1,$3,">"); }
 	| exp menorque exp
-	{ 
-		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
-	}
+    { $$ = new Operation(0,0,$1,$3,"<"); }
 	| exp mayorigualque exp
-	{ 
-		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
-	}
+    { $$ = new Operation(0,0,$1,$3,">="); }
 	| exp menorigualque exp
-	{ 
-		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
-	}
+    { $$ = new Operation(0,0,$1,$3,"<="); }
 	| exp igualdad exp
-	{ 
-		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
-	}
+    { $$ = new Operation(0,0,$1,$3,"=="); }
 	| exp diferencia exp
-	{ 
-		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
-	}
+    { $$ = new Operation(0,0,$1,$3,"!="); }
 	| exp and exp
-	{ 
-		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
-	}
+    { $$ = new Operation(0,0,$1,$3,"&&"); }
 	| exp or exp
-	{ 
-		$$ = new tOperation($1,$2,$3,$1 + $2 + $3);
-	}
+    { $$ = new Operation(0,0,$1,$3,"||"); }
 	| not exp
-	{ 
-		$$ = new tminus($1,$2);
-	}
+    { $$ = new Operation(0,0,$2,null,"!"); }
 	| bracketOpen exp bracketClose
-	{ 
-		$$ = new expBracket($2);
-	}
+    { $$ = $2; }
 	| exp question exp dosPuntos exp
-	{ 
-		$$ = new ternaryOp($1,$3,$5);
-	}
 	| exp increment
-	{
-		$$ = new expRight($1,$2);
-	}
+    { $$ = new Operation(0,0,$1,null,"INC"); }
 	| exp decrement
-	{ 
-		$$ = new expRight($1,$2);
-	}
+    { $$ = new Operation(0,0,$1,null,"DEC"); }
 	| NUMBER
-	{ 
-		$$ = new tnumber($1,$1);
-	}
+    { $$ = new TObject(0,0,$1,"NUMBER"); }
 	| STRING
-	{ 
-		$$ = new tnumber($1,$1);
-	}
+    { $$ = new TObject(0,0,$1/*.substring(1,$1.length-1)*/,"STRING"); }
 	| true
-	{ 
-		$$ = new tnumber($1,$1);
-	}
+    { $$ = new TObject(0,0,$1,"BOOLEAN"); }
 	| false
-	{ 
-		$$ = new tnumber($1,$1);
-	}
+    { $$ = new TObject(0,0,$1,"BOOLEAN"); }
 	| null
-	{ 
-		$$ = new tnumber($1,$1);
-	}
+    { $$ = new TObject(0,0,$1,"NULL"); }
 	| undefined
-	{ 
-		$$ = new tnumber($1,$1);
-	}
+    { $$ = new TObject(0,0,$1,"UNDEFINED"); }
 	| id varLast
-	{
-		$$ = new expIdList($1,$2);
-	}
 	| id
-	{ 
-		$$ = new tId($1,null,$1);
-	}
 	| id PL bracketOpen paramFunc bracketClose
-	{ 
-		$$ = new tLlamadaFunciones($1,$2,$4,"");
-	}
 	| sqBracketOpen arrParam sqBracketClose sqBCKFIN
-	{ 
-		$$ = new expArrList($2,$4);
-	}
-	
 ;
 
 sqBCKFIN: sqBckList { $$ = $1; }
@@ -676,9 +384,7 @@ sqBCKFIN: sqBckList { $$ = $1; }
 ;
 
 sqBckList: sqBckList sqBracketOpen arrParam sqBracketClose
-		{ $$ = new arrList($1,$3); }
 		|sqBracketOpen arrParam sqBracketClose
-		{ $$ = new arrList(null,$2); }
 		;
 /*
 POI: POI point id
@@ -692,7 +398,6 @@ arrParam: listArrParam { $$ = $1; }
 ;
 
 listArrParam: listArrParam comma E
-             { $$ = new arrParamList($1,$2); }
 			|E { $$ = $1; }
 ;
 
@@ -701,11 +406,9 @@ objetoParam: objetoParamList { $$ = $1; }
 ;
 
 objetoParamList: objetoParamList opkv keyvalue
-				{ $$ = new tObjectParamList($1,$2,$3); }
 		  		|keyvalue
 				{ $$ = $1; }
 ;
 
 keyvalue: id dosPuntos E
-		 { $$ = new tKeyvalue($1,$3); }
 ;
