@@ -3,6 +3,20 @@ class Scope {
         this.prev = prev;
         this.table = new Map();
         this.functionTable = new Map();
+        this.typesTable = new Map();
+    }
+
+    existsLocalVariable(id) {
+        return this.table.has(id);
+    }
+    
+    insertVariable(id,value) {
+        
+        if(!this.existsLocalVariable(id)) {
+            this.table.set(id,value);
+            return true;
+        } 
+        return false;
     }
 /*
     get existLocalVariable(id) {

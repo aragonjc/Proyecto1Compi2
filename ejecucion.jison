@@ -1,15 +1,4 @@
-%{let s = null;
-  let st;
-  let aux;
-  let funcList = [];
-  let callFunc=[];
-  let table = [];
-  const chalk = require('chalk');
-  const deepcopy = require('deepcopy');
-  var auxTable = [];
-  let innerTable = [];
-  let functionTable = [];
-  %}
+
 %lex
 
 %options case-sensitive
@@ -110,10 +99,10 @@
 
 %{
 
-	const callFunction = require('./callFunction.js');
-    const TObject = require('./TObject.js');
-	const Operation = require('./Operation.js');
-	
+	const callFunction = require('./ejecucion/callFunction.js');
+    const TObject = require('./ejecucion/TObject.js');
+	const Operation = require('./ejecucion/Operation.js');
+	const idList = require('./ejecucion/idList.js');
 %}
 
 %start S
@@ -141,17 +130,19 @@ Instruccion: llamadaFuncion
 ;
 
 llamadaFuncion: id PL bracketOpen paramFunc bracketClose semicolon
+                { $$ = new callFunction(0,0,$1,$2,$4);}
 ;
- PL:varLast
-	|    
+ PL:varLast {$$= $1;}
+	|{$$ = null;}
 ;
 
-paramFunc: paramFuncList 
-		|                
+paramFunc: paramFuncList { $$ = $1;} 
+		|                { $$ = null;}                
 ;
 
 paramFuncList: paramFuncList comma E
-			  |E
+                  {$1.push($3); $$=$1;}
+			  |E  {$$ = [$1];}
 ;
 
 funciones: function id bracketOpen funcParam bracketClose funcDec
@@ -249,6 +240,7 @@ defVarLastP: defVarLastP comma id defLast
 ;
 
 variables: defType id defLast defVarLast semicolon
+            { $$ = new Variable(0,0,$1,$2,$3,$4); }
 		  |id asignLast semicolon
 		  |id asignLast
 ;
@@ -262,7 +254,9 @@ asignLast: varLast asignLastF
 ;
 
 varLast: sqBracketOpen exp sqBracketClose  auxP
+        { $$ = new idList(true,$2,$4);}
 		| point id  auxP
+        { $$ = new idList(false,$2,$3);}
 ;
 		
 auxP:varLast { $$ = $1;}
