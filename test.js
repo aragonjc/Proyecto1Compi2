@@ -17,3 +17,6 @@ ast.forEach(element => {
     element.run(scope)
 });
 
+scope.table.forEach(element => {
+    console.log(element);
+})

@@ -98,11 +98,13 @@
 %right 'not'
 
 %{
-
+	const defLast = require('./ejecucion/defLast.js');
 	const callFunction = require('./ejecucion/callFunction.js');
     const TObject = require('./ejecucion/TObject.js');
 	const Operation = require('./ejecucion/Operation.js');
 	const idList = require('./ejecucion/idList.js');
+	const Variable = require('./ejecucion/Variable.js');
+	const Type = require('./ejecucion/Type.js');
 %}
 
 %start S
@@ -292,16 +294,34 @@ defType: let   { $$ = $1; }
 	    |const { $$ = $1; }
 ;
 
-defLast: dosPuntos types igual E
-        | igual E
+defLast: dosPuntos types igual E 
+		{
+			$$ = new defLast(0,0,$2,$4);
+		}
+        | igual E { $$ = new defLast(0,0,null,$2);}
         | { $$ = null; }
 ;
 
 types: number  typesList
+	   {
+		   $$ = new Type("NUMBER",$2);
+	   }
       |boolean typesList
+	  {
+		   $$ = new Type("BOOLEAN",$2);
+	  }
       |string  typesList
-      |void    typesList
-      |id      typesList
+	  {
+		   $$ = new Type("STRING",$2);
+	   }
+      |void  typesList
+	  {
+		   $$ = new Type("VOID",$2);
+	   }
+      |id  typesList
+	  {
+		   $$ = new Type($1,$2);
+	   }
 ;
 
 typesList: typesL  { $$ = $1; }
@@ -309,7 +329,13 @@ typesList: typesL  { $$ = $1; }
 ;
 
 typesL: typesL sqBracketOpen sqBracketClose
+		{
+			$$ = new typeL(0,0,$1);
+		}
 		|sqBracketOpen sqBracketClose
+		{
+			$$ = new typeL(0,0,null);
+		}
 ;
 
 E: exp { $$ = $1; }
