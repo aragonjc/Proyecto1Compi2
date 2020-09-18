@@ -108,6 +108,7 @@
 	const decType = require('./ejecucion/decType.js');
 	const objType = require('./ejecucion/objType.js');
 	const typeKeyValue  = require('./ejecucion/typeKeyValue.js');
+	const Id  = require('./ejecucion/Id.js');
 %}
 
 %start S
@@ -401,6 +402,9 @@ exp:  exp mas exp
     { $$ = new TObject(0,0,$1,"UNDEFINED"); }
 	| id varLast
 	| id
+	{
+		$$ = new Id(0,0,$1);
+	}
 	| id PL bracketOpen paramFunc bracketClose
 	| sqBracketOpen arrParam sqBracketClose sqBCKFIN
 ;

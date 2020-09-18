@@ -6,6 +6,17 @@ class Scope {
         this.typesTable = new Map();
     }
 
+    findVariable(id) {
+        var sc= this;
+
+        for(sc = this;sc != null;sc = sc.prev){
+            if(sc.table.has(id)) {
+                return sc.table.get(id);
+            }
+        }
+        return null;
+    }
+
     existsLocalVariable(id) {
         return this.table.has(id);
     }
