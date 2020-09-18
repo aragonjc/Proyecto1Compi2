@@ -24,12 +24,18 @@ class Type {
             if(scope.findType(this.type)) {
                 //***EJECUTAR this.list
                 //***validar this.list
-
+                if(this.list != null) {
+                    let dim = this.list.run(scope);
+                    let isArray = dim==0?false:true;
+    
+                    return {type:this.type,isArray:isArray,dim:dim}
+                } 
                 return {type:this.type,isArray:false,dim:0}
 
             } else {
 
                 //ERROR
+                console.log("-----------ERROR--------------")
             }
         }
     }

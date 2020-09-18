@@ -23,10 +23,10 @@ ast.forEach(element => {
     element.run(scope)
 });
 
-/*scope.typesTable.forEach(element => {
-    console.log(element);
-})*/
+scope.table.forEach(element => {
+    console.log(element.value);
+})
 /*console.log("---TYPES---")
-console.log(scope.typesTable)
-console.log("---Variables---")
-console.log(scope.table)*/
+console.log(scope.typesTable)*/
+//console.log("---Variables---")
+//console.log(scope.table)

@@ -109,6 +109,9 @@
 	const objType = require('./ejecucion/objType.js');
 	const typeKeyValue  = require('./ejecucion/typeKeyValue.js');
 	const Id  = require('./ejecucion/Id.js');
+	const typeList  = require('./ejecucion/typeList.js');
+	const ArrList = require('./ejecucion/ArrList.js');
+	const ArrParamList = require('./ejecucion/ArrParamList.js')
 %}
 
 %start S
@@ -337,11 +340,11 @@ typesList: typesL  { $$ = $1; }
 
 typesL: typesL sqBracketOpen sqBracketClose
 		{
-			$$ = new typeL(0,0,$1);
+			$$ = new typeList(0,0,$1);
 		}
 		|sqBracketOpen sqBracketClose
 		{
-			$$ = new typeL(0,0,null);
+			$$ = new typeList(0,0,null);
 		}
 ;
 
@@ -406,7 +409,10 @@ exp:  exp mas exp
 		$$ = new Id(0,0,$1);
 	}
 	| id PL bracketOpen paramFunc bracketClose
-	| sqBracketOpen arrParam sqBracketClose sqBCKFIN
+	| sqBracketOpen arrParam sqBracketClose /*sqBCKFIN*/
+	{
+		$$ = new ArrList($2);
+	}
 ;
 
 sqBCKFIN: sqBckList { $$ = $1; }
@@ -428,7 +434,8 @@ arrParam: listArrParam { $$ = $1; }
 ;
 
 listArrParam: listArrParam comma E
-			|E { $$ = $1; }
+			   { $$ = new ArrParamList($1,$3); }
+			|E { $$ = new ArrParamList(null,$1); }
 ;
 
 objetoParam: objetoParamList { $$ = $1; }

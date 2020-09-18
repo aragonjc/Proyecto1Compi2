@@ -15,7 +15,7 @@ class Variable extends Nodo{
 
         } else {
             
-            var def = undefined;
+            var def = null;
             if(this.deflast !=null) {
                 def = this.deflast.run(scope,this.type);
             }
