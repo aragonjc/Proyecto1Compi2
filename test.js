@@ -24,8 +24,8 @@ ast.forEach(element => {
 });
 
 scope.table.forEach(element => {
-    console.log(element.value);
-})
+    console.log(element);
+});
 /*console.log("---TYPES---")
 console.log(scope.typesTable)*/
 //console.log("---Variables---")

@@ -95,6 +95,9 @@ break;
 case 4: case 49: case 55: case 62: case 63: case 91: case 92: case 101: case 105: case 137: case 141: case 145: case 148:
  this.$ = $$[$0]; 
 break;
+case 5: case 16: case 75:
+ this.$ = $$[$0];
+break;
 case 6:
  this.$ =new decType($$[$0-5],$$[$0-2]); 
 break;
@@ -106,9 +109,6 @@ this.$= $$[$0];
 break;
 case 15: case 85: case 142:
 this.$ = null;
-break;
-case 16: case 75:
- this.$ = $$[$0];
 break;
 case 17: case 76:
  this.$ = null;

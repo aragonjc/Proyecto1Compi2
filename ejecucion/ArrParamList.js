@@ -13,13 +13,13 @@ class ArrParamList {
             var l = this.list.run(scope);
             
            
-            l.push(e);
+            l.arr.push(e);
             
             return l;
 
         } else {
             var e = this.exp.run(scope);
-            return [e];
+            return {arr:[e],type:e.type};
         }
     }
 }

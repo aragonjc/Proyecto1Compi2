@@ -28,12 +28,18 @@ class defLast extends Nodo{
 
             if(e != null || e.type != "NULL") {
 
-                if(tType.isArray) {
+                if(e.isArray) {
 
-                } else if(tType.type = "OBJ") {
+                    //***Comprobar si todos los elementos del arreglo son iguales
+                    //**Comprobar si los dos son arreglos de la misma dimencion */
                     
-                    //evaluar que las propiedades del TYPE 
-                    //sean igual al TYPE en TS
+                    return {value:e,type:e.type,isArray:e.isArray,dim:tType.dim,dectype:decType}
+
+                    
+                } else if(e.type == "OBJ") {
+                    
+                    //**evaluar que las propiedades del TYPE 
+                    //**sean igual al TYPE en TS
 
                 }else {
 

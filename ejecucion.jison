@@ -129,6 +129,7 @@ Bloque: Bloque Instruccion { $1.push($2); $$=$1;}
 Instruccion: llamadaFuncion
 			{ $$ = $1; }
             |variables
+			{ $$ = $1;}
             |Type id igual curlyBraceOpen parsObj curlyBraceClose semicolon/*; o no*/
 			{ $$ =new decType($2,$5); }
 			|funciones
