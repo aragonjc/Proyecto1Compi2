@@ -18,6 +18,38 @@ class Scope {
         } 
         return false;
     }
+
+    findType(id) {
+        var sc= this;
+
+        for(sc = this;sc != null;sc = sc.prev){
+            if(sc.prev == null) {
+                return sc.typesTable.has(id)
+            }
+        }
+        return false;
+    }
+
+    existsType(id) {
+        return this.typesTable.has(id)
+    }
+
+    insertType(id,value) {
+        if(!this.existsType(id)) {
+            this.typesTable.set(id,value);
+        } else {
+
+           if(this.typesTable.get(id) == null) {
+                this.typesTable.delete(id);
+                this.typesTable.set(id,value);
+                return;
+            }
+
+            //ERROR
+
+        }
+        
+    }
 /*
     get existLocalVariable(id) {
 

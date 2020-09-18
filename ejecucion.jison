@@ -105,6 +105,9 @@
 	const idList = require('./ejecucion/idList.js');
 	const Variable = require('./ejecucion/Variable.js');
 	const Type = require('./ejecucion/Type.js');
+	const decType = require('./ejecucion/decType.js');
+	const objType = require('./ejecucion/objType.js');
+	const typeKeyValue  = require('./ejecucion/typeKeyValue.js');
 %}
 
 %start S
@@ -123,6 +126,7 @@ Instruccion: llamadaFuncion
 			{ $$ = $1; }
             |variables
             |Type id igual curlyBraceOpen parsObj curlyBraceClose semicolon/*; o no*/
+			{ $$ =new decType($2,$5); }
 			|funciones
 			|IF
 			|WHILE
@@ -279,7 +283,8 @@ parsObj: objType {$$ = $1;}
 ;
 
 objType: objType opkv keyvalueT
-		|keyvalueT {$$ = $1;}
+		{  $$ = new objType($1,$3); }
+		|keyvalueT {$$ = new objType(null,$1);}
 ;
 
 
@@ -288,6 +293,7 @@ opkv: comma      {$$ = $1;}
 ;
 
 keyvalueT: id dosPuntos types
+		{ $$ = new typeKeyValue($1,$3); }
 ;
 
 defType: let   { $$ = $1; }

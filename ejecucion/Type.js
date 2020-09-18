@@ -21,6 +21,16 @@ class Type {
             return {type:this.type,isArray:false,dim:0}
         } else {
             //buscar si el type existe
+            if(scope.findType(this.type)) {
+                //***EJECUTAR this.list
+                //***validar this.list
+
+                return {type:this.type,isArray:false,dim:0}
+
+            } else {
+
+                //ERROR
+            }
         }
     }
 

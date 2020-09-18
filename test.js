@@ -13,10 +13,20 @@ let ast = parser.parse(entrada.toString());
 
 let scope = new Scope(null);
 
+/*ast.forEach(element => {
+    if(element.constructor.name == "decType") {
+        element.run(scope,null);
+    }
+})*/
+
 ast.forEach(element => {
     element.run(scope)
 });
 
-scope.table.forEach(element => {
+/*scope.typesTable.forEach(element => {
     console.log(element);
-})
+})*/
+console.log("---TYPES---")
+console.log(scope.typesTable)
+console.log("---Variables---")
+console.log(scope.table)
