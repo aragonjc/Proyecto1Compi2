@@ -15,20 +15,23 @@ class callFunction extends Nodo{
             if(this.idList != null) {
 
                 var list = this.idList.run(scope);
-
                 if(list.id == "log" && list.aux == null) {
-                    
                     if(this.params != null) {
                         if(this.params.length == 1) {
-                            
                             let tobj = this.params.pop();
                             //console.log("----------------------");
                             let newTObj = tobj.run(scope);
                             //console.log(newTObj);
-
+                            
                             if(newTObj.constructor.name == "Map") {
-                                console.log(this.getStrObj(newTObj));
-                            } else {
+                                console.log(this.getStrObj(newTObj,""));
+                                
+                            } else if(newTObj.isArray) {
+                                /*console.log("########")
+                                console.log(newTObj)
+                                console.log("######################")*/
+                                console.log(this.getStrArr(newTObj.value));
+                            }else {
                                 console.log(newTObj.value.toString());
                             }
 
@@ -64,22 +67,47 @@ class callFunction extends Nodo{
 
     }
 
-    getStrObj(obj) {
-        var str = "{\n"
+    getStrArr(obj) {
+        var str = "["
         var prop = "";
-        obj.forEach((value,key) => {
-            
-            prop += key + ": ";
+        //console.log(obj)
+        obj.forEach((value) => {
+
+            //prop += tab + "\t"+ key + ": ";
             if(value.constructor.name == "TObject") {
                 prop += value.value;
+            } else if(value.isArray) {
+                prop += this.getStrArr(value.value)
             } else if(value.constructor.name == "Map"){
-                prop += this.getStrObj(value);
+                prop += this.getStrObj(value,"\t");
+            }
+            prop += ",";
+        });
+        prop = prop.substring(0,prop.length-1)
+        str += prop;
+        str += "]"
+        return str;
+    }
+
+    getStrObj(obj,tab) {
+        var str = tab+"{\n"
+        var prop = "";
+        obj.forEach((value,key) => {
+
+            prop += tab + "\t"+ key + ": ";
+            if(value.constructor.name == "TObject") {
+                prop += value.value;
+            } else if(value.isArray) {
+                prop += this.getStrArr(value.value)
+            } else if(value.constructor.name == "Map"){
+                prop += this.getStrObj(value,"\t");
             }
             prop += ",\n";
         });
         prop = prop.substring(0,prop.length-2)
         str += prop;
-        str += "\n}"
+        str += "\n"
+        str += tab +"}"
         return str;
     }
 }

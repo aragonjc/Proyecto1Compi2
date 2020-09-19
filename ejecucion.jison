@@ -115,6 +115,7 @@
 	const objList = require('./ejecucion/objList.js')
 	const Obj = require('./ejecucion/Obj.js')
 	const objProperty = require('./ejecucion/objProperty.js')
+	const idVarlast = require('./ejecucion/idVarlast.js')
 %}
 
 %start S
@@ -144,6 +145,7 @@ Instruccion: llamadaFuncion
 ;
 
 llamadaFuncion: id PL bracketOpen paramFunc bracketClose semicolon
+				//INCOMPLETO
                 { $$ = new callFunction(0,0,$1,$2,$4);}
 ;
  PL:varLast {$$= $1;}
@@ -255,6 +257,7 @@ defVarLastP: defVarLastP comma id defLast
 ;
 
 variables: defType id defLast defVarLast semicolon
+		//LA ASIGNACION NO ESTA COMPLETA
             { $$ = new Variable(0,0,$1,$2,$3,$4); }
 		  |id asignLast semicolon
 		  |id asignLast
@@ -412,6 +415,10 @@ exp:  exp mas exp
 	| undefined
     { $$ = new TObject(0,0,$1,"UNDEFINED"); }
 	| id varLast
+	{
+
+		$$ = new idVarlast(0,0,$1,$2);
+	}
 	| id
 	{
 		$$ = new Id(0,0,$1);

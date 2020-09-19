@@ -8,7 +8,9 @@ class defLast extends Nodo{
     }
 
     run(scope,decType) {
-
+        /*falta validar que si no tiene :type la variable
+          no se puede asignar un objeto
+        */
         let e = null;
         let type = "NULL";
         let isArray = false;
