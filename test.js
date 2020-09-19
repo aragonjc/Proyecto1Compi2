@@ -22,10 +22,10 @@ let scope = new Scope(null);
 ast.forEach(element => {
     element.run(scope)
 });
-
+/*
 scope.table.forEach(element => {
     console.log(element);
-});
+});*/
 /*console.log("---TYPES---")
 console.log(scope.typesTable)*/
 //console.log("---Variables---")

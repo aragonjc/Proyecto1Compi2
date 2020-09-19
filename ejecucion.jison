@@ -112,6 +112,9 @@
 	const typeList  = require('./ejecucion/typeList.js');
 	const ArrList = require('./ejecucion/ArrList.js');
 	const ArrParamList = require('./ejecucion/ArrParamList.js')
+	const objList = require('./ejecucion/objList.js')
+	const Obj = require('./ejecucion/Obj.js')
+	const objProperty = require('./ejecucion/objProperty.js')
 %}
 
 %start S
@@ -178,6 +181,7 @@ STMT: STMT InstruccionI   { $1.push($2); $$=$1;}
 InstruccionI: llamadaFuncion
 			{ $$=$1; }
             |variables
+			{ $$=$1; }
             |IF
             |WHILE
             |DOWHILE
@@ -351,6 +355,9 @@ typesL: typesL sqBracketOpen sqBracketClose
 
 E: exp { $$ = $1; }
 	| curlyBraceOpen objetoParam curlyBraceClose
+	{
+		$$ = new Obj($2);
+	}
 	;
 
 exp:  exp mas exp
@@ -444,9 +451,13 @@ objetoParam: objetoParamList { $$ = $1; }
 ;
 
 objetoParamList: objetoParamList opkv keyvalue
+				{ $$ = new objList($1,$3); }
 		  		|keyvalue
-				{ $$ = $1; }
+				{ $$ = new objList(null,$1); }
 ;
 
 keyvalue: id dosPuntos E
+	{
+		$$ = new objProperty($1,$3);
+	}
 ;

@@ -26,7 +26,7 @@ class defLast extends Nodo{
             let tType = this.type.run(scope);
             //comprobar si exp == tType
 
-            if(e != null || e.type != "NULL") {
+            if(e.type != 'NULL') {
 
                 if(e.isArray) {
 
@@ -38,8 +38,11 @@ class defLast extends Nodo{
                     
                 } else if(e.type == "OBJ") {
                     
-                    //**evaluar que las propiedades del TYPE 
-                    //**sean igual al TYPE en TS
+                    //1.0**evaluar que las propiedades del TYPE 
+                    //1.1-**sean igual al TYPE en TS
+                    //coprobar los valores de las propiedades
+
+                    return {value:e.value,type:tType.type,isArray:tType.isArray,dim:tType.dim,dectype:decType}
 
                 }else {
 
@@ -48,6 +51,7 @@ class defLast extends Nodo{
                     } else {
                         console.log("-----------ERROR------------")
                         console.log("tipos incompatibles")
+                        //console.log(e)
                         console.log("----------------------------")
                         return null;
                     }
