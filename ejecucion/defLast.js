@@ -43,7 +43,7 @@ class defLast extends Nodo{
                     //1.0**evaluar que las propiedades del TYPE 
                     //1.1-**sean igual al TYPE en TS
                     //coprobar los valores de las propiedades
-
+                    
                     return {value:e.value,type:tType.type,isArray:tType.isArray,dim:tType.dim,dectype:decType}
 
                 }else {

@@ -121,6 +121,7 @@
 	const asignLastF = require('./ejecucion/asignLastF.js')
 	const asignLast = require('./ejecucion/asignLast.js')
 	const asignVariable = require('./ejecucion/asignVariable.js')
+	const ternaryOp = require('./ejecucion/ternaryOp.js')
 %}
 
 %start S
@@ -274,10 +275,12 @@ variables: defType id defLast defVarLast semicolon
             { $$ = new Variable(0,0,$1,$2,$3,$4); }
 		  |id asignLast semicolon
 		  {
+			  //comprobar si es const o let
 			  $$ = new asignVariable($1,$2);
 		  }
 		  |id asignLast
 		  {
+			  //comprobar si es const o let
 			  $$ = new asignVariable($1,$2);
 		  }
 ;
@@ -444,6 +447,9 @@ exp:  exp mas exp
 	| bracketOpen exp bracketClose
     { $$ = $2; }
 	| exp question exp dosPuntos exp
+	{
+		$$ = new ternaryOp($1,$3,$5);
+	}
 	| exp increment
     { $$ = new Operation(0,0,$1,null,"INC"); }
 	| exp decrement
@@ -476,13 +482,14 @@ exp:  exp mas exp
 	}
 ;
 
+/*
 sqBCKFIN: sqBckList { $$ = $1; }
 		|           { $$ = null; }
 ;
 
 sqBckList: sqBckList sqBracketOpen arrParam sqBracketClose
 		|sqBracketOpen arrParam sqBracketClose
-		;
+		;*/
 /*
 POI: POI point id
 	{ $$ = $1 + $2 + $3;}
