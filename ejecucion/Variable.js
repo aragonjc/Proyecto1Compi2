@@ -11,18 +11,22 @@ class Variable extends Nodo{
 
     run(scope) {
 
+        var def = null;
+        if(this.deflast !=null) {
+            def = this.deflast.run(scope,this.type);
+        }
+        scope.insertVariable(this.id,def);
+
         if(this.defvarLast != null) {
 
-        } else {
-            
-            var def = null;
-            if(this.deflast !=null) {
-                def = this.deflast.run(scope,this.type);
-            }
+            var list = this.defvarLast.run(scope,this.type);
 
-            scope.insertVariable(this.id,def);
+            if(list.length > 0) {
+                list.forEach(element => {
+                    element.run(scope);
+                });
+            }
         }
-        
     }
 }
 

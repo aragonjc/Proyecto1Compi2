@@ -116,6 +116,11 @@
 	const Obj = require('./ejecucion/Obj.js')
 	const objProperty = require('./ejecucion/objProperty.js')
 	const idVarlast = require('./ejecucion/idVarlast.js')
+	const defVarLast = require('./ejecucion/defVarLast.js')
+	const defVarLastP = require('./ejecucion/defVarLastP.js')
+	const asignLastF = require('./ejecucion/asignLastF.js')
+	const asignLast = require('./ejecucion/asignLast.js')
+	const asignVariable = require('./ejecucion/asignVariable.js')
 %}
 
 %start S
@@ -249,18 +254,32 @@ forOP: in { $$ = $1; }
 ;
 
 defVarLast: comma defVarLastP
+			{
+				$$ = new defVarLast($2);
+			}
 			|{$$=null;}
 ;
 
 defVarLastP: defVarLastP comma id defLast
+			{
+				$$ = new defVarLastP(0,0,$1,$3,$4);
+			}
 			|id defLast
+			{
+				$$ = new defVarLastP(0,0,null,$1,$2);
+			}
 ;
 
 variables: defType id defLast defVarLast semicolon
-		//LA ASIGNACION NO ESTA COMPLETA
             { $$ = new Variable(0,0,$1,$2,$3,$4); }
 		  |id asignLast semicolon
+		  {
+			  $$ = new asignVariable($1,$2);
+		  }
 		  |id asignLast
+		  {
+			  $$ = new asignVariable($1,$2);
+		  }
 ;
 
 /*
@@ -268,7 +287,13 @@ scNot: semicolon {$$=$1;}
 		|{$$ = "";};*/
 
 asignLast: varLast asignLastF
+			{
+				$$ =new asignLast($1,$2);
+			}
 		 | asignLastF
+		 {
+			 $$ = new asignLast(null,$1);
+		 }
 ;
 
 varLast: sqBracketOpen exp sqBracketClose  auxP
@@ -282,12 +307,33 @@ auxP:varLast { $$ = $1;}
 	;
 
 asignLastF:  igual E
+{
+	$$ = new asignLastF(null,$2);
+}
 			|masIgual E
+			{
+	$$ = new asignLastF("+",$2);
+}
 			|menosIgual E
+			{
+	$$ = new asignLastF("-",$2);
+}
 			|porIgual E
+			{
+	$$ = new asignLastF("*",$2);
+}
 			|divisionIgual E
+			{
+	$$ = new asignLastF("/",$2);
+}
 			|increment
+			{
+	$$ = new asignLastF("+",null);
+}
 			|decrement
+			{
+	$$ = new asignLastF("-",null);
+}
 ;
 
 parsObj: objType {$$ = $1;}

@@ -5,7 +5,7 @@ class idList {
         this.expOrID = expOrID;
         this.auxp = auxp;
     }
-
+    //para funciones
     run(scope) {
 
         var aux = null;
@@ -27,7 +27,6 @@ class idList {
     }
 
     get(scope) {
-        console.log("hola")
         if(this.isArray) {
 
             let exp = this.expOrID.run(scope);

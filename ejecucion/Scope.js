@@ -6,6 +6,21 @@ class Scope {
         this.typesTable = new Map();
     }
 
+    changeValueVariable(id,obj) {
+        this.getObjVariable(id).set(id,obj);
+    }
+
+    getObjVariable(id) {
+        var sc= this;
+
+        for(sc = this;sc != null;sc = sc.prev){
+            if(sc.table.has(id)) {
+                return sc.table;
+            }
+        }
+        return null;
+    }
+
     findVariable(id) {
         var sc= this;
 
@@ -27,6 +42,7 @@ class Scope {
             this.table.set(id,value);
             return true;
         } 
+        console.log("ERROR la variable " + id + " ya existe")
         return false;
     }
 
