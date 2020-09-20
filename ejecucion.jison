@@ -223,6 +223,7 @@ OP: E semicolon { $$ = $1;}
 	;
 
 IF: if bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose IFLAST
+	{  }
 ;
 
 IFLAST: else IFCOND
