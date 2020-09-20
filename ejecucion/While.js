@@ -39,7 +39,7 @@ class While {
                     if(r.type == 'RETURN') {
                         return r;
                     } else if(r.type == 'BREAK') {
-                        return r;
+                        break;
                     }
                 }
 

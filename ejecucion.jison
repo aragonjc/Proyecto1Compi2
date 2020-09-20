@@ -147,10 +147,9 @@ Instruccion: llamadaFuncion
 			{ $$ =new decType($2,$5); }
 			|funciones
 			|IF
+			{ $$ = $1; }
 			|WHILE
-			{
-				$$ = $1;
-			}
+			{ $$ = $1;}
 			|DOWHILE
 			{ $$ = $1; }
 			|SWITCH
@@ -198,6 +197,7 @@ InstruccionI: llamadaFuncion
             |variables
 			{ $$=$1; }
             |IF
+			{ $$ = $1; }
             |WHILE
 			{ $$ = $1; }
             |DOWHILE
