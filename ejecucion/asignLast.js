@@ -95,10 +95,35 @@ class asignLast {
 
         } else {
             //COMPROBAR SI ES NUMBER BOOL STRING NULL
-            var x = obj.dectype;
-            var a = new TObject(0,0,obj.value.value,obj.type)
-            var obr = this.asignLastF.run(scope,{value:a});
-            return {value:obr,type:obr.type,isArray:obr.isArray,dim:obr.dimentions,dectype:x}
+            var dectype = obj.dectype;
+            //console.log(obj);
+            if(this.isPrimitive(obj)) {
+                var a = new TObject(0,0,obj.value.value,obj.type)
+                var obr = this.asignLastF.run(scope,{value:a});
+                return {value:obr,type:obr.type,isArray:obr.isArray,dim:obr.dimentions,dectype:dectype}
+        
+            } 
+            var obr = this.asignLastF.run(scope,obj);
+            obr.dectype = dectype;
+            obr.type = obj.type;
+            return obr;
+        }
+    }
+
+    isPrimitive(obj) {
+        switch(obj.type) {
+            case 'NUMBER':
+                return true;
+            case 'BOOLEAN':
+                return true;
+            case 'STRING':
+                return true;
+            case 'NULL':
+                return true;
+            case 'UNDEFINED':
+                return true
+            default:
+                return false;    
         }
     }
 }

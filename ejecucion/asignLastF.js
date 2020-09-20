@@ -28,6 +28,8 @@ class asignLastF {
             return operation.run(scope);
         }
     }
+
+    
 }
 
 module.exports = asignLastF;
