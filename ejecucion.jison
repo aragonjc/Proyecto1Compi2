@@ -124,6 +124,7 @@
 	const ternaryOp = require('./ejecucion/ternaryOp.js')
 	const While = require('./ejecucion/While.js')
 	const EscapeExp = require('./ejecucion/EscapeExp.js')
+	const doWhile = require('./ejecucion/doWhile.js')
 %}
 
 %start S
@@ -151,6 +152,7 @@ Instruccion: llamadaFuncion
 				$$ = $1;
 			}
 			|DOWHILE
+			{ $$ = $1; }
 			|SWITCH
 			|FOR
 ;
@@ -199,6 +201,7 @@ InstruccionI: llamadaFuncion
             |WHILE
 			{ $$ = $1; }
             |DOWHILE
+			{ $$ = $1; }
             |SWITCH
             |FOR
             |Break semicolon
@@ -237,6 +240,9 @@ WHILE: while bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose
 ;
 
 DOWHILE: do curlyBraceOpen STMT curlyBraceClose while bracketOpen exp bracketClose semicolon
+		{
+			$$ = new doWhile($7,$3);
+		}
 ;
 
 SWITCH: switch bracketOpen exp bracketClose curlyBraceOpen FIRSTCASE LASTCASE curlyBraceClose
