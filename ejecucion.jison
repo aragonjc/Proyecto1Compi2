@@ -125,6 +125,7 @@
 	const While = require('./ejecucion/While.js')
 	const EscapeExp = require('./ejecucion/EscapeExp.js')
 	const doWhile = require('./ejecucion/doWhile.js')
+	const IF = require('./ejecucion/IF.js')
 %}
 
 %start S
@@ -153,6 +154,9 @@ Instruccion: llamadaFuncion
 			|DOWHILE
 			{ $$ = $1; }
 			|SWITCH
+			{
+				$$ = $1;
+			}
 			|FOR
 ;
 
@@ -203,6 +207,9 @@ InstruccionI: llamadaFuncion
             |DOWHILE
 			{ $$ = $1; }
             |SWITCH
+			{
+				$$ =$1;
+			}
             |FOR
             |Break semicolon
 			{
@@ -223,15 +230,23 @@ OP: E semicolon { $$ = $1;}
 	;
 
 IF: if bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose IFLAST
-	{  }
+	{ 
+		$$ = new IF($3,$6,$8);
+	 }
 ;
 
-IFLAST: else IFCOND
+IFLAST: else IFCOND { $$ = $2; }
 	  |{ $$ = null; }
 ;
 
 IFCOND: if bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose IFLAST
+	   {
+		   $$ = new IF($3,$6,$8);
+	   }
 	   |curlyBraceOpen STMT curlyBraceClose
+	   {
+		   $$ = new IF(null,$2,null);
+	   }
 ;
 
 WHILE: while bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose
@@ -484,9 +499,9 @@ exp:  exp mas exp
 	| STRING
     { $$ = new TObject(0,0,$1/*.substring(1,$1.length-1)*/,"STRING"); }
 	| true
-    { $$ = new TObject(0,0,$1,"BOOLEAN"); }
+    { $$ = new TObject(0,0,true,"BOOLEAN"); }
 	| false
-    { $$ = new TObject(0,0,$1,"BOOLEAN"); }
+    { $$ = new TObject(0,0,false,"BOOLEAN"); }
 	| null
     { $$ = new TObject(0,0,$1,"NULL"); }
 	| undefined
