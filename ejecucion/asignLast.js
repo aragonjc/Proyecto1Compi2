@@ -1,3 +1,4 @@
+const TObject = require('./TObject.js');
 class asignLast {
 
     constructor(list,asignLastF) {
@@ -93,7 +94,11 @@ class asignLast {
             }
 
         } else {
-            return this.asignLastF.run(scope,obj);
+            //COMPROBAR SI ES NUMBER BOOL STRING NULL
+            var x = obj.dectype;
+            var a = new TObject(0,0,obj.value.value,obj.type)
+            var obr = this.asignLastF.run(scope,{value:a});
+            return {value:obr,type:obr.type,isArray:obr.isArray,dim:obr.dimentions,dectype:x}
         }
     }
 }

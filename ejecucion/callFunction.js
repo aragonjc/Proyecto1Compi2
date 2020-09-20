@@ -17,8 +17,9 @@ class callFunction extends Nodo{
                 var list = this.idList.run(scope);
                 if(list.id == "log" && list.aux == null) {
                     if(this.params != null) {
+                        //console.log(this.params)
                         if(this.params.length == 1) {
-                            let tobj = this.params.pop();
+                            let tobj = this.params[0];
                             //console.log("----------------------");
                             let newTObj = tobj.run(scope);
                             //console.log(newTObj);
@@ -40,14 +41,14 @@ class callFunction extends Nodo{
                                 this.params.column,
                                 "Semantico",
                                 "Error la funcion necesita un parametro");
-                            console.log("-------ERROR----------");
+                            console.log("r-------ERROR----------r");
                         }
                     } else {
                         new Error(this.params.line,
                                 this.params.column,
                                 "Semantico",
                                 "Error la funcion necesita un parametro");
-                        console.log("-------ERROR----------");
+                        console.log("a-------ERROR----------a");
                     }
 
                 } else {

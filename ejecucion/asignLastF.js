@@ -17,6 +17,7 @@ class asignLastF {
 
             //hacer comprobacion de tipos
             //var newObject = new TObject(0,0,obj.value.value,obj.type)
+            
             var operation = new Operation(0,0,obj.value,this.exp,this.op);
             //console.log(operation);
             return operation.run(scope);

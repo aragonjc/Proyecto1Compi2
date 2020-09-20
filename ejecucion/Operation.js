@@ -14,6 +14,7 @@ class Operation extends Nodo{
     run(scope) {
         let valIzq;
         let valDer;
+        
         if(this.opIzq != null)
             valIzq = this.opIzq.run(scope);
         if(this.opDer != null)

@@ -122,6 +122,8 @@
 	const asignLast = require('./ejecucion/asignLast.js')
 	const asignVariable = require('./ejecucion/asignVariable.js')
 	const ternaryOp = require('./ejecucion/ternaryOp.js')
+	const While = require('./ejecucion/While.js')
+	const EscapeExp = require('./ejecucion/EscapeExp.js')
 %}
 
 %start S
@@ -145,6 +147,9 @@ Instruccion: llamadaFuncion
 			|funciones
 			|IF
 			|WHILE
+			{
+				$$ = $1;
+			}
 			|DOWHILE
 			|SWITCH
 			|FOR
@@ -192,12 +197,22 @@ InstruccionI: llamadaFuncion
 			{ $$=$1; }
             |IF
             |WHILE
+			{ $$ = $1; }
             |DOWHILE
             |SWITCH
             |FOR
             |Break semicolon
+			{
+				$$ = new EscapeExp('BREAK',null);
+			}
             |Continue semicolon
+			{
+				$$ = new EscapeExp('CONTINUE',null);
+			}
             |return OP
+			{
+				$$ = new EscapeExp('RETURN',$1);
+			}
 ;
 
 OP: E semicolon { $$ = $1;}
@@ -216,6 +231,9 @@ IFCOND: if bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose IFLA
 ;
 
 WHILE: while bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose
+		{
+			$$ = new While($3,$6);
+		}
 ;
 
 DOWHILE: do curlyBraceOpen STMT curlyBraceClose while bracketOpen exp bracketClose semicolon
