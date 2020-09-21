@@ -130,6 +130,10 @@
 	const Defcase = require('./ejecucion/Defcase.js')
 	const Case = require('./ejecucion/Case.js')
 	const Switch = require('./ejecucion/Switch.js')
+
+	const ForNormal = require('./ejecucion/ForNormal.js')
+	const ForTwo = require('./ejecucion/ForTwo.js')
+	const ForThree = require('./ejecucion/ForThree.js')
 %}
 
 %start S
@@ -162,6 +166,9 @@ Instruccion: llamadaFuncion
 				$$ = $1;
 			}
 			|FOR
+			{
+				$$ =$1;
+			}
 ;
 
 llamadaFuncion: id PL bracketOpen paramFunc bracketClose semicolon
@@ -215,6 +222,9 @@ InstruccionI: llamadaFuncion
 				$$ =$1;
 			}
             |FOR
+			{
+				$$ = $1;
+			}
             |Break semicolon
 			{
 				$$ = new EscapeExp('BREAK',null);
@@ -304,9 +314,18 @@ ENDCASE: CASE { $$ = $1; }
 ;
 
 
-FOR: for bracketOpen let id igual exp semicolon exp semicolon exp bracketClose curlyBraceOpen STMT curlyBraceClose
-	|for bracketOpen exp igual exp semicolon exp semicolon exp bracketClose curlyBraceOpen STMT curlyBraceClose
-	|for bracketOpen exp semicolon exp semicolon exp bracketClose curlyBraceOpen STMT curlyBraceClose
+FOR: for bracketOpen let id igual exp semicolon exp semicolon id asignLast bracketClose curlyBraceOpen STMT curlyBraceClose
+	{
+		$$ = new ForNormal($4,$6,$8,new asignVariable($10,$11),$14);
+	}
+	|for bracketOpen exp igual exp semicolon exp semicolon id asignLast bracketClose curlyBraceOpen STMT curlyBraceClose
+	{
+		$$ = new ForTwo($3,$5,$7,new asignVariable($9,$10),$13);
+	}
+	|for bracketOpen exp semicolon exp semicolon id asignLast bracketClose curlyBraceOpen STMT curlyBraceClose
+	{
+		$$ = new ForThree($3,$5,new asignVariable($7,$8),$11);
+	}
 	|for bracketOpen let id forOP exp bracketClose curlyBraceOpen STMT curlyBraceClose
 	|for bracketOpen exp forOP exp bracketClose curlyBraceOpen STMT curlyBraceClose
 ;

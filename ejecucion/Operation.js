@@ -168,11 +168,12 @@ class Operation extends Nodo{
             let resTObject =  new TObject(0,0,res,String(typeof(res)).toUpperCase());
             return resTObject;
         } else if (this.operator == "INC") {
+
             let opIzqVal = this.convertedValue(valIzq);
             let res = opIzqVal+1;
-            
             let resTObject =  new TObject(0,0,res,String(typeof(res)).toUpperCase());
             return resTObject;
+
         } else if (this.operator == "DEC") {
             let opIzqVal = this.convertedValue(valIzq);
             let res = opIzqVal-1;

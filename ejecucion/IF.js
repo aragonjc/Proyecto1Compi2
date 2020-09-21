@@ -82,7 +82,7 @@ class IF {
                     } else if(aux.type == 'BREAK') {
                         return aux;
                     } else if(aux.type == 'CONTINUE') {
-                        return null;
+                        return aux;
                     }
                 }
             }     
