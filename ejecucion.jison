@@ -134,6 +134,7 @@
 	const ForNormal = require('./ejecucion/ForNormal.js')
 	const ForTwo = require('./ejecucion/ForTwo.js')
 	const ForThree = require('./ejecucion/ForThree.js')
+	const ForEach = require('./ejecucion/ForEach.js')
 %}
 
 %start S
