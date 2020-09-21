@@ -332,6 +332,9 @@ FOR: for bracketOpen let id igual exp semicolon exp semicolon id asignLast brack
 		$$ = new ForEach(true,$4,$5,$6,$9);
 	}
 	|for bracketOpen exp forOP exp bracketClose curlyBraceOpen STMT curlyBraceClose
+	{
+		$$ = new ForEach(false,$3,$4,$5,$8);
+	}
 ;
 
 forOP: in { $$ = $1; }

@@ -227,6 +227,11 @@ case 60:
 		this.$ = new ForEach(true,$$[$0-6],$$[$0-5],$$[$0-4],$$[$0-1]);
 	
 break;
+case 61:
+
+		this.$ = new ForEach(false,$$[$0-6],$$[$0-5],$$[$0-4],$$[$0-1]);
+	
+break;
 case 64:
 
 				this.$ = new defVarLast($$[$0]);

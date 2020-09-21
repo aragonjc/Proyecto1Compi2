@@ -78,6 +78,60 @@ class ForEach{
 
         } else {
 
+            if(this.id.constructor.name == "Id") {
+
+                var id = this.id.id;
+                if(scope.findVariable(id)){
+
+                    var actualScope = new Scope(scope);
+
+                    var array = this.arr.run(scope);
+                    if(array.constructor.name == "Map") {
+
+                        for (const key of array.keys()) {
+                            
+                            var rasign = new asignVariable(id,new asignLast(null,new asignLastF(null,new TObject(0,0,key.toString(),"STRING"))));
+                            rasign.run(actualScope)
+                            var aux = this.statement(actualScope);
+                            if(aux != null) {
+            
+                                if(aux.type == 'RETURN') {
+                                    return aux;
+                                } else if(aux.type == 'BREAK') {
+                                    break;
+                                } 
+                            }
+                        }
+
+                    } else {
+                        array = array.value;
+                        
+                        for (const key in array) {
+                            var rasign = new asignVariable(id,new asignLast(null,new asignLastF(null,new TObject(0,0,key.toString(),"NUMBER"))));
+                            rasign.run(actualScope)
+                            var aux = this.statement(actualScope);
+                            if(aux != null) {
+            
+                                if(aux.type == 'RETURN') {
+                                    return aux;
+                                } else if(aux.type == 'BREAK') {
+                                    break;
+                                } 
+                            }
+                        }
+                    }
+
+
+                } else {
+                    //ERROR
+                    console.log("ERROR")
+                }
+
+            } else {
+                //Error
+                console.log("ERROR se esperaba un id")
+            }
+
         }
 
         return null;
@@ -115,7 +169,46 @@ class ForEach{
             }
 
         } else {
+            if(this.id.constructor.name == "Id") {
 
+                var id = this.id.id;
+                if(scope.findVariable(id)){
+
+                    var actualScope = new Scope(scope);
+
+                    var array = this.arr.run(scope);
+                    if(array.constructor.name == "Map") {
+                        //ERROR
+                        console.log("ERROR")
+                        return null;
+                    } else {
+                        array = array.value;
+                        
+                        for (const key of array) {
+                            var rasign = new asignVariable(id,new asignLast(null,new asignLastF(null,key)));
+                            rasign.run(actualScope)
+                            var aux = this.statement(actualScope);
+                            if(aux != null) {
+            
+                                if(aux.type == 'RETURN') {
+                                    return aux;
+                                } else if(aux.type == 'BREAK') {
+                                    break;
+                                } 
+                            }
+                        }
+                    }
+
+
+                } else {
+                    //ERROR
+                    console.log("ERROR")
+                }
+
+            } else {
+                //Error
+                console.log("ERROR se esperaba un id")
+            }
         }
 
         return null;
