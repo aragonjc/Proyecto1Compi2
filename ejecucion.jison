@@ -327,6 +327,9 @@ FOR: for bracketOpen let id igual exp semicolon exp semicolon id asignLast brack
 		$$ = new ForThree($3,$5,new asignVariable($7,$8),$11);
 	}
 	|for bracketOpen let id forOP exp bracketClose curlyBraceOpen STMT curlyBraceClose
+	{
+		$$ = new ForEach(true,$4,$5,$6,$9);
+	}
 	|for bracketOpen exp forOP exp bracketClose curlyBraceOpen STMT curlyBraceClose
 ;
 
