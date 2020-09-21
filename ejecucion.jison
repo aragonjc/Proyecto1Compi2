@@ -126,6 +126,10 @@
 	const EscapeExp = require('./ejecucion/EscapeExp.js')
 	const doWhile = require('./ejecucion/doWhile.js')
 	const IF = require('./ejecucion/IF.js')
+
+	const Defcase = require('./ejecucion/Defcase.js')
+	const Case = require('./ejecucion/Case.js')
+	const Switch = require('./ejecucion/Switch.js')
 %}
 
 %start S
@@ -262,20 +266,37 @@ DOWHILE: do curlyBraceOpen STMT curlyBraceClose while bracketOpen exp bracketClo
 ;
 
 SWITCH: switch bracketOpen exp bracketClose curlyBraceOpen FIRSTCASE LASTCASE curlyBraceClose
+		{
+			$$ = new Switch($3,$6,$7);
+		}
 ;
 
-FIRSTCASE: CASE { $$ = $1; }
+FIRSTCASE: CASE { $$ = new Case($1); }
 		  | { $$ = null; }
 ;
 
 CASE: CASE case exp dosPuntos STMT
+	 {
+		 $1.push({exp:$3,stmt:$5});
+		 $$ = $1;
+	 }
 	 |case exp dosPuntos STMT
+	 {
+		 $$ = [{exp:$2,stmt:$4}]
+	 }
 ;
 
+//falta ENDCASE no se como hacer el funcionamiento correcto
 LASTCASE: DEFCASE ENDCASE
+	{
+		$$ = $1;
+	}
 ;
 
 DEFCASE: default dosPuntos STMT
+{
+	$$ = new Defcase($3);
+}
 ;
 
 ENDCASE: CASE { $$ = $1; }
