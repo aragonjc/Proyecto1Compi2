@@ -11,8 +11,14 @@ class EscapeExp {
             return {type:'BREAK'}
         } else if(this.type == 'CONTINUE') {
             return {type:'CONTINUE'}
-        } else {
+        } else if(this.type == "RETURN"){
+            //console.log(this.exp)
+            if(this.exp != null) {
 
+                var res = this.exp.run(scope);
+                return {type:"RETURN",res:res}
+            }
+            return {type:"RETURN"}
         }
     }
 

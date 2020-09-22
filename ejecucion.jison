@@ -135,6 +135,9 @@
 	const ForTwo = require('./ejecucion/ForTwo.js')
 	const ForThree = require('./ejecucion/ForThree.js')
 	const ForEach = require('./ejecucion/ForEach.js')
+
+	const Function = require('./ejecucion/Function.js')
+	const FuncDec = require('./ejecucion/FuncDec.js')
 %}
 
 %start S
@@ -150,38 +153,35 @@ Bloque: Bloque Instruccion { $1.push($2); $$=$1;}
 ;
 
 Instruccion: llamadaFuncion
-			{ $$ = $1; }
+			{ $$=$1; }
             |variables
-			{ $$ = $1;}
+			{ $$=$1;}
             |Type id igual curlyBraceOpen parsObj curlyBraceClose semicolon/*; o no*/
-			{ $$ =new decType($2,$5); }
+			{ $$=new decType($2,$5); }
 			|funciones
+			{ $$=$1; }
 			|IF
-			{ $$ = $1; }
+			{ $$=$1; }
 			|WHILE
-			{ $$ = $1;}
+			{ $$=$1;}
 			|DOWHILE
-			{ $$ = $1; }
+			{ $$=$1; }
 			|SWITCH
-			{
-				$$ = $1;
-			}
+			{ $$=$1; }
 			|FOR
-			{
-				$$ =$1;
-			}
+			{ $$=$1; }
 ;
 
 llamadaFuncion: id PL bracketOpen paramFunc bracketClose semicolon
 				//INCOMPLETO
-                { $$ = new callFunction(0,0,$1,$2,$4);}
+                { $$ = new callFunction(0,0,$1,$2,$4); }
 ;
  PL:varLast {$$= $1;}
 	|{$$ = null;}
 ;
 
-paramFunc: paramFuncList { $$ = $1;} 
-		|                { $$ = null;}                
+paramFunc: paramFuncList { $$=$1;} 
+		|                { $$=null;}                
 ;
 
 paramFuncList: paramFuncList comma E
@@ -190,18 +190,31 @@ paramFuncList: paramFuncList comma E
 ;
 
 funciones: function id bracketOpen funcParam bracketClose funcDec
+{
+			$$ = new Function($2,$4,$6);
+}
 ;
 
 funcDec: dosPuntos types curlyBraceOpen STMT curlyBraceClose
+		 {
+			var hasType = true;
+			$$ = new FuncDec(hasType,$2,$4);
+		 }
 		|curlyBraceOpen STMT curlyBraceClose
+		{
+			var hasType = false;
+			$$ = new FuncDec(hasType,null,$2);
+		 }
 ;
 
-funcParam: funcParamList
-		  |{ $$ = null; }
+funcParam: funcParamList { $$ =$1;}	
+		  |{ $$ = []; }
 ;
 
 funcParamList: funcParamList comma id dosPuntos types
+				{$1.push({id:$3,types:$5}); $$=$1;}
 			  |id dosPuntos types
+			  {$$ = [{id:$1,types:$3}];}
 ;
 
 STMT: STMT InstruccionI   { $1.push($2); $$=$1;}
@@ -213,31 +226,21 @@ InstruccionI: llamadaFuncion
             |variables
 			{ $$=$1; }
             |IF
-			{ $$ = $1; }
+			{ $$=$1; }
             |WHILE
-			{ $$ = $1; }
+			{ $$=$1; }
             |DOWHILE
-			{ $$ = $1; }
+			{ $$=$1; }
             |SWITCH
-			{
-				$$ =$1;
-			}
+			{ $$=$1; }
             |FOR
-			{
-				$$ = $1;
-			}
+			{ $$=$1; }
             |Break semicolon
-			{
-				$$ = new EscapeExp('BREAK',null);
-			}
+			{ $$=new EscapeExp('BREAK',null); }
             |Continue semicolon
-			{
-				$$ = new EscapeExp('CONTINUE',null);
-			}
+			{ $$=new EscapeExp('CONTINUE',null); }
             |return OP
-			{
-				$$ = new EscapeExp('RETURN',$1);
-			}
+			{ $$=new EscapeExp('RETURN',$2); }
 ;
 
 OP: E semicolon { $$ = $1;}
@@ -288,12 +291,12 @@ FIRSTCASE: CASE { $$ = new Case($1); }
 
 CASE: CASE case exp dosPuntos STMT
 	 {
-		 $1.push({exp:$3,stmt:$5});
-		 $$ = $1;
+		$1.push({exp:$3,stmt:$5});
+		$$ = $1;
 	 }
 	 |case exp dosPuntos STMT
 	 {
-		 $$ = [{exp:$2,stmt:$4}]
+		$$ = [{exp:$2,stmt:$4}]
 	 }
 ;
 
@@ -534,9 +537,7 @@ exp:  exp mas exp
 	| bracketOpen exp bracketClose
     { $$ = $2; }
 	| exp question exp dosPuntos exp
-	{
-		$$ = new ternaryOp($1,$3,$5);
-	}
+	{ $$ = new ternaryOp($1,$3,$5); }
 	| exp increment
     { $$ = new Operation(0,0,$1,null,"INC"); }
 	| exp decrement
@@ -554,19 +555,13 @@ exp:  exp mas exp
 	| undefined
     { $$ = new TObject(0,0,$1,"UNDEFINED"); }
 	| id varLast
-	{
-
-		$$ = new idVarlast(0,0,$1,$2);
-	}
+	{ $$ = new idVarlast(0,0,$1,$2); }
 	| id
-	{
-		$$ = new Id(0,0,$1);
-	}
+	{ $$ = new Id(0,0,$1); }
 	| id PL bracketOpen paramFunc bracketClose
+	{ $$ = new callFunction(0,0,$1,$2,$4); }
 	| sqBracketOpen arrParam sqBracketClose /*sqBCKFIN*/
-	{
-		$$ = new ArrList($2);
-	}
+	{ $$ = new ArrList($2); }
 ;
 
 /*

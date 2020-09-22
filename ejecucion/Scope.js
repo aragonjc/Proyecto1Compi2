@@ -32,6 +32,19 @@ class Scope {
         return null;
     }
 
+    checkFunction(id) {
+        return this.functionTable.has(id);
+    }
+
+    insertFunction(id,obj) {
+        
+        if(!this.checkFunction(id)) {
+            this.functionTable.set(id,obj);
+            return true;
+        } 
+        return false;
+    }
+
     existsLocalVariable(id) {
         return this.table.has(id);
     }

@@ -30,3 +30,4 @@ scope.table.forEach(element => {
 console.log(scope.typesTable)*/
 //console.log("---Variables---")
 //console.log(scope.table)
+//console.log(scope.functionTable)

@@ -1,11 +1,20 @@
 const Nodo = require('./Nodo.js');
 const TObject = require('./TObject.js');
+const Scope = require('./Scope.js');
+const Variable = require("./Variable");
+const defLast = require("./defLast");
+
+const asignVariable = require('./asignVariable.js');
+const asignLast = require("./asignLast");
+const asignLastF = require("./asignLastF");
+
 class callFunction extends Nodo{
     constructor(line, column,id,idList,params) {
         super(line,column,null);
         this.id = id;
         this.idList = idList;
         this.params = params;
+        this.stmt = null;
     }
 
     run(scope) {
@@ -62,10 +71,75 @@ class callFunction extends Nodo{
 
             
         } else {
-            console.log("ERROR");
-            console.log(this.id);
+            return this.runFunction(scope);
         }
 
+    }
+
+    runFunction(scope) {
+        
+        if(scope.checkFunction(this.id)) {
+
+            return this.func(scope);
+
+        } else {
+            //error
+            console.log("Error")
+            var undef = new TObject(0,0,"undefined","UNDEFINED");
+            return undef.run(scope);
+        }
+
+    }
+
+    func(scope) {
+
+        var funcObj = scope.functionTable.get(this.id);
+        //console.log(funcObj)
+        this.stmt = funcObj.stmt;
+        var functionScope = new Scope(scope);
+        
+        for (let param of funcObj.param) {
+            var asgn = new Variable(0,0,'let',param.id,new defLast(0,0,param.types,new TObject(0,0,"null",'NULL')),null);
+            asgn.run(functionScope);
+        }
+
+        if(funcObj.param.length == this.params.length) {
+            //comprobar tipos
+            for (let param in this.params) {
+                var changeValue = new asignVariable(funcObj.param[param].id,new asignLast(null,new asignLastF(null,this.params[param])));
+                changeValue.run(functionScope);
+            }
+        } else {
+            console.log("ERROR en la cantidad de parametros")
+        }
+
+        var aux = this.statement(functionScope);
+        if(aux != null) {
+    
+            if(aux.type == 'RETURN') {
+                return aux.res;
+            } 
+        }
+
+        var undef = new TObject(0,0,"undefined","UNDEFINED");
+        return undef.run(scope);
+    }
+
+    statement(scope) {
+        if(this.stmt!= null) {
+            for(var i = 0;i<this.stmt.length;i++) {
+                var element = this.stmt[i];
+                var aux = element.run(scope);
+                //console.log(aux)
+                if(aux != null) {
+    
+                    if(aux.type == 'RETURN') {
+                        return aux;
+                    } 
+                }
+            }     
+        }
+        return null;
     }
 
     getStrArr(obj) {
