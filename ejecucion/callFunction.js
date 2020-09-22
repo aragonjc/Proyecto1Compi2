@@ -71,9 +71,12 @@ class callFunction extends Nodo{
 
             
         } else {
-            return this.runFunction(scope);
-        }
+            if(this.idList != null) {
 
+            } else {
+                return this.runFunction(scope);
+            }
+        }
     }
 
     runFunction(scope) {
