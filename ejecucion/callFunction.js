@@ -73,7 +73,7 @@ class callFunction extends Nodo{
         } else if(this.id == "graficar_ts") {
             if(this.idList == null) {
 
-                
+
 
             } else {
                 console.log("Error")
@@ -82,8 +82,16 @@ class callFunction extends Nodo{
             }
         } else {
             if(this.idList != null) {
+                var arr = scope.findVariable(this.id);
+                if(arr) {
 
+                    
 
+                } else {
+                    console.log("Error")
+                    var undef = new TObject(0,0,"undefined","UNDEFINED");
+                    return undef.run(scope);
+                }
 
             } else {
                 return this.runFunction(scope);
