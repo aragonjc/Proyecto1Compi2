@@ -83,20 +83,51 @@ class callFunction extends Nodo{
         } else {
             if(this.idList != null) {
                 var arr = scope.findVariable(this.id);
+                
                 if(arr) {
-
                     
+                    var list = this.idList.get(scope);    
+                    if(list.length == 1) {
+                        
+                        if(arr.isArray && list[0].id) {
+                            if(list[0].id == 'pop') {
+                                
+                                return this.pop(scope,arr)
+                            } else if(list[0].id == 'push') {
+                                
+                            }
 
-                } else {
-                    console.log("Error")
-                    var undef = new TObject(0,0,"undefined","UNDEFINED");
-                    return undef.run(scope);
+                        }
+
+                    } else {
+
+                    }
+                        
+                   
                 }
+                
+                console.log("Error")
+                var undef = new TObject(0,0,"undefined","UNDEFINED");
+                return undef.run(scope);
+                
 
             } else {
                 return this.runFunction(scope);
             }
         }
+    }
+
+    push(scope,arr,params) {
+
+    }
+
+    pop(scope,arr) {
+
+        if(arr.value.value.length > 0) {
+            return arr.value.value.pop();
+        }
+        var undef = new TObject(0,0,"undefined","UNDEFINED");
+        return undef.run(scope);
     }
 
     runFunction(scope) {
