@@ -67,17 +67,19 @@ class callFunction extends Nodo{
                 
             } else {
 
-                if(this.idList != null) {
-
-
-
-                } else {
-                    return this.runFunction(scope);
-                }
-
+                return this.runFunction(scope);
             }
-
             
+        } else if(this.id == "graficar_ts") {
+            if(this.idList == null) {
+
+                
+
+            } else {
+                console.log("Error")
+                var undef = new TObject(0,0,"undefined","UNDEFINED");
+                return undef.run(scope);
+            }
         } else {
             if(this.idList != null) {
 
