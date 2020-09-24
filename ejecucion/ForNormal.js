@@ -23,8 +23,9 @@ class ForNormal {
             condition = Boolean(condition.value);
             while(condition) {
 
+                var newScope = new Scope(actualScope);
 
-                var aux = this.statement(actualScope);
+                var aux = this.statement(newScope);
                 
                 if(aux != null) {
     
@@ -35,8 +36,8 @@ class ForNormal {
                     } 
                 }
                 
-                this.inc.run(actualScope);
-                condition = this.cond.run(actualScope);
+                this.inc.run(newScope);
+                condition = this.cond.run(newScope);
                 condition = Boolean(condition.value);
                 
             }

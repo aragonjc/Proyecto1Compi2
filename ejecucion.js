@@ -459,7 +459,7 @@ case 127:
  this.$ = new TObject(0,0,$$[$0],"NUMBER"); 
 break;
 case 128:
- this.$ = new TObject(0,0,$$[$0]/*.substring(1,$$[$0].length-1)*/,"STRING"); 
+ this.$ = new TObject(0,0,$$[$0].substring(1,$$[$0].length-1),"STRING"); 
 break;
 case 129:
  this.$ = new TObject(0,0,true,"BOOLEAN"); 

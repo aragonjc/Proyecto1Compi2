@@ -33,7 +33,10 @@ class ForTwo {
                 
                 condition = Boolean(condition.value);
                 while(condition) {
-                    var aux = this.statement(actualScope);
+
+                    var newScope = new Scope(actualScope);
+
+                    var aux = this.statement(newScope);
                     
                     if(aux != null) {
         
@@ -44,8 +47,8 @@ class ForTwo {
                         } 
                     }
                     
-                    this.inc.run(actualScope);
-                    condition = this.cond.run(actualScope);
+                    this.inc.run(newScope);
+                    condition = this.cond.run(newScope);
                     condition = Boolean(condition.value);
                     
                 }

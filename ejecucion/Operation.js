@@ -14,7 +14,10 @@ class Operation extends Nodo{
     run(scope) {
         let valIzq;
         let valDer;
-        
+        /*console.log("$$$$$$$$$$HOLA$$$$$$$$$$$")
+            console.log(this.opIzq)
+            console.log(this.opDer)
+            console.log("AAAAAAAAAAAAAAAAAAAAAAAA")*/
         if(this.opIzq != null)
             valIzq = this.opIzq.run(scope);
         if(this.opDer != null)
@@ -132,7 +135,10 @@ class Operation extends Nodo{
             return resTObject;
             
         } else if (this.operator == "==") {
-
+           /* console.log("$$$$$$$$$$$$$$$$$$$$$")
+            console.log(valIzq)
+            console.log(valDer)
+            console.log("$$$$$$$$$$$$$$$$$$$$$")*/
             let opIzqVal = this.convertedValue(valIzq);
             let opDerVal = this.convertedValue(valDer);
             let res = (opIzqVal == opDerVal);

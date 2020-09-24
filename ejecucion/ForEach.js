@@ -39,16 +39,21 @@ class ForEach{
 
             var id = this.id;
             var asgn = new Variable(0,0,'let',id,new defLast(0,0,null,new TObject(0,0,"null",'NULL')),null);
+            
             var actualScope = new Scope(scope);
+            
             asgn.run(actualScope);
             var array = this.arr.run(scope);
+
             if(array.constructor.name == "Map") {
 
                 for (const key of array.keys()) {
                     
+                    var newScope = new Scope(actualScope);
+
                     var rasign = new asignVariable(id,new asignLast(null,new asignLastF(null,new TObject(0,0,key.toString(),"STRING"))));
-                    rasign.run(actualScope)
-                    var aux = this.statement(actualScope);
+                    rasign.run(newScope)
+                    var aux = this.statement(newScope);
                     if(aux != null) {
     
                         if(aux.type == 'RETURN') {
@@ -62,9 +67,12 @@ class ForEach{
             } else {
                 array = array.value;
                 for (const key in array) {
+
+                    var newScope = new Scope(actualScope);
+
                     var rasign = new asignVariable(id,new asignLast(null,new asignLastF(null,new TObject(0,0,key.toString(),"NUMBER"))));
-                    rasign.run(actualScope)
-                    var aux = this.statement(actualScope);
+                    rasign.run(newScope)
+                    var aux = this.statement(newScope);
                     if(aux != null) {
     
                         if(aux.type == 'RETURN') {
@@ -90,9 +98,11 @@ class ForEach{
 
                         for (const key of array.keys()) {
                             
+                            var newScope = new Scope(actualScope);
+
                             var rasign = new asignVariable(id,new asignLast(null,new asignLastF(null,new TObject(0,0,key.toString(),"STRING"))));
-                            rasign.run(actualScope)
-                            var aux = this.statement(actualScope);
+                            rasign.run(newScope)
+                            var aux = this.statement(newScope);
                             if(aux != null) {
             
                                 if(aux.type == 'RETURN') {
@@ -107,9 +117,12 @@ class ForEach{
                         array = array.value;
                         
                         for (const key in array) {
+                            
+                            var newScope = new Scope(actualScope);
+                            
                             var rasign = new asignVariable(id,new asignLast(null,new asignLastF(null,new TObject(0,0,key.toString(),"NUMBER"))));
-                            rasign.run(actualScope)
-                            var aux = this.statement(actualScope);
+                            rasign.run(newScope)
+                            var aux = this.statement(newScope);
                             if(aux != null) {
             
                                 if(aux.type == 'RETURN') {
@@ -154,9 +167,12 @@ class ForEach{
             } else {
                 array = array.value;
                 for (let value of array) {
+
+                    var newScope = new Scope(actualScope);
+
                     var rasign = new asignVariable(id,new asignLast(null,new asignLastF(null,value)));
-                    rasign.run(actualScope)
-                    var aux = this.statement(actualScope);
+                    rasign.run(newScope)
+                    var aux = this.statement(newScope);
                     if(aux != null) {
     
                         if(aux.type == 'RETURN') {
@@ -185,9 +201,12 @@ class ForEach{
                         array = array.value;
                         
                         for (const key of array) {
+
+                            var newScope = new Scope(actualScope);
+
                             var rasign = new asignVariable(id,new asignLast(null,new asignLastF(null,key)));
-                            rasign.run(actualScope)
-                            var aux = this.statement(actualScope);
+                            rasign.run(newScope)
+                            var aux = this.statement(newScope);
                             if(aux != null) {
             
                                 if(aux.type == 'RETURN') {

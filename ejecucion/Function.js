@@ -10,6 +10,7 @@ class Function {
     run(scope) {
         var obj = this.funcDec.run(scope);
         var func = obj.type;
+        //console.log(func)
         func.param = this.param;
         func.stmt = obj.stmt;
         var r = scope.insertFunction(this.id,func);

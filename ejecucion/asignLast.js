@@ -13,9 +13,17 @@ class asignLast {
             var l = this.list.get(scope);
             //comprobar tipos y si es arreglo tamaños
             var fobj=obj.value;
+            //console.log(obj)
+            //if(fobj.constructor.name == "TObject")
+              //  fobj = fobj.run(scope);
+                //console.log(fobj.run(scope).value);
             
+            /*console.log(fobj.hasOwnProperty('isArray'))
+            console.log(l)
+            console.log("???????")*/
             l.forEach(element => {
                 
+               
                 if(element.isArray) {
                     if(fobj.isArray) {
                         var arrP = Number(element.exp.value);

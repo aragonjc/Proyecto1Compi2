@@ -14,11 +14,13 @@ class While {
             var actualScope = new Scope(scope);
             while(auxCond) {
 
+                var newScope = new Scope(actualScope);
+
                 var r = null;
                 if(this.stmt!= null) {
                     for(var i = 0;i<this.stmt.length;i++) {
                         var element = this.stmt[i];
-                        var aux = element.run(actualScope);
+                        var aux = element.run(newScope);
                         if(aux != null) {
             
                             if(aux.type == 'RETURN') {

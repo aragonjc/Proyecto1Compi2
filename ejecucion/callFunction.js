@@ -3,6 +3,7 @@ const TObject = require('./TObject.js');
 const Scope = require('./Scope.js');
 const Variable = require("./Variable");
 const defLast = require("./defLast");
+const idVarlast = require("./idVarlast");
 
 const asignVariable = require('./asignVariable.js');
 const asignLast = require("./asignLast");
@@ -91,16 +92,28 @@ class callFunction extends Nodo{
                         
                         if(arr.isArray && list[0].id) {
                             if(list[0].id == 'pop') {
-                                
-                                return this.pop(scope,arr)
+                                console.log("pop")
+                                return this.pop(scope,arr.value)
                             } else if(list[0].id == 'push') {
-                                
+                                var isSimple = true;
+                                return this.push(scope,arr,isSimple)
                             }
-
                         }
 
-                    } else {
+                    } else if(list.length > 1){
 
+                        var lastItem = list.pop();
+                        var array = new idVarlast(0,0,this.id,list);
+                        array = array.get(scope,list);
+
+                        if(array.isArray) {
+                            if(lastItem.id == 'pop') {
+                                return this.pop(scope,array)
+                            } else if(lastItem.id == 'push') {
+                                var isSimple = false;
+                                return this.push(scope,array,isSimple)
+                            }
+                        }
                     }
                         
                    
@@ -117,18 +130,39 @@ class callFunction extends Nodo{
         }
     }
 
-    push(scope,arr,params) {
+    push(scope,arr,isSimple) {
+        //comprobar tipos de matriz
+        if(this.params) {
+            if(this.params.length == 1) {
+                var tobj = this.params[0];
+                tobj = tobj.run(scope);
+                //verificar si el parametro del push es compatible con arr
+                if(isSimple) {
+                    arr.value.value.push(tobj);
+                } else {
+                    arr.value.push(tobj);
+                }
 
-    }
-
-    pop(scope,arr) {
-
-        if(arr.value.value.length > 0) {
-            return arr.value.value.pop();
+            } else {
+                console.log("ERROR")
+            }
+        } else {
+            //ERROR
+            console.log("ERROR")
         }
         var undef = new TObject(0,0,"undefined","UNDEFINED");
         return undef.run(scope);
     }
+
+    pop(scope,arr) {
+
+        if(arr.value.length > 0) {
+            return arr.value.pop();
+        }
+        var undef = new TObject(0,0,"undefined","UNDEFINED");
+        return undef.run(scope);
+    }
+
 
     runFunction(scope) {
         
@@ -156,17 +190,24 @@ class callFunction extends Nodo{
             var asgn = new Variable(0,0,'let',param.id,new defLast(0,0,param.types,new TObject(0,0,"null",'NULL')),null);
             asgn.run(functionScope);
         }
-
+        
         if(funcObj.param.length == this.params.length) {
             //comprobar tipos
+            /*console.log(funcObj.param)
+            console.log(this.params)*/
             for (let param in this.params) {
                 var changeValue = new asignVariable(funcObj.param[param].id,new asignLast(null,new asignLastF(null,this.params[param])));
-                changeValue.run(functionScope);
+                changeValue.get(functionScope,scope);
             }
         } else {
             console.log("ERROR en la cantidad de parametros")
         }
+        //functionScope.print()
+        /****DEBUG */
 
+        
+
+        /********* */
         var aux = this.statement(functionScope);
         if(aux != null) {
     

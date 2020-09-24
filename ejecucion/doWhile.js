@@ -16,7 +16,8 @@ class doWhile {
 
             do {
 
-                var r = this.statement(actualScope)
+                var newScope = new Scope(actualScope);
+                var r = this.statement(newScope)
 
                 if(r != null && r != undefined) {
                     if(r.type == 'RETURN') {

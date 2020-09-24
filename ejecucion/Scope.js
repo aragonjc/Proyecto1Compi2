@@ -21,6 +21,17 @@ class Scope {
         return null;
     }
 
+    print() {
+        var sc= this;
+
+        for(sc = this;sc != null;sc = sc.prev){
+            console.log(sc.table)
+            
+        }
+        
+    }
+
+
     findVariable(id) {
         var sc= this;
 

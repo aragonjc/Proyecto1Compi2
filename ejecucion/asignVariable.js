@@ -9,8 +9,24 @@ class asignVariable {
 
         var objId = scope.findVariable(this.id);
         if(objId != null) {
-            //comprobar si res es null
+            
             var res = this.asignLast.run(scope,objId);
+            scope.changeValueVariable(this.id,res);
+
+        } else {
+            console.log("######-ERROR-#########");
+        }
+    }
+
+    get(scope,globalScope) {
+
+        var objId = scope.findVariable(this.id);
+        if(objId != null) {
+            //comprobar si res es null
+            /*console.log(this.id)
+            console.log(objId)
+            console.log("%%%%%%%%%%")*/
+            var res = this.asignLast.run(globalScope,objId);
             scope.changeValueVariable(this.id,res);
 
         } else {

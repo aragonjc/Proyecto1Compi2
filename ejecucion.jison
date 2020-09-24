@@ -545,7 +545,7 @@ exp:  exp mas exp
 	| NUMBER
     { $$ = new TObject(0,0,$1,"NUMBER"); }
 	| STRING
-    { $$ = new TObject(0,0,$1/*.substring(1,$1.length-1)*/,"STRING"); }
+    { $$ = new TObject(0,0,$1.substring(1,$1.length-1),"STRING"); }
 	| true
     { $$ = new TObject(0,0,true,"BOOLEAN"); }
 	| false
