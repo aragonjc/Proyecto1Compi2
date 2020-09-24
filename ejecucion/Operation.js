@@ -200,24 +200,27 @@ Operation.prototype.convertedValue = function(value) {
     /*console.log("-----------------Adentro de convertedValue-----------")
     console.log(value)
     console.log(":::::::::::::::::::::::::::::::::::::::::::::::::::::")*/
-    if (value.type == "NUMBER") {
-        return Number(value.value);
-    } else if (value.type == "STRING") {
-        return String(value.value);
-    } else if (value.type == "BOOLEAN") {
-        if(typeof(value.value) == "string") {
-            if(value.value == "true")
-                return true;
-            else
-                return false;
+    if(value) {
+        if (value.type == "NUMBER") {
+            return Number(value.value);
+        } else if (value.type == "STRING") {
+            return String(value.value);
+        } else if (value.type == "BOOLEAN") {
+            if(typeof(value.value) == "string") {
+                if(value.value == "true")
+                    return true;
+                else
+                    return false;
+            }
+            return Boolean(value.value);
+        } else if(value.type == "NULL") {
+            return null;
+        } else if(value instanceof Map) {
+            return value;
         }
-        return Boolean(value.value);
-    } else if(value.type == "NULL") {
-        return null;
-    } else if(value instanceof Map) {
-        return value;
     }
-    return undefined;
+    
+    return null;
 }
 
 module.exports = Operation;

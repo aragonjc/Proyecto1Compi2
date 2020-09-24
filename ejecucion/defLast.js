@@ -1,4 +1,5 @@
 const Nodo = require('./Nodo.js');
+const TObject = require('./TObject.js');
 class defLast extends Nodo{
 
     constructor(line,column,type,exp) {
@@ -16,11 +17,21 @@ class defLast extends Nodo{
         let isArray = false;
         let dimention = 0;
     
-        if(this.exp != null) {
+        if(this.exp) {
             e = this.exp.run(scope);
-            type = e.type;
-            isArray = e.isArray;
-            dimention = e.dimentions;
+            if(e){
+               /* console.log("---------------")
+                console.log(this.exp)
+                console.log("---------------")*/
+                type = e.type;
+                isArray = e.isArray;
+                dimention = e.dimentions;
+            } else {
+                e = new TObject(0,0,"null","NULL")
+                type = "NULL"
+                isArray = false;
+                dimention = 0;
+            }
         }
 
         if(this.type != null) {
