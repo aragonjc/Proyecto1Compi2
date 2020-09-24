@@ -1,3 +1,4 @@
+const TObject = require('./TObject')
 class Id {
 
     constructor(line,column,id) {
@@ -20,7 +21,9 @@ class Id {
         } else {
             //ERROR
             console.log("ERROR en Id.js")
+            
         }
+        return new TObject(0,0,"undefined","UNDEFINED")
     }
 }
 

@@ -26,8 +26,6 @@ class asignLast {
             */
 
             l.forEach(element => {
-                
-               
                 if(element.isArray) {
                     if(fobj.isArray) {
                         var arrP = Number(element.exp.value);
@@ -71,15 +69,20 @@ class asignLast {
                     fobj = {value:fobj}
                 }
 
-                var auxR = this.asignLastF.run(scope,fobj);
+                var auxR = this.asignLastF.run(scope,null);
                 //verificar errores aqui
                 fobj=obj.value;
-                console.log("AQUI----->")
-                //console.log(fobj)
+                if(obj instanceof Map) {
+                    fobj = obj
+                }
+                //console.log("AQUI----->")
+                //console.log(obj)
+                //console.log("--------")
+                //console.log(this.asignLastF.exp)
                 //console.log("||||||||||||||")
-                console.log(auxR)
-                console.log(fobj);
-                console.log("**********")
+                //console.log(auxR)
+                //console.log(fobj);
+                //console.log("**********")
                 l.forEach((element,index) =>{
                     if(element.isArray) {
                         if(fobj.isArray) {
@@ -105,6 +108,8 @@ class asignLast {
                                 fobj = fobj.get(element.id)  
                             }
                                   
+                        } else {
+                            console.log("cayo aqi")
                         }
                     }
                 });

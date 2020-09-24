@@ -193,19 +193,32 @@ class callFunction extends Nodo{
             var asgn = new Variable(0,0,'let',param.id,new defLast(0,0,param.types,new TObject(0,0,"null",'NULL')),null);
             asgn.run(functionScope);
         }
+
+        /*console.log(this.id)
+        console.log(funcObj)
+        console.log(this.params)*/
         
-        if(funcObj.param.length == this.params.length) {
-            //comprobar tipos
-            //console.log(funcObj.param)
-            //console.log(this.params)
-            for (let param in this.params) {
-                var changeValue = new asignVariable(funcObj.param[param].id,new asignLast(null,new asignLastF(null,this.params[param])));
-                changeValue.get(functionScope,scope);
+        if(this.params == null) {
+            if(!funcObj.param.length == 0) {
+                console.log("Error 0.8 en callFunction.js")
+                console.log("ERROR en la cantidad de parametros")
             }
         } else {
-            console.log("Error 8 en callFunction.js")
-            console.log("ERROR en la cantidad de parametros")
+            if(funcObj.param.length == this.params.length) {
+                //comprobar tipos
+                //console.log(funcObj.param)
+                //console.log(this.params)
+                for (let param in this.params) {
+                    var changeValue = new asignVariable(funcObj.param[param].id,new asignLast(null,new asignLastF(null,this.params[param])));
+                    changeValue.get(functionScope,scope);
+                }
+            } else {
+                console.log("Error 8 en callFunction.js")
+                console.log("ERROR en la cantidad de parametros")
+            }
         }
+
+        
         //functionScope.print()
         //console.log("--------------------------------")
         /****DEBUG */
@@ -213,6 +226,9 @@ class callFunction extends Nodo{
         
 
         /********* */
+
+        functionScope.prev = scope.getGlobalScope();
+
         var aux = this.statement(functionScope);
         if(aux != null) {
     

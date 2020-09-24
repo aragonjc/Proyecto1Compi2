@@ -13,15 +13,48 @@ let ast = parser.parse(entrada.toString());
 
 let scope = new Scope(null);
 
-/*ast.forEach(element => {
+ast.forEach(element => {
     if(element.constructor.name == "decType") {
         element.run(scope,null);
     }
-})*/
+})
 
 ast.forEach(element => {
-    element.run(scope)
+    if(element.constructor.name == "Variable" ||element.constructor.name == "asignVariable" ) {
+        element.run(scope,null);
+    }
+})
+console.log("/***TABLA****/")
+ast.forEach(element => {
+    if(element.constructor.name == "Function") {
+        element.run(scope,null);
+    }
+})
+
+console.log("/*******/")
+console.log("/*******/")
+console.log("/*******/")
+console.log("/*******/")
+console.log("/*******/")
+console.log("/*******/")
+console.log("/*******/")
+console.log("/*******/")
+ast.forEach(element => {
+    if(check(element))
+        element.run(scope)
 });
+
+function check(element) {
+    if(element.constructor.name == "Function") {
+        return false;
+    } else if(element.constructor.name == "Variable" ||element.constructor.name == "asignVariable" ) {
+        return false;
+    } else if(element.constructor.name == "decType") {
+        return false;
+    } else {
+        return true;
+    }
+}
 /*
 scope.table.forEach(element => {
     console.log(element);

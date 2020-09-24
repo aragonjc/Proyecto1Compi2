@@ -9,8 +9,13 @@ class Function {
 
     run(scope) {
         var obj = this.funcDec.run(scope);
-        var func = obj.type;
-        //console.log(func)
+        var func;
+        if(obj.type)
+            func = obj.type;
+        else
+            func = {type:'VOID',isArray:false,dim:0}
+            
+        //console.log(obj)
         func.param = this.param;
         func.stmt = obj.stmt;
         var r = scope.insertFunction(this.id,func);

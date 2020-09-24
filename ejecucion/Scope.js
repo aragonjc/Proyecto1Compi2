@@ -6,6 +6,14 @@ class Scope {
         this.typesTable = new Map();
     }
 
+    getGlobalScope() {
+        var sc= this;
+
+        for(sc = this;sc.prev != null;sc = sc.prev){
+        }
+        return sc;
+    }
+
     changeValueVariable(id,obj) {
         this.getObjVariable(id).set(id,obj);
     }

@@ -60,10 +60,6 @@ class idVarlast {
         }
     }
 
-    getLength(scope,list) {
-        
-    }
-
     run(scope) {
 
         if(scope.findVariable(this.id) != null) {
