@@ -11,6 +11,14 @@ class asignVariable {
         if(objId != null) {
             
             var res = this.asignLast.run(scope,objId);
+            //console.log("/**********Aqui estoy en run()************************/");
+            ///console.log("/**********************************/");
+         ///console.log("/**********************************/");
+         ///console.log(this.id)
+         //console.log(res.value)
+        //console.log("/**********************************/");
+        //console.log("/**********************************/");
+        //console.log("/**********************************/");
             scope.changeValueVariable(this.id,res);
 
         } else {
@@ -27,6 +35,15 @@ class asignVariable {
             console.log(objId)
             console.log("%%%%%%%%%%")*/
             var res = this.asignLast.run(globalScope,objId);
+            //console.log("/**********Aqui estoy en get()************************/");
+           // console.log("/**********************************/");
+         //console.log("/**********************************/");
+         //console.log(this.id)
+         //console.log(res)
+        //console.log("/**********************************/");
+        //console.log("/**********************************/");
+        //console.log("/**********************************/");
+            
             scope.changeValueVariable(this.id,res);
 
         } else {

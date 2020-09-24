@@ -71,8 +71,18 @@ class idVarlast {
             let vl = this.varlast.get(scope);
             let objId = scope.findVariable(this.id);
 
+            
+
             var vobj = objId.value;
-            for(let i=0;i<vl.length;i++){
+
+            if(objId instanceof Map) {
+                vobj = objId
+            }
+
+            /*console.log("||||||||  Aqui estoy al inicio de idVarlast      ||||||||||")
+            console.log(objId)
+            console.log("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
+            */for(let i=0;i<vl.length;i++){
            // vl.every((element,index) => {
                 var element = vl[i];
                 if(i+1 == vl.length) {
@@ -106,7 +116,9 @@ class idVarlast {
                         return;
                     }
                 } else {
-                    if(vobj.constructor.name == "Map") {
+
+                   
+                    if(vobj instanceof Map) {
 
                         if(vobj.has(element.id)) {
                             //console.log("CORRECTO")
@@ -119,10 +131,17 @@ class idVarlast {
                     } else {
                         //error
                         console.log("Error 9 en idVarlast.js")
-                        return;
+                        /*console.log(objId)
+                        console.log(vl)
+                        console.log(element)
+                        console.log("????????????????????????")
+                        console.log(vobj)*/
+                        return new TObject(0,0,'null',"NULL");;
                     }
                 }
             }/*);*/
+            /*console.log("aqui retorna el objeto");
+            console.log(vobj)*/
             return vobj;
             //console.log(objId)
 

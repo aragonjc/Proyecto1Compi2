@@ -10,11 +10,13 @@ class IF {
     run(scope) {
         
         if(this.cond != null) {
-            console.log("IF----")
+            /*console.log("IF----")
             console.log(this.cond)
-            console.log("----.-----")
+            console.log("----.-----")*/
             var auxCond = this.cond.run(scope);
-
+            /*console.log("cual es el resultado de la condicion")
+            console.log(auxCond)
+            console.log("°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°")*/
             if(auxCond.type == 'BOOLEAN') {
 
                 auxCond = Boolean(auxCond.value);

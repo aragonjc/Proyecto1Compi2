@@ -43,8 +43,26 @@ class Scope {
         return null;
     }
 
+    getFunction(id) {
+        var sc= this;
+
+        for(sc = this;sc != null;sc = sc.prev){
+            if(sc.prev == null) {
+                return sc.functionTable.get(id)
+            }
+        }
+    }
+
     checkFunction(id) {
-        return this.functionTable.has(id);
+        var sc= this;
+
+        for(sc = this;sc != null;sc = sc.prev){
+            if(sc.prev == null) {
+                return sc.functionTable.has(id)
+            }
+        }
+        return false;
+        //return this.functionTable.has(id);
     }
 
     insertFunction(id,obj) {

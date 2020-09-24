@@ -14,14 +14,19 @@ class Operation extends Nodo{
     run(scope) {
         let valIzq;
         let valDer;
-        console.log("$$$$$$$$$$HOLA$$$$$$$$$$$")
-            console.log(this.opIzq)
-            console.log(this.opDer)
-            console.log("AAAAAAAAAAAAAAAAAAAAAAAA")
+        /*console.log("$$$$$$$$$$||AL inicio del run en operation|||$$$$$$$$$$$")
+        console.log(this.opIzq)
+        console.log(this.opDer)
+        console.log("|||||||||||||||||||||||||||||||||||||||||||||||||||||")*/
         if(this.opIzq != null)
             valIzq = this.opIzq.run(scope);
         if(this.opDer != null)
             valDer = this.opDer.run(scope);
+        
+        /*console.log("$$$$$$$$$$--Aqui se ejecuta en operacion-$$$$$$$$$$$")
+        console.log(valIzq)
+        console.log(valDer)
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")*/
         if(this.operator == "+") {
             if(valIzq.type === "NUMBER" && valDer.type === "NUMBER") {
                 let res = Number(valIzq.value) + Number(valDer.value);
@@ -135,7 +140,7 @@ class Operation extends Nodo{
             return resTObject;
             
         } else if (this.operator == "==") {
-           /* console.log("$$$$$$$$$$$$$$$$$$$$$")
+           /*console.log("$$$$$$$$$$$$$$$$$$$$$")
             console.log(valIzq)
             console.log(valDer)
             console.log("$$$$$$$$$$$$$$$$$$$$$")*/
@@ -192,7 +197,9 @@ class Operation extends Nodo{
 }
 
 Operation.prototype.convertedValue = function(value) {
-    
+    /*console.log("-----------------Adentro de convertedValue-----------")
+    console.log(value)
+    console.log(":::::::::::::::::::::::::::::::::::::::::::::::::::::")*/
     if (value.type == "NUMBER") {
         return Number(value.value);
     } else if (value.type == "STRING") {
@@ -207,6 +214,8 @@ Operation.prototype.convertedValue = function(value) {
         return Boolean(value.value);
     } else if(value.type == "NULL") {
         return null;
+    } else if(value instanceof Map) {
+        return value;
     }
     return undefined;
 }

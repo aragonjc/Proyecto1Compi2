@@ -173,6 +173,9 @@ class callFunction extends Nodo{
         } else {
             //error
             console.log("Error 7 en callFunction.js")
+            /*console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            console.log(this.id)
+            console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");*/
             var undef = new TObject(0,0,"undefined","UNDEFINED");
             return undef.run(scope);
         }
@@ -181,7 +184,7 @@ class callFunction extends Nodo{
 
     func(scope) {
 
-        var funcObj = scope.functionTable.get(this.id);
+        var funcObj = scope.getFunction(this.id);
         //console.log(funcObj)
         this.stmt = funcObj.stmt;
         var functionScope = new Scope(scope);
@@ -193,8 +196,8 @@ class callFunction extends Nodo{
         
         if(funcObj.param.length == this.params.length) {
             //comprobar tipos
-            /*console.log(funcObj.param)
-            console.log(this.params)*/
+            //console.log(funcObj.param)
+            //console.log(this.params)
             for (let param in this.params) {
                 var changeValue = new asignVariable(funcObj.param[param].id,new asignLast(null,new asignLastF(null,this.params[param])));
                 changeValue.get(functionScope,scope);
@@ -203,8 +206,8 @@ class callFunction extends Nodo{
             console.log("Error 8 en callFunction.js")
             console.log("ERROR en la cantidad de parametros")
         }
-        functionScope.print()
-        console.log("--------------------------------")
+        //functionScope.print()
+        //console.log("--------------------------------")
         /****DEBUG */
 
         

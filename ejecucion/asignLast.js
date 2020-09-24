@@ -13,14 +13,18 @@ class asignLast {
             var l = this.list.get(scope);
             //comprobar tipos y si es arreglo tamaños
             var fobj=obj.value;
-            //console.log(obj)
-            //if(fobj.constructor.name == "TObject")
-              //  fobj = fobj.run(scope);
-                //console.log(fobj.run(scope).value);
             
-            /*console.log(fobj.hasOwnProperty('isArray'))
+            if(obj instanceof Map) {
+                fobj = obj
+            }
+
+            /*console.log("||||||||  Aqui estoy al inicio de asignLast    ||||||||||")
+            console.log(obj)
             console.log(l)
-            console.log("???????")*/
+
+            console.log("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
+            */
+
             l.forEach(element => {
                 
                
@@ -70,7 +74,12 @@ class asignLast {
                 var auxR = this.asignLastF.run(scope,fobj);
                 //verificar errores aqui
                 fobj=obj.value;
-                
+                console.log("AQUI----->")
+                //console.log(fobj)
+                //console.log("||||||||||||||")
+                console.log(auxR)
+                console.log(fobj);
+                console.log("**********")
                 l.forEach((element,index) =>{
                     if(element.isArray) {
                         if(fobj.isArray) {
@@ -88,7 +97,7 @@ class asignLast {
                             
                         }
                     } else {
-                        if(fobj.constructor.name == "Map") {
+                        if(fobj instanceof Map) {
                             
                             if(index + 1 == l.length) {
                                 fobj.set(element.id,auxR)  
@@ -114,6 +123,7 @@ class asignLast {
         
             } 
             var obr = this.asignLastF.run(scope,obj);
+            //console.log(obr)
             obr.dectype = dectype;
             obr.type = obj.type;
             return obr;
