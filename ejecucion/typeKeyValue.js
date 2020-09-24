@@ -11,6 +11,7 @@ class typeKeyValue {
         
         if(t == null) {
             //error
+            console.log("Error en typeKeyValue.js")
         }
 
         return [{id:this.id,type:t.type}]

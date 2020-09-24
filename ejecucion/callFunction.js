@@ -51,18 +51,18 @@ class callFunction extends Nodo{
                                 this.params.column,
                                 "Semantico",
                                 "Error la funcion necesita un parametro");
-                            console.log("r-------ERROR----------r");
+                                console.log("Error 1 en callFunction.js")
                         }
                     } else {
                         new Error(this.params.line,
                                 this.params.column,
                                 "Semantico",
                                 "Error la funcion necesita un parametro");
-                        console.log("a-------ERROR----------a");
+                                console.log("Error 2 en callFunction.js")
                     }
 
                 } else {
-
+                    console.log("No se qe va aqui callFunction.js")
                 }
 
                 
@@ -77,7 +77,7 @@ class callFunction extends Nodo{
 
 
             } else {
-                console.log("Error")
+                console.log("Error 3 en callFunction.js")
                 var undef = new TObject(0,0,"undefined","UNDEFINED");
                 return undef.run(scope);
             }
@@ -119,7 +119,7 @@ class callFunction extends Nodo{
                    
                 }
                 
-                console.log("Error")
+                console.log("Error 4 en callFunction.js")
                 var undef = new TObject(0,0,"undefined","UNDEFINED");
                 return undef.run(scope);
                 
@@ -144,11 +144,11 @@ class callFunction extends Nodo{
                 }
 
             } else {
-                console.log("ERROR")
+                console.log("Error 5 en callFunction.js")
             }
         } else {
             //ERROR
-            console.log("ERROR")
+            console.log("Error 6 en callFunction.js")
         }
         var undef = new TObject(0,0,"undefined","UNDEFINED");
         return undef.run(scope);
@@ -172,7 +172,7 @@ class callFunction extends Nodo{
 
         } else {
             //error
-            console.log("Error")
+            console.log("Error 7 en callFunction.js")
             var undef = new TObject(0,0,"undefined","UNDEFINED");
             return undef.run(scope);
         }
@@ -200,9 +200,11 @@ class callFunction extends Nodo{
                 changeValue.get(functionScope,scope);
             }
         } else {
+            console.log("Error 8 en callFunction.js")
             console.log("ERROR en la cantidad de parametros")
         }
-        //functionScope.print()
+        functionScope.print()
+        console.log("--------------------------------")
         /****DEBUG */
 
         

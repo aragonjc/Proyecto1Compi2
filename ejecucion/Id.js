@@ -19,7 +19,7 @@ class Id {
             return r.value;
         } else {
             //ERROR
-            console.log("ERROR en el id")
+            console.log("ERROR en Id.js")
         }
     }
 }

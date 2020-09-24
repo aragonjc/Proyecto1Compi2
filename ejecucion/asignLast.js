@@ -33,12 +33,13 @@ class asignLast {
                             fobj = objResult[arrP]
                         } else {
                             //ERRROR
+                            console.log("Error 1 en asignLast.js")
                         }
 
                     } else {
                         //ERROR
                         fobj = null;
-                        console.log("###########ERROR########")
+                        console.log("Error 2 en asignLast.js")
                     }
                 } else {
                     if(fobj.constructor.name == "Map") {
@@ -48,11 +49,12 @@ class asignLast {
                         } else {
                             //Error
                             fobj = null;
-                            console.log("ERROR");
+                            console.log("Error 3 en asignLast.js")
                         }
 
                     } else {
                         //error
+                        console.log("Error 4 en asignLast.js")
                         return;
                     }
                 }

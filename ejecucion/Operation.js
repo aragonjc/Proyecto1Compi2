@@ -14,10 +14,10 @@ class Operation extends Nodo{
     run(scope) {
         let valIzq;
         let valDer;
-        /*console.log("$$$$$$$$$$HOLA$$$$$$$$$$$")
+        console.log("$$$$$$$$$$HOLA$$$$$$$$$$$")
             console.log(this.opIzq)
             console.log(this.opDer)
-            console.log("AAAAAAAAAAAAAAAAAAAAAAAA")*/
+            console.log("AAAAAAAAAAAAAAAAAAAAAAAA")
         if(this.opIzq != null)
             valIzq = this.opIzq.run(scope);
         if(this.opDer != null)

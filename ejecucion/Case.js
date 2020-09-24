@@ -37,6 +37,7 @@ class Case {
 
             } else {
                 //error
+                console.log("Error 1 en Case.js")
                 return;
             }
         }

@@ -48,6 +48,7 @@ class idList {
 
             } else {
                 //ERROR
+                console.log("Error 1 en idList.js")
             }
             
         } else {

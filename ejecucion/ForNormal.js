@@ -44,6 +44,7 @@ class ForNormal {
 
         } else {
             //Error;
+            console.log("Error 1 en ForNormal.js")
         }
         
     }

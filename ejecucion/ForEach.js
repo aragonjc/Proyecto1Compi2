@@ -28,7 +28,7 @@ class ForEach{
 
         } else {
             //ERROR
-            console.log("noe es un objeto iterable")
+            console.log("Error 1 en ForEach.js")
             return;
         }
     }
@@ -137,11 +137,12 @@ class ForEach{
 
                 } else {
                     //ERROR
-                    console.log("ERROR")
+                    console.log("Error 2 en ForEach.js")
                 }
 
             } else {
                 //Error
+                console.log("Error 3 en ForEach.js")
                 console.log("ERROR se esperaba un id")
             }
 
@@ -161,7 +162,7 @@ class ForEach{
             var array = this.arr.run(scope);
             if(array.constructor.name == "Map") {
 
-                console.log("ERROR");
+                console.log("Error 4 en ForEach.js")
                 return null;
 
             } else {
@@ -195,7 +196,7 @@ class ForEach{
                     var array = this.arr.run(scope);
                     if(array.constructor.name == "Map") {
                         //ERROR
-                        console.log("ERROR")
+                        console.log("Error 5 en ForEach.js")
                         return null;
                     } else {
                         array = array.value;
@@ -221,11 +222,12 @@ class ForEach{
 
                 } else {
                     //ERROR
-                    console.log("ERROR")
+                    console.log("Error 6 en ForEach.js")
                 }
 
             } else {
                 //Error
+                console.log("Error 7 en ForEach.js")
                 console.log("ERROR se esperaba un id")
             }
         }

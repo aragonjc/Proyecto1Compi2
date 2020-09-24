@@ -51,6 +51,7 @@ class While {
 
         } else {
             //ERROR
+            console.log("ERROR en while.js")
         }
     }
 

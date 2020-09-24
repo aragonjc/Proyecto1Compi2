@@ -15,7 +15,7 @@ class Function {
         func.stmt = obj.stmt;
         var r = scope.insertFunction(this.id,func);
         if(!r) {
-            console.log("---ERROR-----");
+            console.log("Error 1 en Function.js")
         }
     }
 }

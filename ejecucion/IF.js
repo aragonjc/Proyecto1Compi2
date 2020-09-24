@@ -10,7 +10,9 @@ class IF {
     run(scope) {
         
         if(this.cond != null) {
-
+            console.log("IF----")
+            console.log(this.cond)
+            console.log("----.-----")
             var auxCond = this.cond.run(scope);
 
             if(auxCond.type == 'BOOLEAN') {
@@ -50,7 +52,7 @@ class IF {
 
             } else {
                 //ERROR
-                console.log("ERROR en la condicion del if")
+                console.log("ERROR 1 en IF.js")
             }
 
         } else {

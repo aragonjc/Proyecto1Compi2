@@ -20,7 +20,7 @@ class ForTwo {
             var id = this.id.id;
             if(id != this.inc.id) {
                 //ERROR
-                console.log("ERROR");
+                console.log("Error 1 en ForThree.js")
                 return;
             }
            /* var exp = this.expAsign.run(actualScope);
@@ -53,11 +53,12 @@ class ForTwo {
                     
                 }
             } else {
-
+                console.log("No se que va aqui ForThree")
             }
 
         } else {
             //ERROR
+            console.log("Error 2 en ForThree.js")
         }
     }
 

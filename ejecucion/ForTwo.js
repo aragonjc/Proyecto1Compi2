@@ -21,7 +21,7 @@ class ForTwo {
             var id = this.id.id;
             if(id != this.inc.id) {
                 //ERROR
-                console.log("ERROR");
+                console.log("Error 1 en ForTwo.js")
                 return;
             }
             var exp = this.expAsign.run(actualScope);
@@ -55,11 +55,12 @@ class ForTwo {
                     
                 }
             } else {
-
+                console.log("no se que va aqui ForTwo");
             }
 
         } else {
             //ERROR
+            console.log("Error 2 en ForTwo.js")
         }
     }
 

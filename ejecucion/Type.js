@@ -35,7 +35,7 @@ class Type {
             } else {
 
                 //ERROR
-                console.log("-----------ERROR--------------")
+                console.log("ERROR en Type.js")
             }
         }
     }

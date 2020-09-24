@@ -25,9 +25,11 @@ class idVarlast {
                             vobj = objResult[arrP]
                         } else {
                             //ERRROR
+                            console.log("Error 1 en idVarlast.js")
                         }
                     } else {
                         //error
+                        console.log("Error 2 en idVarlast.js")
                         return;
                     }
                 } else {
@@ -38,11 +40,12 @@ class idVarlast {
                             vobj = vobj.get(element.id)
                         } else {
                             //Error
-                            console.log("ERROR");
+                            console.log("Error 3 en idVarlast.js")
                         }
 
                     } else {
                         //error
+                        console.log("Error 4 en idVarlast.js")
                         return;
                     }
                 }
@@ -52,7 +55,7 @@ class idVarlast {
 
         } else {
             /***#########ERROR###############*/
-            console.log("ERROR")
+            console.log("Error 5 en idVarlast.js")
             return new TObject(0,0,'undefined',"UNDEFINED");
         }
     }
@@ -95,9 +98,11 @@ class idVarlast {
                             vobj = objResult[arrP]
                         } else {
                             //ERRROR
+                            console.log("Error 6 en idVarlast.js")
                         }
                     } else {
                         //error
+                        console.log("Error 7 en idVarlast.js")
                         return;
                     }
                 } else {
@@ -108,11 +113,12 @@ class idVarlast {
                             vobj = vobj.get(element.id)
                         } else {
                             //Error
-                            console.log("ERROR");
+                            console.log("Error 8 en idVarlast.js")
                         }
 
                     } else {
                         //error
+                        console.log("Error 9 en idVarlast.js")
                         return;
                     }
                 }
@@ -122,7 +128,7 @@ class idVarlast {
 
         } else {
             /***#########ERROR###############*/
-            console.log("ERROR")
+            console.log("Error 10 en idVarlast.js")
             return new TObject(0,0,'undefined',"UNDEFINED");
         }
     }

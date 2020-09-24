@@ -14,7 +14,7 @@ class asignVariable {
             scope.changeValueVariable(this.id,res);
 
         } else {
-            console.log("######-ERROR-#########");
+            console.log("Error 1 en asigVariable.js")
         }
     }
 
@@ -30,7 +30,7 @@ class asignVariable {
             scope.changeValueVariable(this.id,res);
 
         } else {
-            console.log("######-ERROR-#########");
+            console.log("Error 2 en asigVariable.js")
         }
     }
 }

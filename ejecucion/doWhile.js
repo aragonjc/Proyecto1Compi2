@@ -35,6 +35,7 @@ class doWhile {
 
         } else {
             //ERROR
+            console.log("Error 1 en doWhile.js")
         }
 
     }

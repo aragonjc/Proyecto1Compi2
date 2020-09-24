@@ -20,6 +20,7 @@ class ternaryOp {
 
         } else {
             //ERROR
+            console.log("Error en ternaryOp.js")
         }
 
     }

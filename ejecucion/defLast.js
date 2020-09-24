@@ -51,10 +51,9 @@ class defLast extends Nodo{
                     if(e.type == tType.type) {
                         return {value:e,type:tType.type,isArray:tType.isArray,dim:tType.dim,dectype:decType}
                     } else {
-                        console.log("-----------ERROR------------")
+                        console.log("Error 1 en defLast.js")
                         console.log("tipos incompatibles")
-                        //console.log(e)
-                        console.log("----------------------------")
+                        
                         return null;
                     }
 
