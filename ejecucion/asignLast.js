@@ -37,7 +37,8 @@ class asignLast {
                             fobj = objResult[arrP]
                         } else {
                             //ERRROR
-                            console.log("Error 1 en asignLast.js")
+                            fobj = new TObject(0,0,"undefined","UNDEFINED");
+                            //console.log("Error 1 en asignLast.js")
                         }
 
                     } else {

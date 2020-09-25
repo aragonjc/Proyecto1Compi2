@@ -48,11 +48,35 @@ class callFunction extends Nodo{
                             }
 
                         } else {
-                            new Error(this.params.line,
+                            let str = "";
+                            for (let i = 0; i < this.params.length; i++) {
+                                let tobj = this.params[i];
+                                //console.log("----------------------");
+                                let newTObj = tobj.run(scope);
+                                //console.log(newTObj);
+                                //console.log(tobj)
+                                if(newTObj.constructor.name == "Map") {
+                                    
+                                    str += this.getStrObj(newTObj,"")+" ";
+                                    
+                                } else if(newTObj.isArray) {
+                                    /*console.log("########")
+                                    console.log(newTObj)
+                                    console.log("######################")*/
+                                    str += this.getStrArr(newTObj.value)+" ";
+                                }else {
+                                    str += newTObj.value.toString()+" ";
+                                }
+                                
+                            }
+                            
+                            console.log(str);
+
+                            /*new Error(this.params.line,
                                 this.params.column,
                                 "Semantico",
                                 "Error la funcion necesita un parametro");
-                                console.log("Error 1 en callFunction.js")
+                                console.log("Error 1 en callFunction.js")*/
                         }
                     } else {
                         new Error(this.params.line,
