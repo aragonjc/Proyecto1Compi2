@@ -29,6 +29,119 @@ class Scope {
         return null;
     }
 
+    getNumOfScope() {
+        var sc= this;
+        var num = 0;
+        for(sc = this;sc != null;sc = sc.prev){
+            num++;
+        }
+        return num;
+    }
+
+    grapah_ts() {
+        var sc= this;
+        let str = "";
+        let types = "";
+        let func = "";
+        let scopeNum = this.getNumOfScope()
+        for(sc = this;sc != null;sc = sc.prev){
+            scopeNum--;
+            str += this.graph_tsVariables(sc.table,scopeNum);
+            //console.log(sc.table)
+            /*if(sc.prev == null) {
+                console.log(this.functionTable)
+                types = this.getTypes(this.typesTable)
+                func = this.getFunctions(this.functionTable)
+            }*/
+            
+        }
+
+        func = "Funciones \n--------------------\n" + this.getFunctions(this.getGlobalScope().functionTable);
+        types = this.getTypes(this.getGlobalScope().typesTable);
+        return types + "\n" + func + "\n" + str;
+    }
+
+    getTypes(types) {
+        var str = "";
+        for(let obj of types) {
+            str += obj[0] + "   |   "
+            //str += obj[1].type +"  |" 
+            str += "\n";
+            //str += ambito
+        }
+        return str+"\n";
+    }
+
+    getFunctions(funcTable) {
+        var str = "";
+        for(let obj of funcTable) {
+            str += obj[0] + "   |   "
+            //str += obj[1].type +"  |" 
+            str += "\n";
+            //str += ambito
+        }
+        return str+"\n";
+
+    }
+
+    graph_tsVariables(table,scopeNum) {
+        
+        var str = "----------------------------\n";
+        for(let obj of table) {
+            str += obj[0] + "   |   "
+            str += obj[1].type +"  |    " 
+            str += scopeNum +"  |" 
+            str += "\n";
+            //str += ambito
+        }
+        return str+"\n";
+
+    }
+
+    getStrArr(obj) {
+        var str = "["
+        var prop = "";
+        //console.log(obj)
+        obj.forEach((value) => {
+
+            //prop += tab + "\t"+ key + ": ";
+            if(value.constructor.name == "TObject") {
+                prop += value.value;
+            } else if(value.isArray) {
+                prop += this.getStrArr(value.value)
+            } else if(value.constructor.name == "Map"){
+                prop += this.getStrObj(value,"\t");
+            }
+            prop += ",";
+        });
+        prop = prop.substring(0,prop.length-1)
+        str += prop;
+        str += "]"
+        return str;
+    }
+
+    getStrObj(obj,tab) {
+        var str = tab+"{\n"
+        var prop = "";
+        obj.forEach((value,key) => {
+
+            prop += tab + "\t"+ key + ": ";
+            if(value.constructor.name == "TObject") {
+                prop += value.value;
+            } else if(value.isArray) {
+                prop += this.getStrArr(value.value)
+            } else if(value.constructor.name == "Map"){
+                prop += this.getStrObj(value,"\t");
+            }
+            prop += ",\n";
+        });
+        prop = prop.substring(0,prop.length-2)
+        str += prop;
+        str += "\n"
+        str += tab +"}"
+        return str;
+    }
+
     print() {
         var sc= this;
 

@@ -99,12 +99,12 @@ class callFunction extends Nodo{
         } else if(this.id == "graficar_ts") {
             if(this.idList == null) {
 
-
+                var a = scope.grapah_ts();
+                console.log(a);
 
             } else {
                 console.log("Error 3 en callFunction.js")
-                var undef = new TObject(0,0,"undefined","UNDEFINED");
-                return undef.run(scope);
+                return new TObject(0,0,"undefined","UNDEFINED");
             }
         } else {
             if(this.idList != null) {
