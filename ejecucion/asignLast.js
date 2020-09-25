@@ -31,6 +31,8 @@ class asignLast {
                         var arrP = Number(element.exp.value);
                         var objResult = fobj.value;
 
+                        //console.log(arrP)
+                        //console.log(objResult.length)
                         if(arrP < objResult.length) {
                             fobj = objResult[arrP]
                         } else {

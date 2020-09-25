@@ -10,7 +10,14 @@ class asignVariable {
         var objId = scope.findVariable(this.id);
         if(objId != null) {
             
+            
+
             var res = this.asignLast.run(scope,objId);
+            if(this.id == 'pivot'){
+                console.log(objId);
+                console.log("&&&&&&&&&&&")
+                console.log(res)
+            }
             //console.log("/**********Aqui estoy en run()************************/");
             ///console.log("/**********************************/");
          ///console.log("/**********************************/");
@@ -43,7 +50,7 @@ class asignVariable {
         //console.log("/**********************************/");
         //console.log("/**********************************/");
         //console.log("/**********************************/");
-            
+        
             scope.changeValueVariable(this.id,res);
 
         } else {

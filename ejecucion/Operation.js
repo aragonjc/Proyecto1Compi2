@@ -217,7 +217,9 @@ Operation.prototype.convertedValue = function(value) {
             return null;
         } else if(value instanceof Map) {
             return value;
-        }
+        } else if(value.type == "UNDEFINED") {
+            return undefined
+        }   
     }
     
     return null;

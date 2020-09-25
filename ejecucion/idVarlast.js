@@ -65,6 +65,9 @@ class idVarlast {
         if(scope.findVariable(this.id) != null) {
 
             let vl = this.varlast.get(scope);
+            /*console.log("VARLAST")
+            console.log(vl);
+            console.log("Fin VarLAST")*/
             let objId = scope.findVariable(this.id);
 
             
@@ -75,10 +78,12 @@ class idVarlast {
                 vobj = objId
             }
 
-            /*console.log("||||||||  Aqui estoy al inicio de idVarlast      ||||||||||")
-            console.log(objId)
+            /*
+            console.log("||||||||  Aqui estoy al inicio de idVarlast      ||||||||||")
+            console.log(vobj)
             console.log("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
-            */for(let i=0;i<vl.length;i++){
+            */
+            for(let i=0;i<vl.length;i++){
            // vl.every((element,index) => {
                 var element = vl[i];
                 if(i+1 == vl.length) {
@@ -92,16 +97,22 @@ class idVarlast {
                     }
                 }
 
+                
 
                 if(element.isArray) {
                     if(vobj.isArray) {
 
                         var arrP = Number(element.exp.value);
                         var objResult = vobj.value;
-
-                        
+                        //console.log(arrP);
+                        //console.log(objResult.length)
                         if(arrP < objResult.length) {
+                            //console.log("QUE ENTRO")
                             vobj = objResult[arrP]
+                            if(!vobj) {
+                                vobj = new TObject(0,0,"undefined","UNDEFINED");
+                            }
+
                         } else {
                             //ERRROR
                             console.log("Error 6 en idVarlast.js")

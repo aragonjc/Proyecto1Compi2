@@ -33,8 +33,9 @@ class callFunction extends Nodo{
                             //console.log("----------------------");
                             let newTObj = tobj.run(scope);
                             //console.log(newTObj);
-                            
+                            //console.log(tobj)
                             if(newTObj.constructor.name == "Map") {
+                                
                                 console.log(this.getStrObj(newTObj,""));
                                 
                             } else if(newTObj.isArray) {
@@ -191,6 +192,8 @@ class callFunction extends Nodo{
         
         for (let param of funcObj.param) {
             var asgn = new Variable(0,0,'let',param.id,new defLast(0,0,param.types,new TObject(0,0,"null",'NULL')),null);
+            //var asgn = new Variable(0,0,'let',param.id,new defLast(0,0,param.types,new TObject(0,0,"undefined",'UNDEFINED')),null);
+            
             asgn.run(functionScope);
         }
 
