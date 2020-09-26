@@ -18,32 +18,42 @@ class callFunction extends Nodo{
         this.stmt = null;
     }
 
-    run(scope) {
+    run(scope,consoleT) {
         
         if(this.id == "console") {
             
             if(this.idList != null) {
 
-                var list = this.idList.run(scope);
+                var list = this.idList.run(scope,consoleT);
                 if(list.id == "log" && list.aux == null) {
                     if(this.params != null) {
                         //console.log(this.params)
                         if(this.params.length == 1) {
                             let tobj = this.params[0];
                             //console.log("----------------------");
-                            let newTObj = tobj.run(scope);
+                            let newTObj = tobj.run(scope,consoleT);
                             //console.log(newTObj);
                             //console.log(tobj)
                             if(newTObj.constructor.name == "Map") {
                                 
+                                if(consoleT) {
+                                    consoleT.value += this.getStrObj(newTObj,"") + "\n";
+                                }
+
                                 console.log(this.getStrObj(newTObj,""));
                                 
                             } else if(newTObj.isArray) {
                                 /*console.log("########")
                                 console.log(newTObj)
                                 console.log("######################")*/
+                                if(consoleT) {
+                                    consoleT.value += this.getStrArr(newTObj.value) + "\n";
+                                }
                                 console.log(this.getStrArr(newTObj.value));
                             }else {
+                                if(consoleT) {
+                                    consoleT.value += newTObj.value.toString() + "\n";
+                                }
                                 console.log(newTObj.value.toString());
                             }
 
@@ -52,7 +62,7 @@ class callFunction extends Nodo{
                             for (let i = 0; i < this.params.length; i++) {
                                 let tobj = this.params[i];
                                 //console.log("----------------------");
-                                let newTObj = tobj.run(scope);
+                                let newTObj = tobj.run(scope,consoleT);
                                 //console.log(newTObj);
                                 //console.log(tobj)
                                 if(newTObj.constructor.name == "Map") {
@@ -69,7 +79,9 @@ class callFunction extends Nodo{
                                 }
                                 
                             }
-                            
+                            if(consoleT) {
+                                consoleT.value += str + "\n";
+                            }
                             console.log(str);
 
                             /*new Error(this.params.line,
@@ -93,7 +105,7 @@ class callFunction extends Nodo{
                 
             } else {
 
-                return this.runFunction(scope);
+                return this.runFunction(scope,consoleT);
             }
             
         } else if(this.id == "graficar_ts") {
@@ -112,16 +124,16 @@ class callFunction extends Nodo{
                 
                 if(arr) {
                     
-                    var list = this.idList.get(scope);    
+                    var list = this.idList.get(scope,consoleT);    
                     if(list.length == 1) {
                         
                         if(arr.isArray && list[0].id) {
                             if(list[0].id == 'pop') {
                                 console.log("pop")
-                                return this.pop(scope,arr.value)
+                                return this.pop(scope,arr.value,consoleT)
                             } else if(list[0].id == 'push') {
                                 var isSimple = true;
-                                return this.push(scope,arr,isSimple)
+                                return this.push(scope,arr,isSimple,consoleT)
                             }
                         }
 
@@ -129,14 +141,14 @@ class callFunction extends Nodo{
 
                         var lastItem = list.pop();
                         var array = new idVarlast(0,0,this.id,list);
-                        array = array.get(scope,list);
+                        array = array.get(scope,list,consoleT);
 
                         if(array.isArray) {
                             if(lastItem.id == 'pop') {
-                                return this.pop(scope,array)
+                                return this.pop(scope,array,consoleT)
                             } else if(lastItem.id == 'push') {
                                 var isSimple = false;
-                                return this.push(scope,array,isSimple)
+                                return this.push(scope,array,isSimple,consoleT)
                             }
                         }
                     }
@@ -146,21 +158,21 @@ class callFunction extends Nodo{
                 
                 console.log("Error 4 en callFunction.js")
                 var undef = new TObject(0,0,"undefined","UNDEFINED");
-                return undef.run(scope);
+                return undef.run(scope,consoleT);
                 
 
             } else {
-                return this.runFunction(scope);
+                return this.runFunction(scope,consoleT);
             }
         }
     }
 
-    push(scope,arr,isSimple) {
+    push(scope,arr,isSimple,consoleT) {
         //comprobar tipos de matriz
         if(this.params) {
             if(this.params.length == 1) {
                 var tobj = this.params[0];
-                tobj = tobj.run(scope);
+                tobj = tobj.run(scope,consoleT);
                 //verificar si el parametro del push es compatible con arr
                 if(isSimple) {
                     arr.value.value.push(tobj);
@@ -176,24 +188,24 @@ class callFunction extends Nodo{
             console.log("Error 6 en callFunction.js")
         }
         var undef = new TObject(0,0,"undefined","UNDEFINED");
-        return undef.run(scope);
+        return undef.run(scope,consoleT);
     }
 
-    pop(scope,arr) {
+    pop(scope,arr,consoleT) {
 
         if(arr.value.length > 0) {
             return arr.value.pop();
         }
         var undef = new TObject(0,0,"undefined","UNDEFINED");
-        return undef.run(scope);
+        return undef.run(scope,consoleT);
     }
 
 
-    runFunction(scope) {
+    runFunction(scope,consoleT) {
         
         if(scope.checkFunction(this.id)) {
 
-            return this.func(scope);
+            return this.func(scope,consoleT);
 
         } else {
             //error
@@ -202,12 +214,12 @@ class callFunction extends Nodo{
             console.log(this.id)
             console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");*/
             var undef = new TObject(0,0,"undefined","UNDEFINED");
-            return undef.run(scope);
+            return undef.run(scope,consoleT);
         }
 
     }
 
-    func(scope) {
+    func(scope,consoleT) {
 
         var funcObj = scope.getFunction(this.id);
         //console.log(funcObj)
@@ -218,7 +230,7 @@ class callFunction extends Nodo{
             var asgn = new Variable(0,0,'let',param.id,new defLast(0,0,param.types,new TObject(0,0,"null",'NULL')),null);
             //var asgn = new Variable(0,0,'let',param.id,new defLast(0,0,param.types,new TObject(0,0,"undefined",'UNDEFINED')),null);
             
-            asgn.run(functionScope);
+            asgn.run(functionScope,consoleT);
         }
 
         /*console.log(this.id)
@@ -237,7 +249,7 @@ class callFunction extends Nodo{
                 //console.log(this.params)
                 for (let param in this.params) {
                     var changeValue = new asignVariable(funcObj.param[param].id,new asignLast(null,new asignLastF(null,this.params[param])));
-                    changeValue.get(functionScope,scope);
+                    changeValue.get(functionScope,scope,consoleT);
                 }
             } else {
                 console.log("Error 8 en callFunction.js")
@@ -256,7 +268,7 @@ class callFunction extends Nodo{
 
         functionScope.prev = scope.getGlobalScope();
 
-        var aux = this.statement(functionScope);
+        var aux = this.statement(functionScope,consoleT);
         if(aux != null) {
     
             if(aux.type == 'RETURN') {
@@ -265,14 +277,14 @@ class callFunction extends Nodo{
         }
 
         var undef = new TObject(0,0,"undefined","UNDEFINED");
-        return undef.run(scope);
+        return undef.run(scope,consoleT);
     }
 
-    statement(scope) {
+    statement(scope,consoleT) {
         if(this.stmt!= null) {
             for(var i = 0;i<this.stmt.length;i++) {
                 var element = this.stmt[i];
-                var aux = element.run(scope);
+                var aux = element.run(scope,consoleT);
                 //console.log(aux)
                 if(aux != null) {
     

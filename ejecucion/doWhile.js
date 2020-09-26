@@ -6,9 +6,9 @@ class doWhile {
         this.stmt = stmt;
     }
 
-    run(scope) {
+    run(scope,console) {
         
-        var auxCond = this.cond.run(scope);
+        var auxCond = this.cond.run(scope,console);
         if(auxCond.type == 'BOOLEAN') {
 
             auxCond = Boolean(auxCond.value);
@@ -17,7 +17,7 @@ class doWhile {
             do {
 
                 var newScope = new Scope(actualScope);
-                var r = this.statement(newScope)
+                var r = this.statement(newScope,console)
 
                 if(r != null && r != undefined) {
                     if(r.type == 'RETURN') {
@@ -28,7 +28,7 @@ class doWhile {
                     }
                 }
 
-                auxCond = this.cond.run(scope);
+                auxCond = this.cond.run(scope,console);
                 auxCond = Boolean(auxCond.value);
 
             } while(auxCond);
@@ -40,11 +40,11 @@ class doWhile {
 
     }
 
-    statement(scope) {
+    statement(scope,console) {
         if(this.stmt!= null) {
             for(var i = 0;i<this.stmt.length;i++) {
                 var element = this.stmt[i];
-                var aux = element.run(scope);
+                var aux = element.run(scope,console);
                 if(aux != null) {
     
                     if(aux.type == 'RETURN') {

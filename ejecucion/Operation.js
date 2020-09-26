@@ -11,7 +11,7 @@ class Operation extends Nodo{
 
     
 
-    run(scope) {
+    run(scope,console) {
         let valIzq;
         let valDer;
         /*console.log("$$$$$$$$$$||AL inicio del run en operation|||$$$$$$$$$$$")
@@ -19,9 +19,9 @@ class Operation extends Nodo{
         console.log(this.opDer)
         console.log("|||||||||||||||||||||||||||||||||||||||||||||||||||||")*/
         if(this.opIzq != null)
-            valIzq = this.opIzq.run(scope);
+            valIzq = this.opIzq.run(scope,console);
         if(this.opDer != null)
-            valDer = this.opDer.run(scope);
+            valDer = this.opDer.run(scope,console);
         
         /*console.log("$$$$$$$$$$--Aqui se ejecuta en operacion-$$$$$$$$$$$")
         console.log(valIzq)

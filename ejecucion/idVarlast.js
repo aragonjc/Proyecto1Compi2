@@ -6,7 +6,7 @@ class idVarlast {
         this.varlast = varlast;
     }
 
-    get(scope,l) {
+    get(scope,l,console) {
         if(scope.findVariable(this.id) != null) {
 
             let vl = l;
@@ -60,11 +60,11 @@ class idVarlast {
         }
     }
 
-    run(scope) {
+    run(scope,console) {
 
         if(scope.findVariable(this.id) != null) {
 
-            let vl = this.varlast.get(scope);
+            let vl = this.varlast.get(scope,console);
             /*console.log("VARLAST")
             console.log(vl);
             console.log("Fin VarLAST")*/
@@ -92,7 +92,7 @@ class idVarlast {
                         var r = vobj.value.length;
                         
                         var length = new TObject(0,0,r,"NUMBER");
-                        return length.run(scope);
+                        return length.run(scope,console);
                         
                     }
                 }

@@ -5,9 +5,9 @@ class typeKeyValue {
         this.type = type;
     }
 
-    run(scope) {
+    run(scope,console) {
 
-        var t = this.type.run(scope);
+        var t = this.type.run(scope,console);
         
         if(t == null) {
             //error

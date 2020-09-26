@@ -5,12 +5,12 @@ class ArrParamList {
         this.exp = exp;
     }
 
-    run(scope) {
+    run(scope, console) {
 
         if(this.list != null) {
 
-            var e = this.exp.run(scope);
-            var l = this.list.run(scope);
+            var e = this.exp.run(scope, console);
+            var l = this.list.run(scope, console);
             
            
             l.arr.push(e);
@@ -18,7 +18,7 @@ class ArrParamList {
             return l;
 
         } else {
-            var e = this.exp.run(scope);
+            var e = this.exp.run(scope, console);
             return {arr:[e],type:e.type};
         }
     }

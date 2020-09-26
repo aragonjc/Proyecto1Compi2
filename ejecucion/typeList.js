@@ -7,10 +7,10 @@ class typeList extends Nodo{
         this.contador = 1;
     }
 
-    run(scope) {
+    run(scope,console) {
 
         if(this.list != null) {
-            return this.list.run(scope) + this.contador;
+            return this.list.run(scope,console) + this.contador;
         }
 
         return this.contador;

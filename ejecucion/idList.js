@@ -6,17 +6,17 @@ class idList {
         this.auxp = auxp;
     }
     //para funciones
-    run(scope) {
+    run(scope,console) {
 
         var aux = null;
 
         if(this.auxp != null) {
-            aux = this.auxp.run(scope);
+            aux = this.auxp.run(scope,console);
         }
 
         if(this.isArray) {
 
-            let exp = this.expOrID.run(scope);
+            let exp = this.expOrID.run(scope,console);
             
 
         } else {
@@ -26,17 +26,17 @@ class idList {
         }
     }
 
-    get(scope) {
+    get(scope,console) {
         if(this.isArray) {
 
-            let exp = this.expOrID.run(scope);
+            let exp = this.expOrID.run(scope,console);
             
             if(exp.type != "NULL") {
                 
                 var aux = null;
 
                 if(this.auxp != null) {
-                    aux = this.auxp.get(scope);
+                    aux = this.auxp.get(scope,console);
                     let r = [];
                     r.push({isArray:true,exp:exp,id:null });
                     aux.forEach(element => {
@@ -54,7 +54,7 @@ class idList {
         } else {
             var aux = null;
             if(this.auxp != null) {
-                aux = this.auxp.get(scope);
+                aux = this.auxp.get(scope,console);
                 let r = [];
                 r.push({isArray:false,exp:null,id:this.expOrID });
                 aux.forEach(element => {

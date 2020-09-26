@@ -9,12 +9,12 @@ class defVarLastP {
         this.deflast = deflast;        
     }
 
-    run(scope,decType) {
+    run(scope,decType,console) {
 
 
         if(this.list != null) {
 
-            var l = this.list.run(scope,decType);
+            var l = this.list.run(scope,decType,console);
             var aux = new Variable(this.line,this.column,decType,this.id,this.deflast,null);
             l.push(aux);
             return l;

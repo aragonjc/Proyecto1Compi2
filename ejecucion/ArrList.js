@@ -4,9 +4,9 @@ class ArrList {
         this.arr = arr;
     }
 
-    run(scope) {
+    run(scope,console) {
         if(this.arr != null) {
-            var a = this.arr.run(scope);
+            var a = this.arr.run(scope,console);
             return {value:a.arr,type:a.type,isArray:true,dim:1}
         }
 

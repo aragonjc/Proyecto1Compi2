@@ -5,7 +5,7 @@ class defVarLast {
     }
 
     run(scope,decType) {
-        return this.defVarLastP.run(scope,decType);
+        return this.defVarLastP.run(scope,decType,console);
     }
 
 }

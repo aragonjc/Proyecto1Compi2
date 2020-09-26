@@ -5,18 +5,18 @@ class objType {
         this.keyvalue = keyvalue;
     }
 
-    run(scope) {
+    run(scope,console) {
 
         if(this.list != null) {
 
-            var l = this.list.run(scope);
-            var kv = this.keyvalue.run(scope);
+            var l = this.list.run(scope,console);
+            var kv = this.keyvalue.run(scope,console);
 
             l.push(kv[0]);
             return l;
         }
 
-        return this.keyvalue.run(scope);
+        return this.keyvalue.run(scope,console);
     }
 }
 

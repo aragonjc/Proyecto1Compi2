@@ -10,37 +10,57 @@ $(document).ready(function(){
         lineNumbers : true,
         mode: 'javascript'
     });
-    document.getElementById("traducir").onclick = function() {
+    var consoleT = document.getElementsByClassName('console')[0];
+    
+    document.getElementById("ejecutar").onclick = function() {
         let entrada = editor.getValue();
-        ejecutar(entrada);
+        consoleT.value = "";
+        ejecutar(entrada,consoleT);
     }
 });
 
-function ejecutar(entrada) {
+function ejecutar(entrada,consoleT) {
+
+    //console.log(console);
     
+
 let ast = parser.parse(entrada.toString());
 
 let scope = new Scope(null);
 
-/*ast.forEach(element => {
+ast.forEach(element => {
     if(element.constructor.name == "decType") {
-        element.run(scope,null);
+        element.run(scope,consoleT);
     }
-})*/
+})
 
 ast.forEach(element => {
-    element.run(scope)
+    if(element.constructor.name == "Variable" ||element.constructor.name == "asignVariable" ) {
+        element.run(scope,consoleT);
+    }
+})
+
+ast.forEach(element => {
+    if(element.constructor.name == "Function") {
+        element.run(scope,consoleT);
+    }
+})
+
+ast.forEach(element => {
+    if(check(element))
+        element.run(scope,consoleT)
 });
 
-/*scope.typesTable.forEach(element => {
-    console.log(element);
-})*/
-/*console.log("---TYPES---")
-console.log(scope.typesTable)
-console.log("---Variables---")
-console.log(scope.table)*/
+}
 
-
-
-
+function check(element) {
+    if(element.constructor.name == "Function") {
+        return false;
+    } else if(element.constructor.name == "Variable" ||element.constructor.name == "asignVariable" ) {
+        return false;
+    } else if(element.constructor.name == "decType") {
+        return false;
+    } else {
+        return true;
+    }
 }

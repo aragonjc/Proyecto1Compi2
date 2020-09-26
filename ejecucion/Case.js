@@ -6,14 +6,14 @@ class Case {
         this.list = list;
     }
 
-    run(scope,cond) {
+    run(scope,cond,console) {
         for(var i = 0;i<this.list.length;i++) {
             var element = this.list[i];
             var exp = element.exp/*.run(scope)*/;
             var stmt = element.stmt;
             
             var op = new Operation(0,0,cond,exp,"==");
-            var result = op.run(scope);
+            var result = op.run(scope,console);
 
             if(result.type == 'BOOLEAN' && !result.isArray) {
 
@@ -22,7 +22,7 @@ class Case {
                 //console.log(result);
                 if(result) {
                     var actualScope = new Scope(scope);
-                    var aux = this.statement(actualScope,stmt);
+                    var aux = this.statement(actualScope,stmt,console);
                     if(aux != null) {
     
                         if(aux.type == 'RETURN') {
@@ -43,11 +43,11 @@ class Case {
         }
     }
 
-    statement(scope,stmt) {
+    statement(scope,stmt,console) {
         if(stmt!= null) {
             for(var i = 0;i<stmt.length;i++) {
                 var element = stmt[i];
-                var aux = element.run(scope);
+                var aux = element.run(scope,console);
                 if(aux != null) {
     
                     if(aux.type == 'RETURN') {

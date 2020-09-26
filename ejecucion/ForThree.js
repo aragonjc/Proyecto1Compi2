@@ -12,7 +12,7 @@ class ForTwo {
         this.stmt = stmt;
     }
 
-    run(scope) {
+    run(scope,console) {
         
         if(this.id.constructor.name == "Id") {
             
@@ -28,7 +28,7 @@ class ForTwo {
             var asign = new asignVariable(id,asignLast_);
 
             asign.run(actualScope);*/
-            var condition = this.cond.run(actualScope);
+            var condition = this.cond.run(actualScope,console);
             if(condition.type == 'BOOLEAN') {
                 
                 condition = Boolean(condition.value);
@@ -36,7 +36,7 @@ class ForTwo {
 
                     var newScope = new Scope(actualScope);
 
-                    var aux = this.statement(newScope);
+                    var aux = this.statement(newScope,console);
                     
                     if(aux != null) {
         
@@ -47,8 +47,8 @@ class ForTwo {
                         } 
                     }
                     
-                    this.inc.run(newScope);
-                    condition = this.cond.run(newScope);
+                    this.inc.run(newScope,console);
+                    condition = this.cond.run(newScope,console);
                     condition = Boolean(condition.value);
                     
                 }
@@ -62,11 +62,11 @@ class ForTwo {
         }
     }
 
-    statement(scope) {
+    statement(scope,console) {
         if(this.stmt!= null) {
             for(var i = 0;i<this.stmt.length;i++) {
                 var element = this.stmt[i];
-                var aux = element.run(scope);
+                var aux = element.run(scope,console);
                 if(aux != null) {
     
                     if(aux.type == 'RETURN') {

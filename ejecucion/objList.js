@@ -5,12 +5,12 @@ class objList {
         this.key = key;
     }
 
-    run(scope) {
+    run(scope,console) {
 
         if(this.list != null) {
 
-            var e = this.key.run(scope);
-            var l = this.list.run(scope);
+            var e = this.key.run(scope,console);
+            var l = this.list.run(scope,console);
 
             e.forEach((value, key) => l.set(key, value));
 
@@ -18,7 +18,7 @@ class objList {
 
         }
 
-        return this.key.run(scope);
+        return this.key.run(scope,console);
     }
 }
 module.exports = objList;

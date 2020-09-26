@@ -7,13 +7,13 @@ class IF {
         this.iflast = iflast;
     }
 
-    run(scope) {
+    run(scope,console) {
         
         if(this.cond != null) {
             /*console.log("IF----")
             console.log(this.cond)
             console.log("----.-----")*/
-            var auxCond = this.cond.run(scope);
+            var auxCond = this.cond.run(scope,console);
             /*console.log("cual es el resultado de la condicion")
             console.log(auxCond)
             console.log("°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°")*/
@@ -24,7 +24,7 @@ class IF {
 
                 if(auxCond) {
 
-                    var r = this.statement(actualScope)
+                    var r = this.statement(actualScope,console)
                     if(r != null && r != undefined) {
                         if(r.type == 'RETURN') {
                             return r;
@@ -39,7 +39,7 @@ class IF {
 
                     if(this.iflast != null) {
                         var actualScope = new Scope(scope);
-                        var ifr = this.iflast.run(actualScope);
+                        var ifr = this.iflast.run(actualScope,console);
                         if(ifr != null && ifr != undefined) {
                             if(ifr.type == 'RETURN') {
                                 return ifr;
@@ -60,7 +60,7 @@ class IF {
         } else {
 
             var actualScope = new Scope(scope);
-            var r = this.statement(actualScope);
+            var r = this.statement(actualScope,console);
             if(r != null && r != undefined) {
                 if(r.type == 'RETURN') {
                     return r;
@@ -74,11 +74,11 @@ class IF {
         }
     }
 
-    statement(scope) {
+    statement(scope,console) {
         if(this.stmt!= null) {
             for(var i = 0;i<this.stmt.length;i++) {
                 var element = this.stmt[i];
-                var aux = element.run(scope);
+                var aux = element.run(scope,console);
                 if(aux != null) {
     
                     if(aux.type == 'RETURN') {

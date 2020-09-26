@@ -5,7 +5,7 @@ class EscapeExp {
         this.exp = exp;
     }
 
-    run(scope) {
+    run(scope,console) {
 
         if(this.type == 'BREAK') {
             return {type:'BREAK'}
@@ -15,7 +15,7 @@ class EscapeExp {
             //console.log(this.exp)
             if(this.exp != null) {
 
-                var res = this.exp.run(scope);
+                var res = this.exp.run(scope,console);
                 return {type:"RETURN",res:res}
             }
             return {type:"RETURN"}

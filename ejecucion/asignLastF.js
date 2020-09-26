@@ -7,10 +7,10 @@ class asignLastF {
         this.exp = exp;
     }
 
-    run(scope,obj) {
+    run(scope,obj,console) {
 
         if(this.op == null) {
-            return this.exp.run(scope);
+            return this.exp.run(scope,console);
         }
 
         if(this.exp != null) {
@@ -20,12 +20,12 @@ class asignLastF {
             
             var operation = new Operation(0,0,obj.value,this.exp,this.op);
             //console.log(operation);
-            return operation.run(scope);
+            return operation.run(scope,console);
 
         } else {
             var newObject = new TObject(0,0,"1","NUMBER")
             var operation = new Operation(0,0,obj.value,newObject,this.op);
-            return operation.run(scope);
+            return operation.run(scope,console);
         }
     }
 

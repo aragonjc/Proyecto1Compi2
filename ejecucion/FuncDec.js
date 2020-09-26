@@ -7,10 +7,10 @@ class FuncDec {
         this.STMT = STMT;
     }
 
-    run(scope) {
+    run(scope,console) {
         
         if(this.hasType) {
-            return {stmt:this.STMT,type:this.type.run(scope)}
+            return {stmt:this.STMT,type:this.type.run(scope,console)}
         } else {
             return {stmt:this.STMT,type:undefined};
         }

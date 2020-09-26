@@ -5,13 +5,13 @@ class decType {
         this.obj = obj;
     }
 
-    run(scope) {
+    run(scope,console) {
         //comprobar si el type ya existe
         //comprobar si las propiedades del type no estan repetidas
         
         scope.insertType(this.id,null);
 
-        var ob = this.obj.run(scope)
+        var ob = this.obj.run(scope,console)
 
         scope.insertType(this.id,ob);
     }

@@ -24,7 +24,7 @@ ast.forEach(element => {
         element.run(scope,null);
     }
 })
-console.log("/***TABLA****/")
+
 ast.forEach(element => {
     if(element.constructor.name == "Function") {
         element.run(scope,null);
@@ -33,7 +33,7 @@ ast.forEach(element => {
 
 ast.forEach(element => {
     if(check(element))
-        element.run(scope)
+        element.run(scope,null)
 });
 
 function check(element) {

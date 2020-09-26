@@ -7,12 +7,12 @@ class Switch {
         this.lastcase = lastcase;
     }
 
-    run(scope) {
+    run(scope,console) {
 
         //this.cond.run(scope);
 
         if(this.firstcase != null) {
-            var aux = this.firstcase.run(scope,this.cond);
+            var aux = this.firstcase.run(scope,this.cond,console);
             if(aux != null) {
     
                 if(aux.type == 'RETURN') {
@@ -26,7 +26,7 @@ class Switch {
         }
 
         if(this.lastcase != null) {
-            var aux = this.lastcase.run(scope,this.cond);
+            var aux = this.lastcase.run(scope,this.cond,console);
             if(aux != null) {
     
                 if(aux.type == 'RETURN') {

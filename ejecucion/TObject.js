@@ -8,7 +8,7 @@ class TObject extends Nodo{
         this.dimentions = 0;
     }
 
-    run(scope) {
+    run(scope,console) {
         return this;
     }
 }

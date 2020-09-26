@@ -5,9 +5,9 @@ class objProperty {
         this.exp = exp;
     }
 
-    run(scope) {
+    run(scope,console) {
 
-        var e = this.exp.run(scope);
+        var e = this.exp.run(scope,console);
         var obj = new Map();
         obj.set(this.id,e);
         return obj;
