@@ -101,7 +101,7 @@
 
 %{
 	
-	
+	const ast = require('./AST/AST.js');
 	
 %}
 
@@ -114,14 +114,14 @@ S: Bloque EOF
 ;
 
 Bloque: Bloque Instruccion { $1.push($2); $$=$1;}
-	| Instruccion          { $$ = [$1]; }
+	| Instruccion          { $$ = $1; }
 ;
 
 Instruccion: llamadaFuncion
 			{ $$=$1; }
             |variables
 			{ $$=$1;}
-            |Type id igual curlyBraceOpen parsObj curlyBraceClose semicolon/*; o no*/
+            |Type id igual curlyBraceOpen parsObj curlyBraceClose semicolon
 			{  }
 			|funciones
 			{ $$=$1; }
@@ -324,11 +324,11 @@ variables: defType id defLast defVarLast semicolon
             {  }
 		  |id asignLast semicolon
 		  {
-			
+			 $$ = $2;
 		  }
 		  |id asignLast
 		  {
-			
+			$$ = $2;
 		  }
 ;
 
@@ -339,7 +339,7 @@ asignLast: varLast asignLastF
 			}
 		 | asignLastF
 		 {
-			
+			$$ =$1;
 		 }
 ;
 
@@ -355,7 +355,7 @@ auxP:varLast { $$ = $1;}
 
 asignLastF:  igual E
 {
-	
+	$$ = $2;
 }
 			|masIgual E
 			{
@@ -448,7 +448,10 @@ typesL: typesL sqBracketOpen sqBracketClose
 		}
 ;
 
-E: exp { $$ = $1; }
+E: exp {
+		contador++;
+		$$ =  ast.Node(contador,"E",$1,null);
+		}
 	| curlyBraceOpen objetoParam curlyBraceClose
 	{
 		
@@ -456,51 +459,153 @@ E: exp { $$ = $1; }
 	;
 
 exp:  exp mas exp
+	{ 
+		contador++;
+		var e =  ast.Node(contador,"+",$1,$3);
+		contador++;
+		$$ = ast.Node(contador,"exp",e,null)
+	}
 	| exp menos exp
+	{ 
+		contador++;
+		var e =  ast.Node(contador,"-",$1,$3);
+		contador++;
+		$$ = ast.Node(contador,"exp",e,null)
+	}
 	| exp por exp
+	{ 
+		contador++;
+		var e =  ast.Node(contador,"*",$1,$3);
+		contador++;
+		$$ = ast.Node(contador,"exp",e,null)
+	}
 	| exp division exp
+	{ 
+		contador++;
+		var e =  ast.Node(contador,"/",$1,$3);
+		contador++;
+		$$ = ast.Node(contador,"exp",e,null)
+	}
 	| menos exp %prec unary
 	| exp potencia exp
+	{ 
+		contador++;
+		var e =  ast.Node(contador,"**",$1,$3);
+		contador++;
+		$$ = ast.Node(contador,"exp",e,null)
+	}
 	| exp modulo exp
+	{ 
+		contador++;
+		var e =  ast.Node(contador,"%",$1,$3);
+		contador++;
+		$$ = ast.Node(contador,"exp",e,null)
+	}
 	| exp mayorque exp
+	{ 
+		contador++;
+		var e =  ast.Node(contador,">",$1,$3);
+		contador++;
+		$$ = ast.Node(contador,"exp",e,null)
+	}
 	| exp menorque exp
+	{ 
+		contador++;
+		var e =  ast.Node(contador,"<",$1,$3);
+		contador++;
+		$$ = ast.Node(contador,"exp",e,null)
+	}
 	| exp mayorigualque exp
+	{ 
+		contador++;
+		var e =  ast.Node(contador,">=",$1,$3);
+		contador++;
+		$$ = ast.Node(contador,"exp",e,null)
+	}
 	| exp menorigualque exp
+	{ 
+		contador++;
+		var e =  ast.Node(contador,"<=",$1,$3);
+		contador++;
+		$$ = ast.Node(contador,"exp",e,null)
+	}
 	| exp igualdad exp
+	{ 
+		contador++;
+		var e =  ast.Node(contador,"==",$1,$3);
+		contador++;
+		$$ = ast.Node(contador,"exp",e,null)
+	}
 	| exp diferencia exp
+	{ 
+		contador++;
+		var e =  ast.Node(contador,"!=",$1,$3);
+		contador++;
+		$$ = ast.Node(contador,"exp",e,null)
+	}
 	| exp and exp
+	{ 
+		contador++;
+		var e =  ast.Node(contador,"&&",$1,$3);
+		contador++;
+		$$ = ast.Node(contador,"exp",e,null)
+	}
 	| exp or exp
-    {  }
+	{ 
+		contador++;
+		var e =  ast.Node(contador,"||",$1,$3);
+		contador++;
+		$$ = ast.Node(contador,"exp",e,null)
+	}
 	| not exp
-    {  }
+    { 
+		contador++;
+		var e =  ast.Node(contador,"!",$2,null);
+		contador++;
+		$$ = ast.Node(contador,"exp",e,null)
+	}
 	| bracketOpen exp bracketClose
-    {  }
 	| exp question exp dosPuntos exp
-	{  }
 	| exp increment
-    {  }
 	| exp decrement
-    {  }
 	| NUMBER
-    {  }
+    { 
+		contador++;
+		$$ = ast.Leaf(contador,$1);
+	}
 	| STRING
-    { }
+    { 
+		contador++;
+		$$ = ast.Leaf(contador,$1);
+	}
 	| true
-    { }
+    { 
+		contador++;
+		$$ = ast.Leaf(contador,"true");
+	}
 	| false
-    { }
+    { 
+		contador++;
+		$$ = ast.Leaf(contador,"false");
+	}
 	| null
-    { }
+    { 
+		contador++;
+		$$ = ast.Leaf(contador,"null");
+	}
 	| undefined
-    { }
+    { 
+		contador++;
+		$$ = ast.Leaf(contador,"undefined");
+	}
 	| id varLast
-	{ }
 	| id
-	{ }
+	{ 
+		contador++;
+		$$ = ast.Leaf(contador,$1);
+	}
 	| id PL bracketOpen paramFunc bracketClose
-	{ }
 	| sqBracketOpen arrParam sqBracketClose
-	{ }
 ;
 
 arrParam: listArrParam { $$ = $1; }

@@ -31,14 +31,6 @@ ast.forEach(element => {
     }
 })
 
-console.log("/*******/")
-console.log("/*******/")
-console.log("/*******/")
-console.log("/*******/")
-console.log("/*******/")
-console.log("/*******/")
-console.log("/*******/")
-console.log("/*******/")
 ast.forEach(element => {
     if(check(element))
         element.run(scope)
