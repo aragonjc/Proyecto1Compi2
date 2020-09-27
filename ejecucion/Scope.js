@@ -6,6 +6,20 @@ class Scope {
         this.typesTable = new Map();
     }
 
+    getTable() {
+        return this.table;
+    }
+
+    getTypesTable() {
+        if(this.typesTable)
+            return this.typesTable;
+        return null;
+    }
+
+    getFunctionTable() {
+        return this.functionTable;
+    }
+
     getGlobalScope() {
         var sc= this;
 

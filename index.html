@@ -21,7 +21,7 @@
             margin-top: 5px;
         font-family: monospace;
         font-size: 24px;
-        height: 400px;
+        height: 350px;
         /*height: 100%;*/
         }
         .console {
@@ -86,6 +86,8 @@
         <a href="#" id="ejecutar">Ejecutar</a>
         <a href="#" id="hola">Traducir y Ejecutar</a>
         <a href="#" id="Arbol">Arbol</a>
+        <a href="#" id="tabla">Tabla de Simbolos</a>
+        <a href="#" id="Errores">Reporte de Errores</a>
     </div>
     <div>
         <div class="tab">
@@ -100,11 +102,17 @@
 
         <div id="tree" class="tabcontent">
             <div id= "merTree"class="mermaid">
-                graph TD; N4("[");N3(+);N1(5);N3-->N1;N2(6);N3-->N2;N4-->N3;
-           </div>
+            </div>
             
         </div>
         
+        <div id="table">
+
+        </div>
+
+        <div id="table-ts">
+          
+        </div>
     </div>
 
     
@@ -145,6 +153,10 @@
         mermaid.initialize({startOnLoad:true});
         mermaid.init();
 });
+</script>
+<script>
+  var consoleT = document.getElementsByClassName('console')[0];
+  consoleT.value = "";
 </script>
 </body>
 </html>

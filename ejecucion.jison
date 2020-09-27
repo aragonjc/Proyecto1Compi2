@@ -1,4 +1,10 @@
-
+%{
+	
+	let tablaErrores = [];	
+	if(tablaErrores.length != 0) {
+		tablaErrores = [];
+	}
+%}
 %lex
 
 %options case-sensitive
@@ -83,7 +89,11 @@
 
 <<EOF>>                 return 'EOF';
 
-.                       { console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
+.                       { 
+	console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); 
+	tablaErrores.push({line:yylloc.first_line, column:yylloc.first_column, type:'Lexico',msg:'El caracter: ' + yytext + " no se esperaba"})
+
+	}
 /lex
 
 %right 'question'
@@ -145,11 +155,22 @@
 %%
 
 S: Bloque EOF
-{ return $1; }
+{ 	console.log(tablaErrores)
+	return {ast:$1,tabla:tablaErrores}; }
+
 ;
 
 Bloque: Bloque Instruccion { $1.push($2); $$=$1;}
 	| Instruccion          { $$ = [$1]; }
+				|error semicolon
+{
+	tablaErrores.push({line:@1.first_line,column:@1.first_column,type:'Semantico',msg:'El caracter: ' + yytext + " no se esperaba"})
+}
+|error curlyBraceClose
+{
+	tablaErrores.push({line:@1.first_line,column:@1.first_column,type:'Semantico',msg:'El caracter: ' + yytext + " no se esperaba"})
+
+}
 ;
 
 Instruccion: llamadaFuncion
@@ -170,6 +191,7 @@ Instruccion: llamadaFuncion
 			{ $$=$1; }
 			|FOR
 			{ $$=$1; }
+
 ;
 
 llamadaFuncion: id PL bracketOpen paramFunc bracketClose semicolon
