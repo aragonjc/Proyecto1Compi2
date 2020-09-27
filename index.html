@@ -90,11 +90,14 @@
 #table {
   display: none;
 }
+#editor-traduccion{
+  display: none;
+}
     </style>
     <div>
         <a href="#" id="traducir">Traducir</a>
         <a href="#" id="ejecutar">Ejecutar</a>
-        <a href="#" id="hola">Traducir y Ejecutar</a>
+        <a href="#" id="traducir-ejecutar">Traducir y Ejecutar</a>
         <a href="#" id="Arbol">Arbol</a>
         <a href="#" id="tabla">Tabla de Simbolos</a>
         <!--<a href="#" id="Errores">Reporte de Errores</a>-->
@@ -102,6 +105,7 @@
     <div>
         <div class="tab">
             <button class="tablinks" onclick="openCity(event, 'editor')">Editor</button>
+            <button class="tablinks" onclick="openCity(event, 'editor-traduccion')">Editor para Traduccion</button>
             <button class="tablinks" onclick="openCity(event, 'tree')">Arbol</button>
             <button class="tablinks" onclick="openCity(event, 'table-ts')">Tabla de Simbolos</button>
             <button class="tablinks" onclick="openCity(event, 'table')">Errores</button>
@@ -111,6 +115,10 @@
           <div id="editor" class="tabcontent">
             <textarea class="codemirror-textarea"></textarea>
             <textarea class="console"></textarea>
+        </div>
+
+        <div id="editor-traduccion" class="tabcontent">
+          <textarea class="codemirror-translate"></textarea>
         </div>
 
         <div id="tree" class="tabcontent">

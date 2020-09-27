@@ -1,6 +1,8 @@
 const parser = require('./ejecucion.js');
 const Scope = require('./ejecucion/Scope.js');
+const translate = require('./EjecutarTraductor');
 const parserAST = require('./AST.js');
+
 let scope = null;
 let tablaErrores = null;
 //const mermaid = require('mermaid');
@@ -13,8 +15,16 @@ $(document).ready(function(){
         lineNumbers : true,
         mode: 'javascript'
     });
+    
+    var code_translate = $(".codemirror-translate")[0];
+    var editor_translate = CodeMirror.fromTextArea(code_translate, {
+        lineNumbers : true,
+        mode: 'javascript'
+    });
+
     var consoleT = document.getElementsByClassName('console')[0];
     var treeDiv = document.getElementById("merTree");
+    
     document.getElementById("ejecutar").onclick = function() {
         let entrada = editor.getValue();
         consoleT.value = "";
@@ -93,7 +103,26 @@ $(document).ready(function(){
             table.innerHTML = str;
         }
     }
+
+    document.getElementById("traducir").onclick = function() {
+        let entrada = editor_translate.getValue();
+        consoleT.value = "";
+        traducir(entrada,editor);
+    }
+
+    document.getElementById("traducir-ejecutar").onclick = function() {
+        let entrada = editor_translate.getValue();
+        consoleT.value = "";
+        var traduccion = traducir(entrada,editor);
+        ejecutar(traduccion,consoleT);
+    }
 });
+
+function traducir(entrada,editor) {
+    var r = translate(entrada);
+    editor.getDoc().setValue(r);
+    return r;
+}
 
 function getValue(obj) {
     //console.log(obj);
