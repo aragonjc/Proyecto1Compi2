@@ -110,11 +110,23 @@
 %%
 
 S: Bloque EOF
-{ return $1; }
+{ 
+	contador++;
+	return ast.Node(contador,"S",$1,null);	
+	 
+}
 ;
 
-Bloque: Bloque Instruccion { $1.push($2); $$=$1;}
-	| Instruccion          { $$ = $1; }
+Bloque: Bloque Instruccion 
+		{ 
+			contador++;
+			$$ = ast.Node(contador,"Bloque",$1,$2);
+		}
+	| Instruccion
+	{ 
+		contador++;
+		$$ = ast.Node(contador,"Instruccion",$1,null);
+	}
 ;
 
 Instruccion: llamadaFuncion
@@ -180,8 +192,16 @@ funcParamList: funcParamList comma id dosPuntos types
 			  {}
 ;
 
-STMT: STMT InstruccionI   { $1.push($2); $$=$1;}
-	 |InstruccionI        { $$ = [$1]; }
+STMT: STMT InstruccionI
+		{ 
+			contador++;
+			$$ = ast.Node(contador,"Bloque",$1,$2);
+		}
+	 |InstruccionI        
+	 { 
+		contador++;
+		$$ = ast.Node(contador,"Instruccion",$1,null);
+	 }
 ;
 
 InstruccionI: llamadaFuncion
@@ -199,11 +219,18 @@ InstruccionI: llamadaFuncion
             |FOR
 			{ $$=$1; }
             |Break semicolon
-			{  }
+			{ 
+				contador++;
+				$$ = ast.Leaf(contador,"Break"); 
+			}
             |Continue semicolon
-			{ }
+			{
+				contador++;
+				$$ = ast.Leaf(contador,"Continue"); 
+			}
             |return OP
-			{  }
+			{ contador++;
+				$$ = ast.Node(contador,"RETURN",$2,null);  }
 ;
 
 OP: E semicolon { $$ = $1;}
@@ -212,32 +239,50 @@ OP: E semicolon { $$ = $1;}
 
 IF: if bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose IFLAST
 	{ 
-	 }
+		contador++;
+		var Condicion = ast.Node(contador,"Condicion",$3,null)
+		contador++;
+		var IF_STMT = ast.Node(contador,"IF",[Condicion,$6],$8)
+		$$ = IF_STMT;
+	}
 ;
 
-IFLAST: else IFCOND { $$ = $2; }
+IFLAST: else IFCOND
+		{ 
+			contador++;
+		   	$$ = ast.Node(contador,"ELSE",$2,null);
+		}
 	  |{ $$ = null; }
 ;
 
 IFCOND: if bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose IFLAST
 	   {
-		   
+		   contador++;
+		   var conditon = ast.Node(contador,"Condicion",$3,null);
+		   contador++;
+		   $$ = ast.Node(contador,"IF",[conditon,$6],$8)
 	   }
 	   |curlyBraceOpen STMT curlyBraceClose
 	   {
-		   
+		   $$ = $2;
 	   }
 ;
 
 WHILE: while bracketOpen exp bracketClose curlyBraceOpen STMT curlyBraceClose
 		{
-			
+			contador++;
+			var condition = ast.Node(contador,"Condicion",$3,null)
+			contador++;
+			$$=  ast.Node(contador,"WHILE",condition,$6)
 		}
 ;
 
 DOWHILE: do curlyBraceOpen STMT curlyBraceClose while bracketOpen exp bracketClose semicolon
 		{
-			
+			contador++;
+			var condition = ast.Node(contador,"Condicion",$7,null)
+			contador++;
+			$$ =  ast.Node(contador,"DOWHILE",$3,condition)
 		}
 ;
 

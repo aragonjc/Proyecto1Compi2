@@ -84,13 +84,23 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- return $$[$0-1]; 
+ 
+	contador++;
+	return ast.Node(contador,"S",$$[$0-1],null);	
+	 
+
 break;
 case 2: case 27:
- $$[$0-1].push($$[$0]); this.$=$$[$0-1];
+ 
+			contador++;
+			this.$ = ast.Node(contador,"Bloque",$$[$0-1],$$[$0]);
+		
 break;
-case 3: case 42: case 55: case 62: case 63: case 91: case 92: case 137: case 141:
- this.$ = $$[$0]; 
+case 3:
+ 
+		contador++;
+		this.$ = ast.Node(contador,"Instruccion",$$[$0],null);
+	
 break;
 case 4: case 7: case 8: case 10: case 11: case 12: case 29: case 30: case 31: case 32: case 33: case 34: case 35:
  this.$=$$[$0]; 
@@ -98,7 +108,7 @@ break;
 case 5: case 9: case 16:
  this.$=$$[$0];
 break;
-case 6: case 13: case 36: case 38: case 90: case 139: case 143: case 144:
+case 6: case 13: case 38: case 90: case 139: case 143: case 144:
   
 break;
 case 14:
@@ -133,10 +143,22 @@ case 24:
  this.$ = []; 
 break;
 case 28:
- this.$ = [$$[$0]]; 
-break;
-case 37: case 49: case 140:
  
+		contador++;
+		this.$ = ast.Node(contador,"Instruccion",$$[$0],null);
+	 
+break;
+case 36:
+ 
+				contador++;
+				this.$ = ast.Leaf(contador,"Break"); 
+			
+break;
+case 37:
+
+				contador++;
+				this.$ = ast.Leaf(contador,"Continue"); 
+			
 break;
 case 39:
  this.$ = $$[$0-1];
@@ -146,17 +168,55 @@ case 40: case 43: case 56: case 95:
 break;
 case 41:
  
-	 
+		contador++;
+		var Condicion = ast.Node(contador,"Condicion",$$[$0-5],null)
+		contador++;
+		var IF_STMT = ast.Node(contador,"IF",[Condicion,$$[$0-2]],$$[$0])
+		this.$ = IF_STMT;
+	
 break;
-case 44: case 45:
+case 42:
+ 
+			contador++;
+		   	this.$ = ast.Node(contador,"ELSE",$$[$0],null);
+		
+break;
+case 44:
 
-		   
+		   contador++;
+		   var conditon = ast.Node(contador,"Condicion",$$[$0-5],null);
+		   contador++;
+		   this.$ = ast.Node(contador,"IF",[conditon,$$[$0-2]],$$[$0])
 	   
 break;
-case 46: case 47: case 48:
+case 45:
+
+		   this.$ = $$[$0-1];
+	   
+break;
+case 46:
+
+			contador++;
+			var condition = ast.Node(contador,"Condicion",$$[$0-4],null)
+			contador++;
+			this.$=  ast.Node(contador,"WHILE",condition,$$[$0-1])
+		
+break;
+case 47:
+
+			contador++;
+			var condition = ast.Node(contador,"Condicion",$$[$0-2],null)
+			contador++;
+			this.$ =  ast.Node(contador,"DOWHILE",$$[$0-6],condition)
+		
+break;
+case 48:
 
 			
 		
+break;
+case 49: case 140:
+ 
 break;
 case 50: case 102:
  this.$ = ""; 
@@ -175,6 +235,9 @@ case 54:
 
 	
 
+break;
+case 55: case 62: case 63: case 91: case 92: case 137: case 141:
+ this.$ = $$[$0]; 
 break;
 case 58: case 59: case 60: case 61: case 106: case 145:
 
