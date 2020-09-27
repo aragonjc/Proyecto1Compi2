@@ -134,7 +134,27 @@ Instruccion: llamadaFuncion
             |variables
 			{ $$=$1;}
             |Type id igual curlyBraceOpen parsObj curlyBraceClose semicolon
-			{  }
+			{
+				contador++;
+				var id = ast.Leaf(contador,$2);
+				contador++;
+				var igual = ast.Leaf(contador,"=");
+				contador++;
+				var curlyO = ast.Leaf(contador,"\"{\"")
+				contador++;
+				var curlyC = ast.Leaf(contador,"\"}\"")
+				var arr = [];
+				arr.push(id)
+				arr.push(igual)
+				arr.push(curlyO)
+				if($5) {
+					arr.push($5)
+				}
+				arr.push(curlyC)
+
+				contador++;
+				$$ = ast.Node(contador,"TYPE",arr,null);
+			}
 			|funciones
 			{ $$=$1; }
 			|IF
@@ -150,8 +170,26 @@ Instruccion: llamadaFuncion
 ;
 
 llamadaFuncion: id PL bracketOpen paramFunc bracketClose semicolon
-				//INCOMPLETO
-                {  }
+                {
+					contador++;
+					var id = ast.Leaf(contador,$1);
+					contador++;
+					var bkOp = ast.Leaf(contador,"ParentesisAbre")
+					contador++;
+					var bkC = ast.Leaf(contador,"ParentesisCierra")
+					var arr = [];
+					arr.push(id)
+					if($2!=null) {
+						arr.push($2)
+					}
+					arr.push(bkOp)
+					if($4) {
+						arr.push($4)
+					}
+					arr.push(bkC)
+					contador++;
+					$$ = ast.Node(contador,"LlamadaFuncion",arr,null);
+				}
 ;
  PL:varLast {$$= $1;}
 	|{$$ = null;}
@@ -162,34 +200,76 @@ paramFunc: paramFuncList { $$=$1;}
 ;
 
 paramFuncList: paramFuncList comma E
-                  {$1.push($3); $$=$1;}
-			  |E  {$$ = [$1];}
+                  {
+					  contador++;
+					  $$ = ast.Node(contador,"listaParametros",$1,$3);
+					}
+			  |E  {$$ = $1;}
 ;
 
 funciones: function id bracketOpen funcParam bracketClose funcDec
 {
-			
+		contador++;
+		var id = ast.Leaf(contador,$2);
+		contador++;
+		var bo = ast.Leaf(contador,"ParentesisAbre")
+		contador++;
+		var bc = ast.Leaf(contador,"ParentesisCierre")
+		var arr = []
+		arr.push(id)
+		arr.push(bo)
+		if($4) {
+			arr.push($4)
+		}
+		arr.push(bc)
+		if($6.hasOwnProperty("type")) {
+			arr.push($6.type)
+			arr.push($6.value)
+		} else {
+			arr.push($6.value)
+		}
+		contador++;
+		$$ = ast.Node(contador,"Funcion",arr,null)
+
 }
 ;
 
 funcDec: dosPuntos types curlyBraceOpen STMT curlyBraceClose
-		 {
-			
-		 }
+		{
+			contador++;
+			var type = ast.Leaf(contador,$2)
+			$$ = {value:$4,type:type}
+		}		
 		|curlyBraceOpen STMT curlyBraceClose
 		{
-			
-		 }
+			$$ = {value:$2};	
+		}
 ;
 
 funcParam: funcParamList { $$ =$1;}	
-		  |{ $$ = []; }
+		  |{ $$ = null; }
 ;
 
 funcParamList: funcParamList comma id dosPuntos types
-				{}
+			   {
+					contador++;
+				  	var id = ast.Leaf(contador,$3);
+				  	contador++;
+				  	var types = ast.Leaf(contador,$5);
+				  	contador++;
+				  	var param = ast.Node(contador,"Parametro",id,types)
+					contador++;
+					$$ = ast.Node(contador,"ListaParametro",$1,param)
+			   }
 			  |id dosPuntos types
-			  {}
+			  {
+				  contador++;
+				  var id = ast.Leaf(contador,$1);
+				  contador++;
+				  var types = ast.Leaf(contador,$3);
+				  contador++;
+				  $$ = ast.Node(contador,"Parametro",id,types)
+			  }
 ;
 
 STMT: STMT InstruccionI
@@ -229,8 +309,10 @@ InstruccionI: llamadaFuncion
 				$$ = ast.Leaf(contador,"Continue"); 
 			}
             |return OP
-			{ contador++;
-				$$ = ast.Node(contador,"RETURN",$2,null);  }
+			{ 
+				contador++;
+				$$ = ast.Node(contador,"RETURN",$2,null);
+			}
 ;
 
 OP: E semicolon { $$ = $1;}
@@ -288,25 +370,37 @@ DOWHILE: do curlyBraceOpen STMT curlyBraceClose while bracketOpen exp bracketClo
 
 SWITCH: switch bracketOpen exp bracketClose curlyBraceOpen FIRSTCASE LASTCASE curlyBraceClose
 		{
-			
+			contador++;
+			var param = [];
+			param.push($3);
+			if($6 != null) {
+				param.push($6)
+			}
+			if($7 != null) {
+				param.push($7)
+			}
+			$$ = ast.Node(contador,"SWITCH",param,null)
 		}
 ;
 
-FIRSTCASE: CASE { }
-		  | { $$ = ""; }
+FIRSTCASE: CASE {$$ =$1; }
+		  | { $$ = null; }
 ;
 
 CASE: CASE case exp dosPuntos STMT
 	 {
-		
+		contador++;
+		var caseT = ast.Node(contador,"CASE",$3,$5);
+		contador++;
+		$$ = ast.Node(contador,"CaseList",$1,caseT);
 	 }
 	 |case exp dosPuntos STMT
 	 {
-		
+		contador++;
+		$$ = ast.Node(contador,"CASE",$2,$4);
 	 }
 ;
 
-//falta ENDCASE no se como hacer el funcionamiento correcto
 LASTCASE: DEFCASE ENDCASE
 	{
 		$$ = $1;
@@ -315,7 +409,8 @@ LASTCASE: DEFCASE ENDCASE
 
 DEFCASE: default dosPuntos STMT
 {
-	
+	contador++;
+	$$ = ast.Node(contador,"DEFAULT",$3,null)
 }
 ;
 
@@ -325,7 +420,25 @@ ENDCASE: CASE { $$ = $1; }
 
 
 FOR: for bracketOpen let id igual exp semicolon exp semicolon id asignLast bracketClose curlyBraceOpen STMT curlyBraceClose
-	{}
+	{
+		contador++;
+		var dect = ast.Leaf(contador,"let");
+		contador++;
+		var id = ast.Leaf(contador,$4);
+		contador++;
+		var igual = ast.Leaf(contador,"=");
+		contador++;
+		var exp = ast.Leaf(contador,$6)
+		var asign = [dect,id,igual,exp]
+		
+		contador++;
+		var asignacion = ast.Node(contador,"ASIGNACION",asign,null);
+		
+		contador++;
+		var condicion = ast.Node(contador,"CONDICION",$8,null);
+
+		
+	}
 	|for bracketOpen exp igual exp semicolon exp semicolon id asignLast bracketClose curlyBraceOpen STMT curlyBraceClose
 	{
 		
@@ -527,34 +640,33 @@ auxP:varLast { $$ = $1;}
 	;
 
 asignLastF:  igual E
-{	
-	$$ = {value:[$1,$2]}
-}
+			{	
+				$$ = {value:[$1,$2]}
+			}
 			|masIgual E
 			{	
 				$$ = {value:[$1,$2]}
 			}
 			|menosIgual E
 			{	
-	$$ = {value:[$1,$2]}
-}
+				$$ = {value:[$1,$2]}
+			}
 			|porIgual E
-{	
-	$$ = {value:[$1,$2]}
-}
+			{	
+				$$ = {value:[$1,$2]}
+			}
 			|divisionIgual E
-{	
-	$$ = {value:[$1,$2]}
-}
+			{	
+				$$ = {value:[$1,$2]}
+			}
 			|increment
 			{
-	$$={value:[$1]}
-
-}
+				$$={value:[$1]}
+			}	
 			|decrement
 			{
-			$$={value:[$1]}
-}
+				$$={value:[$1]}
+			}
 ;
 
 parsObj: objType {$$ = $1;}
@@ -562,8 +674,11 @@ parsObj: objType {$$ = $1;}
 ;
 
 objType: objType opkv keyvalueT
-		{   }
-		|keyvalueT {}
+		{
+			contador++;
+			$$ = ast.Node(contador,"ListType",$1,$3);
+		}
+		|keyvalueT {$$ =$1;}
 ;
 
 
@@ -572,7 +687,14 @@ opkv: comma      {$$ = $1;}
 ;
 
 keyvalueT: id dosPuntos types
-		{  }
+		{
+			contador++;
+			var id = ast.Leaf(contador,$1);
+			contador++;
+			var types = ast.Leaf(contador,$3);
+			contador++;
+			$$ = ast.Node(contador,"KeyValue",id,types);
+		}
 ;
 
 defType: let   { $$ = $1; }
@@ -626,12 +748,25 @@ typesL: typesL sqBracketOpen sqBracketClose
 ;
 
 E: exp {
-		contador++;
-		$$ =  ast.Node(contador,"E",$1,null);
+			contador++;
+			$$ =  ast.Node(contador,"E",$1,null);
 		}
 	| curlyBraceOpen objetoParam curlyBraceClose
 	{
-		
+		contador++;
+		var curlyO = ast.Leaf(contador,"\"{\"");
+		contador++;
+		var curlyC = ast.Leaf(contador,"\"}\"");
+		var arr = []
+		arr.push(curlyO)
+		if($2 != null) {
+			arr.push($2)
+		}
+		arr.push(curlyC)
+		contador++;
+		var obj = ast.Node(contador,"OBJETO",arr,null);
+		contador++;
+		$$ = ast.Node(contador,"E",obj,null)
 	}
 	;
 
@@ -664,6 +799,12 @@ exp:  exp mas exp
 		$$ = ast.Node(contador,"exp",e,null)
 	}
 	| menos exp %prec unary
+	{
+		contador++;
+		var e =  ast.Node(contador,"'-''",$2,null);
+		contador++;
+		$$ = ast.Node(contador,"exp",e,null)
+	}
 	| exp potencia exp
 	{ 
 		contador++;
@@ -742,9 +883,37 @@ exp:  exp mas exp
 		$$ = ast.Node(contador,"exp",e,null)
 	}
 	| bracketOpen exp bracketClose
+	{
+		contador++;
+		parA = ast.Leaf(contador,"Parentesis Abre")
+		contador++;
+		parC = ast.Leaf(contador,"Parentesis Cierra")
+		contador++;
+		$$ = ast.Node(contador,"exp",[parA,$2,parC],null)
+	}
 	| exp question exp dosPuntos exp
+	{	
+		contador++;
+		var e1 = ast.Node(contador,"?",$3,null);
+		contador++;
+		var e2 = ast.Node(contador,":",$5,null);
+		contador++;
+		$$ = ast.Node(contador,"OperadorTernario",[$1,e1,e2],null)
+	}
 	| exp increment
+	{
+		contador++;
+		var inc = ast.Node(contador,"++",$1,null)
+		contador++;
+		$$ = ast.Node(contador,"exp",inc,null)
+	}
 	| exp decrement
+	{
+		contador++;
+		var dec = ast.Node(contador,"--",$1,null)
+		contador++;
+		$$ = ast.Node(contador,"exp",dec,null)
+	}
 	| NUMBER
     { 
 		contador++;
@@ -776,13 +945,55 @@ exp:  exp mas exp
 		$$ = ast.Leaf(contador,"undefined");
 	}
 	| id varLast
+	{
+		contador++;
+		var id = ast.Leaf(contador,$1);
+		contador++;
+		$$ = ast.Node(contador,"exp",id,$2)
+	}
 	| id
 	{ 
 		contador++;
 		$$ = ast.Leaf(contador,$1);
 	}
 	| id PL bracketOpen paramFunc bracketClose
+	{
+		contador++;
+		var id = ast.Leaf(contador,$1);
+		contador++;
+		var bkOp = ast.Leaf(contador,"ParentesisAbre")
+		contador++;
+		var bkC = ast.Leaf(contador,"ParentesisCierra")
+		var arr = [];
+		arr.push(id)
+		if($2!=null) {
+			arr.push($2)
+		}
+		arr.push(bkOp)
+		if($4) {
+			arr.push($4)
+		}
+		arr.push(bkC)
+		contador++;
+		$$ = ast.Node(contador,"LlamadaFuncion",arr,null);
+		
+
+	}
 	| sqBracketOpen arrParam sqBracketClose
+	{
+		contador++;
+		var sqBO = ast.Leaf(contador,"corcheteA")
+		contador++;
+		var sqBC = ast.Leaf(contador,"corcheteC")
+		contador++;
+		var arr = [];
+		arr.push(sqBO)
+		if($2 != null) {
+			arr.push($2)
+		}
+		arr.push(sqBC)
+		$$ = ast.Node(contador,"exp",arr,null)
+	}
 ;
 
 arrParam: listArrParam { $$ = $1; }
@@ -790,8 +1001,15 @@ arrParam: listArrParam { $$ = $1; }
 ;
 
 listArrParam: listArrParam comma E
-			   {  }
-			|E { }
+			   {
+				   contador++;
+				   var comma = ast.Leaf(contador,",");
+				   contador++;
+				   var e = ast.Leaf(contador,$3);
+				   contador++;
+				   $$ = ast.Node(contador,"ListaArreglos",[$1,comma,e],null)
+			   }
+			|E {$$=$1; }
 ;
 
 objetoParam: objetoParamList { $$ = $1; }
@@ -799,13 +1017,19 @@ objetoParam: objetoParamList { $$ = $1; }
 ;
 
 objetoParamList: objetoParamList opkv keyvalue
-				{  }
+				{
+					contador++;
+					$$ = ast.Node(contador,"ListaObjeto",$1,$3);
+				}
 		  		|keyvalue
-				{  }
+				{ $$ =$1; }
 ;
 
 keyvalue: id dosPuntos E
 	{
-		
+		contador++;
+		var id = ast.Leaf(contador,$1)
+		contador++;
+		$$ = ast.Node(contador,"KeyValue",id,$3)
 	}
 ;
