@@ -355,12 +355,169 @@ case 55: case 62: case 63: case 91: case 92: case 137: case 141:
 break;
 case 57:
 
+		contador++;
+		var dect = ast.Leaf(contador,"let");
+		contador++;
+		var id = ast.Leaf(contador,$$[$0-11]);
+		contador++;
+		var igual = ast.Leaf(contador,"=");
+		var asign = [dect,id,igual,$$[$0-9]]
+		
+		contador++;
+		var asignacion = ast.Node(contador,"ASIGNACION",asign,null);
+		
+		contador++;
+		var condicion = ast.Node(contador,"CONDICION",$$[$0-7],null);
+		
+		var arr = [];
+		arr.push(asignacion)
+		arr.push(condicion)
+		
+		if($$[$0-4].hasOwnProperty("varlast")) {
+			contador++;
+			var id = ast.Leaf(contador,$$[$0-5]);
+			if($$[$0-4].value.length == 2) {
+				contador++;
+				var inc = ast.Node(contador,$$[$0-4].value[0],id,$$[$0-4].value[1])
+				arr.push(inc)
+			} else {
+				contador++;
+				var inc = ast.Node(contador,$$[$0-4].value[0],id,null);
+				arr.push(inc)
+			}
+			
+		} else {
+			contador++;
+			var id = ast.Leaf(contador,$$[$0-5]);
+			if($$[$0-4].value.length == 2) {
+				contador++;
+				var inc = ast.Node(contador,$$[$0-4].value[0],id,$$[$0-4].value[1])
+				arr.push(inc)
+			} else {
+				contador++;
+				var inc = ast.Node(contador,$$[$0-4].value[0],id,null);
+				arr.push(inc)
+			}
+		}
+		arr.push($$[$0-1])
+		contador++;
+		this.$ = ast.Node(contador,"FOR",arr,null)
+		
+	
+break;
+case 58:
+
+		
+		
+		contador++;
+		var igual = ast.Leaf(contador,"=");
+
+		var asign = [$$[$0-11],igual,$$[$0-9]]
+		
+		contador++;
+		var asignacion = ast.Node(contador,"ASIGNACION",asign,null);
+		
+		contador++;
+		var condicion = ast.Node(contador,"CONDICION",$$[$0-7],null);
+		
+		var arr = [];
+		arr.push(asignacion)
+		arr.push(condicion)
+		
+		if($$[$0-4].hasOwnProperty("varlast")) {
+			contador++;
+			var id = ast.Leaf(contador,$$[$0-5]);
+			arr.push(id)
+			arr.push($$[$0-4].varlast)
+		} else {
+			contador++;
+			var id = ast.Leaf(contador,$$[$0-5]);
+			if($$[$0-4].value.length == 2) {
+				contador++;
+				var inc = ast.Node(contador,$$[$0-4].value[0],id,$$[$0-4].value[1])
+				arr.push(inc)
+			} else {
+				contador++;
+				var inc = ast.Node(contador,$$[$0-4].value[0],id,null);
+				arr.push(inc)
+			}
+		}
+		arr.push($$[$0-1])
+		contador++;
+		this.$ = ast.Node(contador,"FOR",arr,null)
+	
+break;
+case 59:
+
+		
+		
+		contador++;
+		var asignacion = ast.Node(contador,"ASIGNACION",$$[$0-9],null);
+		
+		contador++;
+		var condicion = ast.Node(contador,"CONDICION",$$[$0-7],null);
+		
+		var arr = [];
+		arr.push(asignacion)
+		arr.push(condicion)
+		
+		if($$[$0-4].hasOwnProperty("varlast")) {
+			contador++;
+			var id = ast.Leaf(contador,$$[$0-5]);
+			arr.push(id)
+			arr.push($$[$0-4].varlast)
+		} else {
+			contador++;
+			var id = ast.Leaf(contador,$$[$0-5]);
+			
+			if($$[$0-4].value.length == 2) {
+				contador++;
+				var inc = ast.Node(contador,$$[$0-4].value[0],id,$$[$0-4].value[1])
+				arr.push(inc)
+			} else {
+				contador++;
+				var inc = ast.Node(contador,$$[$0-4].value[0],id,null);
+				arr.push(inc)
+			}
+		}
+		arr.push($$[$0-1])
+		contador++;
+		this.$ = ast.Node(contador,"FOR",arr,null)
+	
+break;
+case 60:
+
+		contador++;
+		var dec = ast.Leaf(contador,"let")
+		contador++;
+		var id = ast.Leaf(contador,$$[$0-6])
+		contador++;
+		var forOP = ast.Leaf(contador,$$[$0-5])
+		var arr = []
+		arr.push(dec)
+		arr.push(id)
+		arr.push(forOP)
+		arr.push($$[$0-4])
+		arr.push($$[$0-1])
+		contador++;
+		this.$ = ast.Node(contador,"FOR",arr,null)
+
 
 	
 break;
-case 58: case 59: case 60: case 61:
+case 61:
 
 		
+		
+		contador++;
+		var forOP = ast.Leaf(contador,$$[$0-5])
+		var arr = []
+		arr.push($$[$0-6])
+		arr.push(forOP)
+		arr.push($$[$0-4])
+		arr.push($$[$0-1])
+		contador++;
+		this.$ = ast.Node(contador,"FOR",arr,null)
 	
 break;
 case 64:
@@ -884,10 +1041,9 @@ case 139:
 
 				   contador++;
 				   var comma = ast.Leaf(contador,",");
+				   
 				   contador++;
-				   var e = ast.Leaf(contador,$$[$0]);
-				   contador++;
-				   this.$ = ast.Node(contador,"ListaArreglos",[$$[$0-2],comma,e],null)
+				   this.$ = ast.Node(contador,"ListaArreglos",[$$[$0-2],comma,$$[$0]],null)
 			   
 break;
 case 140:

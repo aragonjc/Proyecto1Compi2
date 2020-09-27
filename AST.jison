@@ -427,33 +427,159 @@ FOR: for bracketOpen let id igual exp semicolon exp semicolon id asignLast brack
 		var id = ast.Leaf(contador,$4);
 		contador++;
 		var igual = ast.Leaf(contador,"=");
-		contador++;
-		var exp = ast.Leaf(contador,$6)
-		var asign = [dect,id,igual,exp]
+		var asign = [dect,id,igual,$6]
 		
 		contador++;
 		var asignacion = ast.Node(contador,"ASIGNACION",asign,null);
 		
 		contador++;
 		var condicion = ast.Node(contador,"CONDICION",$8,null);
-
+		
+		var arr = [];
+		arr.push(asignacion)
+		arr.push(condicion)
+		
+		if($11.hasOwnProperty("varlast")) {
+			contador++;
+			var id = ast.Leaf(contador,$10);
+			if($11.value.length == 2) {
+				contador++;
+				var inc = ast.Node(contador,$11.value[0],id,$11.value[1])
+				arr.push(inc)
+			} else {
+				contador++;
+				var inc = ast.Node(contador,$11.value[0],id,null);
+				arr.push(inc)
+			}
+			
+		} else {
+			contador++;
+			var id = ast.Leaf(contador,$10);
+			if($11.value.length == 2) {
+				contador++;
+				var inc = ast.Node(contador,$11.value[0],id,$11.value[1])
+				arr.push(inc)
+			} else {
+				contador++;
+				var inc = ast.Node(contador,$11.value[0],id,null);
+				arr.push(inc)
+			}
+		}
+		arr.push($14)
+		contador++;
+		$$ = ast.Node(contador,"FOR",arr,null)
 		
 	}
 	|for bracketOpen exp igual exp semicolon exp semicolon id asignLast bracketClose curlyBraceOpen STMT curlyBraceClose
 	{
 		
+		
+		contador++;
+		var igual = ast.Leaf(contador,"=");
+
+		var asign = [$3,igual,$5]
+		
+		contador++;
+		var asignacion = ast.Node(contador,"ASIGNACION",asign,null);
+		
+		contador++;
+		var condicion = ast.Node(contador,"CONDICION",$7,null);
+		
+		var arr = [];
+		arr.push(asignacion)
+		arr.push(condicion)
+		
+		if($10.hasOwnProperty("varlast")) {
+			contador++;
+			var id = ast.Leaf(contador,$9);
+			arr.push(id)
+			arr.push($10.varlast)
+		} else {
+			contador++;
+			var id = ast.Leaf(contador,$9);
+			if($10.value.length == 2) {
+				contador++;
+				var inc = ast.Node(contador,$10.value[0],id,$10.value[1])
+				arr.push(inc)
+			} else {
+				contador++;
+				var inc = ast.Node(contador,$10.value[0],id,null);
+				arr.push(inc)
+			}
+		}
+		arr.push($13)
+		contador++;
+		$$ = ast.Node(contador,"FOR",arr,null)
 	}
 	|for bracketOpen exp semicolon exp semicolon id asignLast bracketClose curlyBraceOpen STMT curlyBraceClose
 	{
 		
+		
+		contador++;
+		var asignacion = ast.Node(contador,"ASIGNACION",$3,null);
+		
+		contador++;
+		var condicion = ast.Node(contador,"CONDICION",$5,null);
+		
+		var arr = [];
+		arr.push(asignacion)
+		arr.push(condicion)
+		
+		if($8.hasOwnProperty("varlast")) {
+			contador++;
+			var id = ast.Leaf(contador,$7);
+			arr.push(id)
+			arr.push($8.varlast)
+		} else {
+			contador++;
+			var id = ast.Leaf(contador,$7);
+			
+			if($8.value.length == 2) {
+				contador++;
+				var inc = ast.Node(contador,$8.value[0],id,$8.value[1])
+				arr.push(inc)
+			} else {
+				contador++;
+				var inc = ast.Node(contador,$8.value[0],id,null);
+				arr.push(inc)
+			}
+		}
+		arr.push($11)
+		contador++;
+		$$ = ast.Node(contador,"FOR",arr,null)
 	}
 	|for bracketOpen let id forOP exp bracketClose curlyBraceOpen STMT curlyBraceClose
 	{
-		
+		contador++;
+		var dec = ast.Leaf(contador,"let")
+		contador++;
+		var id = ast.Leaf(contador,$4)
+		contador++;
+		var forOP = ast.Leaf(contador,$5)
+		var arr = []
+		arr.push(dec)
+		arr.push(id)
+		arr.push(forOP)
+		arr.push($6)
+		arr.push($9)
+		contador++;
+		$$ = ast.Node(contador,"FOR",arr,null)
+
+
 	}
 	|for bracketOpen exp forOP exp bracketClose curlyBraceOpen STMT curlyBraceClose
 	{
 		
+		
+		contador++;
+		var forOP = ast.Leaf(contador,$4)
+		var arr = []
+		arr.push($3)
+		arr.push(forOP)
+		arr.push($5)
+		arr.push($8)
+		contador++;
+		$$ = ast.Node(contador,"FOR",arr,null)
 	}
 ;
 
@@ -1004,10 +1130,9 @@ listArrParam: listArrParam comma E
 			   {
 				   contador++;
 				   var comma = ast.Leaf(contador,",");
+				   
 				   contador++;
-				   var e = ast.Leaf(contador,$3);
-				   contador++;
-				   $$ = ast.Node(contador,"ListaArreglos",[$1,comma,e],null)
+				   $$ = ast.Node(contador,"ListaArreglos",[$1,comma,$3],null)
 			   }
 			|E {$$=$1; }
 ;
