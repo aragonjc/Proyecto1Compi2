@@ -89,7 +89,7 @@ break;
 case 2: case 27:
  $$[$0-1].push($$[$0]); this.$=$$[$0-1];
 break;
-case 3: case 42: case 55: case 62: case 63: case 91: case 92: case 101: case 105: case 137: case 141:
+case 3: case 42: case 55: case 62: case 63: case 91: case 92: case 137: case 141:
  this.$ = $$[$0]; 
 break;
 case 4: case 7: case 8: case 10: case 11: case 12: case 29: case 30: case 31: case 32: case 33: case 34: case 35:
@@ -98,7 +98,7 @@ break;
 case 5: case 9: case 16:
  this.$=$$[$0];
 break;
-case 6: case 13: case 36: case 38: case 68: case 90: case 121: case 122: case 123: case 124: case 125: case 126: case 139: case 143: case 144:
+case 6: case 13: case 36: case 38: case 90: case 139: case 143: case 144:
   
 break;
 case 14:
@@ -135,30 +135,30 @@ break;
 case 28:
  this.$ = [$$[$0]]; 
 break;
-case 37: case 49: case 73: case 74: case 94: case 133: case 134: case 135: case 136: case 140:
+case 37: case 49: case 140:
  
 break;
 case 39:
  this.$ = $$[$0-1];
 break;
-case 40: case 43: case 56: case 95: case 102:
+case 40: case 43: case 56: case 95:
  this.$ = null; 
 break;
 case 41:
  
 	 
 break;
-case 44: case 45: case 98: case 100:
+case 44: case 45:
 
 		   
 	   
 break;
-case 46: case 47: case 48: case 93: case 103: case 104:
+case 46: case 47: case 48:
 
 			
 		
 break;
-case 50:
+case 50: case 102:
  this.$ = ""; 
 break;
 case 51: case 52:
@@ -171,7 +171,7 @@ case 53:
 		this.$ = $$[$0-1];
 	
 break;
-case 54: case 78: case 79: case 80: case 81: case 82: case 83:
+case 54:
 
 	
 
@@ -181,28 +181,180 @@ case 58: case 59: case 60: case 61: case 106: case 145:
 		
 	
 break;
-case 64: case 66: case 67: case 71:
+case 64:
 
-				
+				contador++;
+				var comma = ast.Leaf(contador,",");
+				contador++;
+				this.$ = ast.Node(contador,"defVar",comma,$$[$0]);
 			
 break;
 case 65:
 this.$=null;
 break;
-case 69:
+case 66:
 
-			 this.$ = $$[$0-1];
+				var result;
+				contador++;
+				var comma = ast.Leaf(contador,",");
+				contador++;
+				var id = ast.Leaf(contador,$$[$0-1]);
+				if($$[$0] == null){
+					result = ast.Node(contador,"defVarList",[$$[$0-3],comma,id],null)
+				} else {
+					if($$[$0].hasOwnProperty("type")) {
+						contador++;
+						var par3 = ast.Leaf(contador,$$[$0].type);
+						contador++;
+						result = ast.Node(contador,"defVarList",[$$[$0-3],comma,id,par3,$$[$0].value],null);
+					} else {
+						contador++;
+						result = ast.Node(contador,"defVarList",[$$[$0-3],comma,id,$$[$0].value],null);
+					}
+				}
+				this.$ = result;
+			
+break;
+case 67:
+
+				var result;
+				contador++;
+				var id = ast.Leaf(contador,$$[$0-1]);
+				if($$[$0] == null) {
+					result = ast.Node(contador,"defVarList",id,null)
+				} else {
+					if($$[$0].hasOwnProperty("type")) {
+						contador++;
+						var par3 = ast.Leaf(contador,$$[$0].type);
+						contador++;
+						result = ast.Node(contador,"defVarList",[id,par3,$$[$0].value],null);
+					} else {
+						contador++;
+						result = ast.Node(contador,"defVarList",[id,$$[$0].value],null);
+					}
+				}
+				this.$ = result;
+			
+break;
+case 68:
+
+				contador++;
+				var decType = ast.Leaf(contador,$$[$0-4]);
+				contador++;
+				var id = ast.Leaf(contador,$$[$0-3]);
+
+				var result;
+				if($$[$0-2] == null) {
+					contador++;
+					result = ast.Node(contador,"Asignacion",[decType,id],$$[$0-1]);
+				} else {
+					var par3;
+					if($$[$0-2].hasOwnProperty("type")) {
+						contador++;
+						par3 = ast.Leaf(contador,$$[$0-2].type);
+						contador++;
+						result = ast.Node(contador,"Asignacion",[decType,id,par3,$$[$0-2].value],$$[$0-1]);
+					} else {
+						contador++;
+						result = ast.Node(contador,"Asignacion",[decType,id,$$[$0-2].value],$$[$0-1]);
+					}
+					this.$ = result;
+				}
+			
+break;
+case 69:
+	
+			  var r;
+			  if($$[$0-1].value.length == 2) {
+				  	contador++;
+					var id;
+					if($$[$0-1].hasOwnProperty("varlast")) {
+						id = ast.Leaf(contador,$$[$0-2]);
+						id = [id,$$[$0-1].varlast];
+						console.log(id)
+					} else {
+			  			id = ast.Leaf(contador,$$[$0-2]);
+					}
+					contador++;
+					r = this.$ = ast.Node(contador,$$[$0-1].value[0],id,$$[$0-1].value[1]);
+			  } else {
+				  contador++;
+					var id;
+					if($$[$0-1].hasOwnProperty("varlast")) {
+						id = ast.Leaf(contador,$$[$0-2]);
+						id = [id,$$[$0-1].varlast];
+						console.log(id)
+					} else {
+			  			id = ast.Leaf(contador,$$[$0-2]);
+					}
+					contador++;
+					r = this.$ = ast.Node(contador,$$[$0-1].value[0],id,null);
+			  
+			  }
+			 this.$ = r;
 		  
 break;
 case 70:
 
-			this.$ = $$[$0];
+			var r;
+			  if($$[$0].value.length == 2) {
+				  	contador++;
+					var id;
+					if($$[$0].hasOwnProperty("varlast")) {
+						id = ast.Leaf(contador,$$[$0-1]);
+						id = [id,$$[$0].varlast];
+						console.log(id)
+					} else {
+			  			id = ast.Leaf(contador,$$[$0-1]);
+					}
+					contador++;
+					r = ast.Node(contador,$$[$0].value[0],id,$$[$0].value[1]);
+			  } else {
+				  contador++;
+					var id;
+					if($$[$0].hasOwnProperty("varlast")) {
+						id = ast.Leaf(contador,$$[$0-1]);
+						id = [id,$$[$0].varlast];
+						console.log(id)
+					} else {
+			  			id = ast.Leaf(contador,$$[$0-1]);
+					}
+					contador++;
+					r = this.$ = ast.Node(contador,$$[$0].value[0],id,null);
+			  
+			  }
+			 this.$ = r;
 		  
+break;
+case 71:
+
+				$$[$0].varlast = $$[$0-1];
+				this.$ = $$[$0];
+			
 break;
 case 72:
 
 			this.$ =$$[$0];
 		 
+break;
+case 73:
+ 
+			contador++;
+			var p1 = ast.Leaf(contador,"corchete Abre");
+			contador++;
+			var p2 = ast.Leaf(contador,"corchete cierra");
+			contador++;
+			this.$ = ast.Node(contador,"varLast",[p1,$$[$0-2],p2],$$[$0])
+			
+		
+break;
+case 74:
+ 
+			contador++;
+			var pi = ast.Leaf(contador,$$[$0-2]+$$[$0-1]);
+			contador++;
+			this.$ = ast.Node(contador,"varLast",pi,$$[$0])
+		
 break;
 case 75:
  this.$ = $$[$0];
@@ -210,9 +362,25 @@ break;
 case 76:
  this.$ = null;
 break;
-case 77:
+case 77: case 79: case 80: case 81:
+	
+	this.$ = {value:[$$[$0-1],$$[$0]]}
 
-	this.$ = $$[$0];
+break;
+case 78:
+	
+				this.$ = {value:[$$[$0-1],$$[$0]]}
+			
+break;
+case 82:
+
+	this.$={value:[$$[$0]]}
+
+
+break;
+case 83:
+
+			this.$={value:[$$[$0]]}
 
 break;
 case 84: case 88: case 89:
@@ -221,19 +389,49 @@ break;
 case 86:
    
 break;
-case 96:
+case 93:
 
+			this.$ = {value:$$[$0],type:$$[$0-2]}
+		
+break;
+case 94:
+ 
+			this.$ = {value:$$[$0]}
+		
+break;
+case 96: case 98: case 100:
+
+		   this.$ = $$[$0] + $$[$0-1];
 	   
 break;
 case 97:
 
-		   
+		   this.$ = $$[$0] + $$[$0-1];
 	  
 break;
 case 99:
 
-		  
+		  this.$ = $$[$0] + $$[$0-1];
 	   
+break;
+case 101:
+ this.$ = "arreglo de dimension " + $$[$0]+ " " ; 
+break;
+case 103:
+
+			this.$ = $$[$0-2] + 1;
+		
+break;
+case 104:
+
+			this.$ = 1;
+		
+break;
+case 105:
+
+		contador++;
+		this.$ =  ast.Node(contador,"E",$$[$0],null);
+		
 break;
 case 107:
  
@@ -243,7 +441,119 @@ case 107:
 		this.$ = ast.Node(contador,"exp",e,null)
 	
 break;
-case 127: case 128:
+case 108:
+ 
+		contador++;
+		var e =  ast.Node(contador,"-",$$[$0-2],$$[$0]);
+		contador++;
+		this.$ = ast.Node(contador,"exp",e,null)
+	
+break;
+case 109:
+ 
+		contador++;
+		var e =  ast.Node(contador,"*",$$[$0-2],$$[$0]);
+		contador++;
+		this.$ = ast.Node(contador,"exp",e,null)
+	
+break;
+case 110:
+ 
+		contador++;
+		var e =  ast.Node(contador,"/",$$[$0-2],$$[$0]);
+		contador++;
+		this.$ = ast.Node(contador,"exp",e,null)
+	
+break;
+case 112:
+ 
+		contador++;
+		var e =  ast.Node(contador,"**",$$[$0-2],$$[$0]);
+		contador++;
+		this.$ = ast.Node(contador,"exp",e,null)
+	
+break;
+case 113:
+ 
+		contador++;
+		var e =  ast.Node(contador,"%",$$[$0-2],$$[$0]);
+		contador++;
+		this.$ = ast.Node(contador,"exp",e,null)
+	
+break;
+case 114:
+ 
+		contador++;
+		var e =  ast.Node(contador,">",$$[$0-2],$$[$0]);
+		contador++;
+		this.$ = ast.Node(contador,"exp",e,null)
+	
+break;
+case 115:
+ 
+		contador++;
+		var e =  ast.Node(contador,"<",$$[$0-2],$$[$0]);
+		contador++;
+		this.$ = ast.Node(contador,"exp",e,null)
+	
+break;
+case 116:
+ 
+		contador++;
+		var e =  ast.Node(contador,">=",$$[$0-2],$$[$0]);
+		contador++;
+		this.$ = ast.Node(contador,"exp",e,null)
+	
+break;
+case 117:
+ 
+		contador++;
+		var e =  ast.Node(contador,"<=",$$[$0-2],$$[$0]);
+		contador++;
+		this.$ = ast.Node(contador,"exp",e,null)
+	
+break;
+case 118:
+ 
+		contador++;
+		var e =  ast.Node(contador,"==",$$[$0-2],$$[$0]);
+		contador++;
+		this.$ = ast.Node(contador,"exp",e,null)
+	
+break;
+case 119:
+ 
+		contador++;
+		var e =  ast.Node(contador,"!=",$$[$0-2],$$[$0]);
+		contador++;
+		this.$ = ast.Node(contador,"exp",e,null)
+	
+break;
+case 120:
+ 
+		contador++;
+		var e =  ast.Node(contador,"&&",$$[$0-2],$$[$0]);
+		contador++;
+		this.$ = ast.Node(contador,"exp",e,null)
+	
+break;
+case 121:
+ 
+		contador++;
+		var e =  ast.Node(contador,"||",$$[$0-2],$$[$0]);
+		contador++;
+		this.$ = ast.Node(contador,"exp",e,null)
+	
+break;
+case 122:
+ 
+		contador++;
+		var e =  ast.Node(contador,"!",$$[$0],null);
+		contador++;
+		this.$ = ast.Node(contador,"exp",e,null)
+	
+break;
+case 127: case 128: case 134:
  
 		contador++;
 		this.$ = ast.Leaf(contador,$$[$0]);

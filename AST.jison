@@ -305,37 +305,152 @@ forOP: in { $$ = $1; }
 
 defVarLast: comma defVarLastP
 			{
-				
+				contador++;
+				var comma = ast.Leaf(contador,",");
+				contador++;
+				$$ = ast.Node(contador,"defVar",comma,$2);
 			}
 			|{$$=null;}
 ;
 
 defVarLastP: defVarLastP comma id defLast
 			{
-				
+				var result;
+				contador++;
+				var comma = ast.Leaf(contador,",");
+				contador++;
+				var id = ast.Leaf(contador,$3);
+				if($4 == null){
+					result = ast.Node(contador,"defVarList",[$1,comma,id],null)
+				} else {
+					if($4.hasOwnProperty("type")) {
+						contador++;
+						var par3 = ast.Leaf(contador,$4.type);
+						contador++;
+						result = ast.Node(contador,"defVarList",[$1,comma,id,par3,$4.value],null);
+					} else {
+						contador++;
+						result = ast.Node(contador,"defVarList",[$1,comma,id,$4.value],null);
+					}
+				}
+				$$ = result;
 			}
 			|id defLast
 			{
-				
+				var result;
+				contador++;
+				var id = ast.Leaf(contador,$1);
+				if($2 == null) {
+					result = ast.Node(contador,"defVarList",id,null)
+				} else {
+					if($2.hasOwnProperty("type")) {
+						contador++;
+						var par3 = ast.Leaf(contador,$2.type);
+						contador++;
+						result = ast.Node(contador,"defVarList",[id,par3,$2.value],null);
+					} else {
+						contador++;
+						result = ast.Node(contador,"defVarList",[id,$2.value],null);
+					}
+				}
+				$$ = result;
 			}
 ;
 
 variables: defType id defLast defVarLast semicolon
-            {  }
+            {
+				contador++;
+				var decType = ast.Leaf(contador,$1);
+				contador++;
+				var id = ast.Leaf(contador,$2);
+
+				var result;
+				if($3 == null) {
+					contador++;
+					result = ast.Node(contador,"Asignacion",[decType,id],$4);
+				} else {
+					var par3;
+					if($3.hasOwnProperty("type")) {
+						contador++;
+						par3 = ast.Leaf(contador,$3.type);
+						contador++;
+						result = ast.Node(contador,"Asignacion",[decType,id,par3,$3.value],$4);
+					} else {
+						contador++;
+						result = ast.Node(contador,"Asignacion",[decType,id,$3.value],$4);
+					}
+					$$ = result;
+				}
+			}
 		  |id asignLast semicolon
-		  {
-			 $$ = $2;
+		  {	
+			  var r;
+			  if($2.value.length == 2) {
+				  	contador++;
+					var id;
+					if($2.hasOwnProperty("varlast")) {
+						id = ast.Leaf(contador,$1);
+						id = [id,$2.varlast];
+						console.log(id)
+					} else {
+			  			id = ast.Leaf(contador,$1);
+					}
+					contador++;
+					r = $$ = ast.Node(contador,$2.value[0],id,$2.value[1]);
+			  } else {
+				  contador++;
+					var id;
+					if($2.hasOwnProperty("varlast")) {
+						id = ast.Leaf(contador,$1);
+						id = [id,$2.varlast];
+						console.log(id)
+					} else {
+			  			id = ast.Leaf(contador,$1);
+					}
+					contador++;
+					r = $$ = ast.Node(contador,$2.value[0],id,null);
+			  
+			  }
+			 $$ = r;
 		  }
 		  |id asignLast
 		  {
-			$$ = $2;
+			var r;
+			  if($2.value.length == 2) {
+				  	contador++;
+					var id;
+					if($2.hasOwnProperty("varlast")) {
+						id = ast.Leaf(contador,$1);
+						id = [id,$2.varlast];
+						console.log(id)
+					} else {
+			  			id = ast.Leaf(contador,$1);
+					}
+					contador++;
+					r = ast.Node(contador,$2.value[0],id,$2.value[1]);
+			  } else {
+				  contador++;
+					var id;
+					if($2.hasOwnProperty("varlast")) {
+						id = ast.Leaf(contador,$1);
+						id = [id,$2.varlast];
+						console.log(id)
+					} else {
+			  			id = ast.Leaf(contador,$1);
+					}
+					contador++;
+					r = $$ = ast.Node(contador,$2.value[0],id,null);
+			  
+			  }
+			 $$ = r;
 		  }
 ;
 
 
 asignLast: varLast asignLastF
 			{
-				
+				$2.varlast = $1;
+				$$ = $2;
 			}
 		 | asignLastF
 		 {
@@ -344,9 +459,22 @@ asignLast: varLast asignLastF
 ;
 
 varLast: sqBracketOpen exp sqBracketClose  auxP
-        { }
+        { 
+			contador++;
+			var p1 = ast.Leaf(contador,"corchete Abre");
+			contador++;
+			var p2 = ast.Leaf(contador,"corchete cierra");
+			contador++;
+			$$ = ast.Node(contador,"varLast",[p1,$2,p2],$4)
+			
+		}
 		| point id  auxP
-        { }
+        { 
+			contador++;
+			var pi = ast.Leaf(contador,$1+$2);
+			contador++;
+			$$ = ast.Node(contador,"varLast",pi,$3)
+		}
 ;
 		
 auxP:varLast { $$ = $1;}
@@ -354,32 +482,33 @@ auxP:varLast { $$ = $1;}
 	;
 
 asignLastF:  igual E
-{
-	$$ = $2;
+{	
+	$$ = {value:[$1,$2]}
 }
 			|masIgual E
-			{
-	
-}
+			{	
+				$$ = {value:[$1,$2]}
+			}
 			|menosIgual E
-			{
-	
+			{	
+	$$ = {value:[$1,$2]}
 }
 			|porIgual E
-			{
-	
+{	
+	$$ = {value:[$1,$2]}
 }
 			|divisionIgual E
-			{
-	
+{	
+	$$ = {value:[$1,$2]}
 }
 			|increment
 			{
-	
+	$$={value:[$1]}
+
 }
 			|decrement
 			{
-	
+			$$={value:[$1]}
 }
 ;
 
@@ -407,44 +536,47 @@ defType: let   { $$ = $1; }
 
 defLast: dosPuntos types igual E 
 		{
-			
+			$$ = {value:$4,type:$2}
 		}
-        | igual E { }
+        | igual E { 
+			$$ = {value:$2}
+		}
         | { $$ = null; }
 ;
 
 types: number  typesList
 	   {
+		   $$ = $2 + $1;
 	   }
       |boolean typesList
 	  {
-		   
+		   $$ = $2 + $1;
 	  }
       |string  typesList
 	  {
-		   
+		   $$ = $2 + $1;
 	   }
       |void  typesList
 	  {
-		  
+		  $$ = $2 + $1;
 	   }
       |id  typesList
 	  {
-		   
+		   $$ = $2 + $1;
 	   }
 ;
 
-typesList: typesL  { $$ = $1; }
-		  |{ $$ = null; }
+typesList: typesL  { $$ = "arreglo de dimension " + $1+ " " ; }
+		  |{ $$ = ""; }
 ;
 
 typesL: typesL sqBracketOpen sqBracketClose
 		{
-			
+			$$ = $1 + 1;
 		}
 		|sqBracketOpen sqBracketClose
 		{
-			
+			$$ = 1;
 		}
 ;
 
