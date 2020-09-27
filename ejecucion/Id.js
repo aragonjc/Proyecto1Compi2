@@ -7,7 +7,7 @@ class Id {
         this.id = id;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
         
         var r = scope.findVariable(this.id);
         /*console.log("!!!!!!!!!!OBJ!!!!!!!!!!!1")
