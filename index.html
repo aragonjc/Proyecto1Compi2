@@ -80,6 +80,16 @@
   border: 1px solid #ccc;
   border-top: none;*/
 }
+
+#tree {
+  display: none;
+}
+#table-ts {
+  display: none;
+}
+#table {
+  display: none;
+}
     </style>
     <div>
         <a href="#" id="traducir">Traducir</a>
@@ -87,12 +97,15 @@
         <a href="#" id="hola">Traducir y Ejecutar</a>
         <a href="#" id="Arbol">Arbol</a>
         <a href="#" id="tabla">Tabla de Simbolos</a>
-        <a href="#" id="Errores">Reporte de Errores</a>
+        <!--<a href="#" id="Errores">Reporte de Errores</a>-->
     </div>
     <div>
         <div class="tab">
             <button class="tablinks" onclick="openCity(event, 'editor')">Editor</button>
             <button class="tablinks" onclick="openCity(event, 'tree')">Arbol</button>
+            <button class="tablinks" onclick="openCity(event, 'table-ts')">Tabla de Simbolos</button>
+            <button class="tablinks" onclick="openCity(event, 'table')">Errores</button>
+          
           </div>
         
           <div id="editor" class="tabcontent">
@@ -106,11 +119,11 @@
             
         </div>
         
-        <div id="table">
+        <div id="table" class="tabcontent">
 
         </div>
 
-        <div id="table-ts">
+        <div id="table-ts" class="tabcontent">
           
         </div>
     </div>

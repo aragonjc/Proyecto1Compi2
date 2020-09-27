@@ -34,10 +34,11 @@ $(document).ready(function(){
 
         mermaid.initialize({startOnLoad:true});
         mermaid.init();
+        
     }
 
     document.getElementById("tabla").onclick = function() {
-        var table = document.getElementById("table");
+        var table = document.getElementById("table-ts");
         table.innerHTML = "";
         if(scope != null) {
 
@@ -171,7 +172,7 @@ consoleT.value = "";
 
 tablaErrores = ast.tabla;
 ast = ast.ast;
-var ts = document.getElementById("table-ts");
+var ts = document.getElementById("table");
 ts.innerHTML = "";
 
 
