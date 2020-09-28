@@ -3156,9 +3156,9 @@ class ArrList {
         this.arr = arr;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
         if(this.arr != null) {
-            var a = this.arr.run(scope,console);
+            var a = this.arr.run(scope,consoleT);
             return {value:a.arr,type:a.type,isArray:true,dim:1}
         }
 
@@ -3176,14 +3176,14 @@ class ArrParamList {
         this.exp = exp;
     }
 
-    run(scope, console) {
+    run(scope, consoleT) {
         if(this.list != null) {
-            var e = this.exp.run(scope, console);
-            var l = this.list.run(scope, console);
+            var e = this.exp.run(scope, consoleT);
+            var l = this.list.run(scope, consoleT);
             l.arr.push(e);
             return l;
         } else {
-            var e = this.exp.run(scope, console);
+            var e = this.exp.run(scope, consoleT);
             return {arr:[e],type:e.type};
         }
     }
@@ -3199,14 +3199,14 @@ class Case {
         this.list = list;
     }
 
-    run(scope,cond,console) {
+    run(scope,cond,consoleT) {
         for(var i = 0;i<this.list.length;i++) {
             var element = this.list[i];
             var exp = element.exp/*.run(scope)*/;
             var stmt = element.stmt;
             
             var op = new Operation(0,0,cond,exp,"==");
-            var result = op.run(scope,console);
+            var result = op.run(scope,consoleT);
 
             if(result.type == 'BOOLEAN' && !result.isArray) {
 
@@ -3215,7 +3215,7 @@ class Case {
                 //console.log(result);
                 if(result) {
                     var actualScope = new Scope(scope);
-                    var aux = this.statement(actualScope,stmt,console);
+                    var aux = this.statement(actualScope,stmt,consoleT);
                     if(aux != null) {
     
                         if(aux.type == 'RETURN') {
@@ -3236,11 +3236,11 @@ class Case {
         }
     }
 
-    statement(scope,stmt,console) {
+    statement(scope,stmt,consoleT) {
         if(stmt!= null) {
             for(var i = 0;i<stmt.length;i++) {
                 var element = stmt[i];
-                var aux = element.run(scope,console);
+                var aux = element.run(scope,consoleT);
                 if(aux != null) {
     
                     if(aux.type == 'RETURN') {
@@ -3265,12 +3265,12 @@ class Defcase {
         this.stmt = stmt;
     }
 
-    run(scope,console){ 
+    run(scope,consoleT){ 
         var actualScope = new Scope(scope);
         if(this.stmt!= null) {
             for(var i = 0;i<this.stmt.length;i++) {
                 var element = this.stmt[i];
-                var aux = element.run(actualScope,console);
+                var aux = element.run(actualScope,consoleT);
                 if(aux != null) {
     
                     if(aux.type == 'RETURN') {
@@ -3295,7 +3295,7 @@ class EscapeExp {
         this.exp = exp;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
 
         if(this.type == 'BREAK') {
             return {type:'BREAK'}
@@ -3305,7 +3305,7 @@ class EscapeExp {
             //console.log(this.exp)
             if(this.exp != null) {
 
-                var res = this.exp.run(scope,console);
+                var res = this.exp.run(scope,consoleT);
                 return {type:"RETURN",res:res}
             }
             return {type:"RETURN"}
@@ -3332,15 +3332,15 @@ class ForEach{
         this.stmt = stmt;
     }
     
-    run(scope,console) {
+    run(scope,consoleT) {
 
-        var obj = this.arr.run(scope,console);
+        var obj = this.arr.run(scope,consoleT);
         if(obj.isArray || !this.isPrimitive(obj)) {
 
             if(this.forOp == 'in') {
-                return this.forIn(obj,scope,console);
+                return this.forIn(obj,scope,consoleT);
             } else {
-                return this.forOf(obj,scope,console)
+                return this.forOf(obj,scope,consoleT)
             }
 
         } else {
@@ -3350,7 +3350,7 @@ class ForEach{
         }
     }
 
-    forIn(obj,scope,console) {
+    forIn(obj,scope,consoleT) {
 
         if(this.isDec) {
 
@@ -3359,8 +3359,8 @@ class ForEach{
             
             var actualScope = new Scope(scope);
             
-            asgn.run(actualScope,console);
-            var array = this.arr.run(scope,console);
+            asgn.run(actualScope,consoleT);
+            var array = this.arr.run(scope,consoleT);
 
             if(array.constructor.name == "Map") {
 
@@ -3369,8 +3369,8 @@ class ForEach{
                     var newScope = new Scope(actualScope);
 
                     var rasign = new asignVariable(id,new asignLast(null,new asignLastF(null,new TObject(0,0,key.toString(),"STRING"))));
-                    rasign.run(newScope,console)
-                    var aux = this.statement(newScope,console);
+                    rasign.run(newScope,consoleT)
+                    var aux = this.statement(newScope,consoleT);
                     if(aux != null) {
     
                         if(aux.type == 'RETURN') {
@@ -3388,8 +3388,8 @@ class ForEach{
                     var newScope = new Scope(actualScope);
 
                     var rasign = new asignVariable(id,new asignLast(null,new asignLastF(null,new TObject(0,0,key.toString(),"NUMBER"))));
-                    rasign.run(newScope,console)
-                    var aux = this.statement(newScope,console);
+                    rasign.run(newScope,consoleT)
+                    var aux = this.statement(newScope,consoleT);
                     if(aux != null) {
     
                         if(aux.type == 'RETURN') {
@@ -3410,7 +3410,7 @@ class ForEach{
 
                     var actualScope = new Scope(scope);
 
-                    var array = this.arr.run(scope,console);
+                    var array = this.arr.run(scope,consoleT);
                     if(array.constructor.name == "Map") {
 
                         for (const key of array.keys()) {
@@ -3418,8 +3418,8 @@ class ForEach{
                             var newScope = new Scope(actualScope);
 
                             var rasign = new asignVariable(id,new asignLast(null,new asignLastF(null,new TObject(0,0,key.toString(),"STRING"))));
-                            rasign.run(newScope,console)
-                            var aux = this.statement(newScope,console);
+                            rasign.run(newScope,consoleT)
+                            var aux = this.statement(newScope,consoleT);
                             if(aux != null) {
             
                                 if(aux.type == 'RETURN') {
@@ -3438,8 +3438,8 @@ class ForEach{
                             var newScope = new Scope(actualScope);
                             
                             var rasign = new asignVariable(id,new asignLast(null,new asignLastF(null,new TObject(0,0,key.toString(),"NUMBER"))));
-                            rasign.run(newScope,console)
-                            var aux = this.statement(newScope,console);
+                            rasign.run(newScope,consoleT)
+                            var aux = this.statement(newScope,consoleT);
                             if(aux != null) {
             
                                 if(aux.type == 'RETURN') {
@@ -3468,15 +3468,15 @@ class ForEach{
         return null;
     }
 
-    forOf(obj,scope,console) {
+    forOf(obj,scope,consoleT) {
 
         if(this.isDec) {
 
             var id = this.id;
             var asgn = new Variable(0,0,'let',id,new defLast(0,0,null,new TObject(0,0,"null",'NULL')),null);
             var actualScope = new Scope(scope);
-            asgn.run(actualScope,console);
-            var array = this.arr.run(scope,console);
+            asgn.run(actualScope,consoleT);
+            var array = this.arr.run(scope,consoleT);
             if(array.constructor.name == "Map") {
 
                 console.log("Error 4 en ForEach.js")
@@ -3489,8 +3489,8 @@ class ForEach{
                     var newScope = new Scope(actualScope);
 
                     var rasign = new asignVariable(id,new asignLast(null,new asignLastF(null,value)));
-                    rasign.run(newScope,console)
-                    var aux = this.statement(newScope,console);
+                    rasign.run(newScope,consoleT)
+                    var aux = this.statement(newScope,consoleT);
                     if(aux != null) {
     
                         if(aux.type == 'RETURN') {
@@ -3510,7 +3510,7 @@ class ForEach{
 
                     var actualScope = new Scope(scope);
 
-                    var array = this.arr.run(scope,console);
+                    var array = this.arr.run(scope,consoleT);
                     if(array.constructor.name == "Map") {
                         //ERROR
                         console.log("Error 5 en ForEach.js")
@@ -3523,8 +3523,8 @@ class ForEach{
                             var newScope = new Scope(actualScope);
 
                             var rasign = new asignVariable(id,new asignLast(null,new asignLastF(null,key)));
-                            rasign.run(newScope,console)
-                            var aux = this.statement(newScope,console);
+                            rasign.run(newScope,consoleT)
+                            var aux = this.statement(newScope,consoleT);
                             if(aux != null) {
             
                                 if(aux.type == 'RETURN') {
@@ -3552,11 +3552,11 @@ class ForEach{
         return null;
     }
     
-    statement(scope,console) {
+    statement(scope,consoleT) {
         if(this.stmt!= null) {
             for(var i = 0;i<this.stmt.length;i++) {
                 var element = this.stmt[i];
-                var aux = element.run(scope,console);
+                var aux = element.run(scope,consoleT);
                 if(aux != null) {
     
                     if(aux.type == 'RETURN') {
@@ -3602,15 +3602,15 @@ class ForNormal {
         this.stmt = stmt;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
 
-        var exp = this.expAsign.run(scope,console);
+        var exp = this.expAsign.run(scope,consoleT);
         var actualScope = new Scope(scope);
         
         var objAsgn = {value:exp,type:exp.type,isArray:exp.isArray,dim:exp.dim,dectype:'let'}
         actualScope.insertVariable(this.id,objAsgn);
 
-        var condition = this.cond.run(actualScope,console);
+        var condition = this.cond.run(actualScope,consoleT);
 
         if(condition.type == 'BOOLEAN') {
             condition = Boolean(condition.value);
@@ -3618,7 +3618,7 @@ class ForNormal {
 
                 var newScope = new Scope(actualScope);
 
-                var aux = this.statement(newScope,console);
+                var aux = this.statement(newScope,consoleT);
                 
                 if(aux != null) {
     
@@ -3629,8 +3629,8 @@ class ForNormal {
                     } 
                 }
                 
-                this.inc.run(newScope,console);
-                condition = this.cond.run(newScope,console);
+                this.inc.run(newScope,consoleT);
+                condition = this.cond.run(newScope,consoleT);
                 condition = Boolean(condition.value);
                 
             }
@@ -3642,11 +3642,11 @@ class ForNormal {
         
     }
 
-    statement(scope,console) {
+    statement(scope,consoleT) {
         if(this.stmt!= null) {
             for(var i = 0;i<this.stmt.length;i++) {
                 var element = this.stmt[i];
-                var aux = element.run(scope,console);
+                var aux = element.run(scope,consoleT);
                 if(aux != null) {
     
                     if(aux.type == 'RETURN') {
@@ -3677,7 +3677,7 @@ class ForTwo {
         this.stmt = stmt;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
         
         if(this.id.constructor.name == "Id") {
             
@@ -3693,7 +3693,7 @@ class ForTwo {
             var asign = new asignVariable(id,asignLast_);
 
             asign.run(actualScope);*/
-            var condition = this.cond.run(actualScope,console);
+            var condition = this.cond.run(actualScope,consoleT);
             if(condition.type == 'BOOLEAN') {
                 
                 condition = Boolean(condition.value);
@@ -3701,7 +3701,7 @@ class ForTwo {
 
                     var newScope = new Scope(actualScope);
 
-                    var aux = this.statement(newScope,console);
+                    var aux = this.statement(newScope,consoleT);
                     
                     if(aux != null) {
         
@@ -3712,8 +3712,8 @@ class ForTwo {
                         } 
                     }
                     
-                    this.inc.run(newScope,console);
-                    condition = this.cond.run(newScope,console);
+                    this.inc.run(newScope,consoleT);
+                    condition = this.cond.run(newScope,consoleT);
                     condition = Boolean(condition.value);
                     
                 }
@@ -3727,11 +3727,11 @@ class ForTwo {
         }
     }
 
-    statement(scope,console) {
+    statement(scope,consoleT) {
         if(this.stmt!= null) {
             for(var i = 0;i<this.stmt.length;i++) {
                 var element = this.stmt[i];
-                var aux = element.run(scope,console);
+                var aux = element.run(scope,consoleT);
                 if(aux != null) {
     
                     if(aux.type == 'RETURN') {
@@ -3765,7 +3765,7 @@ class ForTwo {
         this.stmt = stmt;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
         
         if(this.id.constructor.name == "Id") {
             
@@ -3776,12 +3776,12 @@ class ForTwo {
                 console.log("Error 1 en ForTwo.js")
                 return;
             }
-            var exp = this.expAsign.run(actualScope,console);
+            var exp = this.expAsign.run(actualScope,consoleT);
             var asignLast_ = new asignLast(null,new asignLastF(null,exp));
             var asign = new asignVariable(id,asignLast_);
 
-            asign.run(actualScope,console);
-            var condition = this.cond.run(actualScope,console);
+            asign.run(actualScope,consoleT);
+            var condition = this.cond.run(actualScope,consoleT);
 
             if(condition.type == 'BOOLEAN') {
                 
@@ -3790,7 +3790,7 @@ class ForTwo {
 
                     var newScope = new Scope(actualScope);
 
-                    var aux = this.statement(newScope,console);
+                    var aux = this.statement(newScope,consoleT);
                     
                     if(aux != null) {
         
@@ -3801,8 +3801,8 @@ class ForTwo {
                         } 
                     }
                     
-                    this.inc.run(newScope,console);
-                    condition = this.cond.run(newScope,console);
+                    this.inc.run(newScope,consoleT);
+                    condition = this.cond.run(newScope,consoleT);
                     condition = Boolean(condition.value);
                     
                 }
@@ -3816,11 +3816,11 @@ class ForTwo {
         }
     }
 
-    statement(scope,console) {
+    statement(scope,consoleT) {
         if(this.stmt!= null) {
             for(var i = 0;i<this.stmt.length;i++) {
                 var element = this.stmt[i];
-                var aux = element.run(scope,console);
+                var aux = element.run(scope,consoleT);
                 if(aux != null) {
     
                     if(aux.type == 'RETURN') {
@@ -3847,10 +3847,10 @@ class FuncDec {
         this.STMT = STMT;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
         
         if(this.hasType) {
-            return {stmt:this.STMT,type:this.type.run(scope,console)}
+            return {stmt:this.STMT,type:this.type.run(scope,consoleT)}
         } else {
             return {stmt:this.STMT,type:undefined};
         }
@@ -3869,8 +3869,8 @@ class Function {
         this.funcDec = funcDec;
     }
 
-    run(scope,console) {
-        var obj = this.funcDec.run(scope,console);
+    run(scope,consoleT) {
+        var obj = this.funcDec.run(scope,consoleT);
         var func;
         if(obj.type)
             func = obj.type;
@@ -3898,13 +3898,13 @@ class IF {
         this.iflast = iflast;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
         
         if(this.cond != null) {
             /*console.log("IF----")
             console.log(this.cond)
             console.log("----.-----")*/
-            var auxCond = this.cond.run(scope,console);
+            var auxCond = this.cond.run(scope,consoleT);
             /*console.log("cual es el resultado de la condicion")
             console.log(auxCond)
             console.log("°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°")*/
@@ -3915,7 +3915,7 @@ class IF {
 
                 if(auxCond) {
 
-                    var r = this.statement(actualScope,console)
+                    var r = this.statement(actualScope,consoleT)
                     if(r != null && r != undefined) {
                         if(r.type == 'RETURN') {
                             return r;
@@ -3930,7 +3930,7 @@ class IF {
 
                     if(this.iflast != null) {
                         var actualScope = new Scope(scope);
-                        var ifr = this.iflast.run(actualScope,console);
+                        var ifr = this.iflast.run(actualScope,consoleT);
                         if(ifr != null && ifr != undefined) {
                             if(ifr.type == 'RETURN') {
                                 return ifr;
@@ -3951,7 +3951,7 @@ class IF {
         } else {
 
             var actualScope = new Scope(scope);
-            var r = this.statement(actualScope,console);
+            var r = this.statement(actualScope,consoleT);
             if(r != null && r != undefined) {
                 if(r.type == 'RETURN') {
                     return r;
@@ -3965,11 +3965,11 @@ class IF {
         }
     }
 
-    statement(scope,console) {
+    statement(scope,consoleT) {
         if(this.stmt!= null) {
             for(var i = 0;i<this.stmt.length;i++) {
                 var element = this.stmt[i];
-                var aux = element.run(scope,console);
+                var aux = element.run(scope,consoleT);
                 if(aux != null) {
     
                     if(aux.type == 'RETURN') {
@@ -4034,8 +4034,8 @@ class Obj {
         this.obj = obj;
     }
 
-    run(scope,console) {
-        var ob = this.obj.run(scope,console);
+    run(scope,consoleT) {
+        var ob = this.obj.run(scope,consoleT);
         //console.log(ob)
         return { value:ob,type:"OBJ",isArray:false,dim:0 };
     }
@@ -4055,7 +4055,7 @@ class Operation extends Nodo{
 
     
 
-    run(scope,console) {
+    run(scope,consoleT) {
         let valIzq;
         let valDer;
         /*console.log("$$$$$$$$$$||AL inicio del run en operation|||$$$$$$$$$$$")
@@ -4063,9 +4063,9 @@ class Operation extends Nodo{
         console.log(this.opDer)
         console.log("|||||||||||||||||||||||||||||||||||||||||||||||||||||")*/
         if(this.opIzq != null)
-            valIzq = this.opIzq.run(scope,console);
+            valIzq = this.opIzq.run(scope,consoleT);
         if(this.opDer != null)
-            valDer = this.opDer.run(scope,console);
+            valDer = this.opDer.run(scope,consoleT);
         
         /*console.log("$$$$$$$$$$--Aqui se ejecuta en operacion-$$$$$$$$$$$")
         console.log(valIzq)
@@ -4584,12 +4584,12 @@ class Switch {
         this.lastcase = lastcase;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
 
         //this.cond.run(scope);
 
         if(this.firstcase != null) {
-            var aux = this.firstcase.run(scope,this.cond,console);
+            var aux = this.firstcase.run(scope,this.cond,consoleT);
             if(aux != null) {
     
                 if(aux.type == 'RETURN') {
@@ -4603,7 +4603,7 @@ class Switch {
         }
 
         if(this.lastcase != null) {
-            var aux = this.lastcase.run(scope,this.cond,console);
+            var aux = this.lastcase.run(scope,this.cond,consoleT);
             if(aux != null) {
     
                 if(aux.type == 'RETURN') {
@@ -4630,7 +4630,7 @@ class TObject extends Nodo{
         this.dimentions = 0;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
         return this;
     }
 }
@@ -4645,12 +4645,12 @@ class Type {
         this.list = list;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
         
         if(this.checkType(this.type)) {
             
             if(this.list != null) {
-                let dim = this.list.run(scope,console);
+                let dim = this.list.run(scope,consoleT);
                 let isArray = dim==0?false:true;
 
                 return {type:this.type,isArray:isArray,dim:dim}
@@ -4663,7 +4663,7 @@ class Type {
                 //***EJECUTAR this.list
                 //***validar this.list
                 if(this.list != null) {
-                    let dim = this.list.run(scope,console);
+                    let dim = this.list.run(scope,consoleT);
                     let isArray = dim==0?false:true;
     
                     return {type:this.type,isArray:isArray,dim:dim}
@@ -4705,21 +4705,21 @@ class Variable extends Nodo{
         this.defvarLast = defvarLast;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
 
         var def = null;
         if(this.deflast !=null) {
-            def = this.deflast.run(scope,this.type,console);
+            def = this.deflast.run(scope,this.type,consoleT);
         }
         scope.insertVariable(this.id,def);
 
         if(this.defvarLast != null) {
 
-            var list = this.defvarLast.run(scope,this.type,console);
+            var list = this.defvarLast.run(scope,this.type,consoleT);
 
             if(list.length > 0) {
                 list.forEach(element => {
-                    element.run(scope,console);
+                    element.run(scope,consoleT);
                 });
             }
         }
@@ -4736,8 +4736,8 @@ class While {
         this.stmt = stmt;
     }
     
-    run(scope,console) {
-        var auxCond = this.cond.run(scope,console);
+    run(scope,consoleT) {
+        var auxCond = this.cond.run(scope,consoleT);
         if(auxCond.type == 'BOOLEAN') {
 
             auxCond = Boolean(auxCond.value);
@@ -4750,7 +4750,7 @@ class While {
                 if(this.stmt!= null) {
                     for(var i = 0;i<this.stmt.length;i++) {
                         var element = this.stmt[i];
-                        var aux = element.run(newScope,console);
+                        var aux = element.run(newScope,consoleT);
                         if(aux != null) {
             
                             if(aux.type == 'RETURN') {
@@ -4775,7 +4775,7 @@ class While {
                     }
                 }
 
-                auxCond = this.cond.run(scope,console);
+                auxCond = this.cond.run(scope,consoleT);
                 auxCond = Boolean(auxCond.value);
             }
 
@@ -4785,11 +4785,11 @@ class While {
         }
     }
 
-    statement(scope,console) {
+    statement(scope,consoleT) {
         if(this.stmt!= null) {
             for(var i = 0;i<this.stmt.length;i++) {
                 var element = this.stmt[i];
-                var aux = element.run(scope,console);
+                var aux = element.run(scope,consoleT);
                 if(aux != null) {
     
                     if(aux.type == 'RETURN') {
@@ -4814,11 +4814,11 @@ class asignLast {
         this.asignLastF = asignLastF;
     }
 
-    run(scope,obj, console) {
+    run(scope,obj, consoleT) {
 
         if(this.list != null) {
 
-            var l = this.list.get(scope,console);
+            var l = this.list.get(scope,consoleT);
             //comprobar tipos y si es arreglo tamaños
             var fobj=obj.value;
             
@@ -4880,7 +4880,7 @@ class asignLast {
                     fobj = {value:fobj}
                 }
 
-                var auxR = this.asignLastF.run(scope,null,console);
+                var auxR = this.asignLastF.run(scope,null,consoleT);
                 //verificar errores aqui
                 fobj=obj.value;
                 if(obj instanceof Map) {
@@ -4934,11 +4934,11 @@ class asignLast {
             //console.log(obj);
             if(this.isPrimitive(obj)) {
                 var a = new TObject(0,0,obj.value.value,obj.type)
-                var obr = this.asignLastF.run(scope,{value:a},console);
+                var obr = this.asignLastF.run(scope,{value:a},consoleT);
                 return {value:obr,type:obr.type,isArray:obr.isArray,dim:obr.dimentions,dectype:dectype}
         
             } 
-            var obr = this.asignLastF.run(scope,obj,console);
+            var obr = this.asignLastF.run(scope,obj,consoleT);
             //console.log(obr)
             obr.dectype = dectype;
             obr.type = obj.type;
@@ -4975,10 +4975,10 @@ class asignLastF {
         this.exp = exp;
     }
 
-    run(scope,obj,console) {
+    run(scope,obj,consoleT) {
 
         if(this.op == null) {
-            return this.exp.run(scope,console);
+            return this.exp.run(scope,consoleT);
         }
 
         if(this.exp != null) {
@@ -4988,12 +4988,12 @@ class asignLastF {
             
             var operation = new Operation(0,0,obj.value,this.exp,this.op);
             //console.log(operation);
-            return operation.run(scope,console);
+            return operation.run(scope,consoleT);
 
         } else {
             var newObject = new TObject(0,0,"1","NUMBER")
             var operation = new Operation(0,0,obj.value,newObject,this.op);
-            return operation.run(scope,console);
+            return operation.run(scope,consoleT);
         }
     }
 
@@ -5009,14 +5009,14 @@ class asignVariable {
         this.asignLast = asignLast;
     }
 
-    run(scope, console) {
+    run(scope, consoleT) {
 
         var objId = scope.findVariable(this.id);
         if(objId != null) {
             
             
 
-            var res = this.asignLast.run(scope,objId,console);
+            var res = this.asignLast.run(scope,objId,consoleT);
             if(this.id == 'pivot'){
                 console.log(objId);
                 console.log("&&&&&&&&&&&")
@@ -5037,7 +5037,7 @@ class asignVariable {
         }
     }
 
-    get(scope,globalScope, console) {
+    get(scope,globalScope, consoleT) {
 
         var objId = scope.findVariable(this.id);
         if(objId != null) {
@@ -5045,7 +5045,7 @@ class asignVariable {
             /*console.log(this.id)
             console.log(objId)
             console.log("%%%%%%%%%%")*/
-            var res = this.asignLast.run(globalScope,objId, console);
+            var res = this.asignLast.run(globalScope,objId, consoleT);
             //console.log("/**********Aqui estoy en get()************************/");
            // console.log("/**********************************/");
          //console.log("/**********************************/");
@@ -5417,13 +5417,13 @@ class decType {
         this.obj = obj;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
         //comprobar si el type ya existe
         //comprobar si las propiedades del type no estan repetidas
         
         scope.insertType(this.id,null);
 
-        var ob = this.obj.run(scope,console)
+        var ob = this.obj.run(scope,consoleT)
 
         scope.insertType(this.id,ob);
     }
@@ -5442,7 +5442,7 @@ class defLast extends Nodo{
         this.exp = exp;
     }
 
-    run(scope,decType,console) {
+    run(scope,decType,consoleT) {
         /*falta validar que si no tiene :type la variable
           no se puede asignar un objeto
         */
@@ -5452,7 +5452,7 @@ class defLast extends Nodo{
         let dimention = 0;
     
         if(this.exp) {
-            e = this.exp.run(scope,console);
+            e = this.exp.run(scope,consoleT);
             if(e){
                /* console.log("---------------")
                 console.log(this.exp)
@@ -5470,7 +5470,7 @@ class defLast extends Nodo{
 
         if(this.type != null) {
             
-            let tType = this.type.run(scope,console);
+            let tType = this.type.run(scope,consoleT);
             //comprobar si exp == tType
 
             if(e.type != 'NULL') {
@@ -5523,8 +5523,8 @@ class defVarLast {
         this.defVarLastP = defVarLastP;
     }
 
-    run(scope,decType) {
-        return this.defVarLastP.run(scope,decType,console);
+    run(scope,decType,consoleT) {
+        return this.defVarLastP.run(scope,decType,consoleT);
     }
 
 }
@@ -5542,12 +5542,12 @@ class defVarLastP {
         this.deflast = deflast;        
     }
 
-    run(scope,decType,console) {
+    run(scope,decType,consoleT) {
 
 
         if(this.list != null) {
 
-            var l = this.list.run(scope,decType,console);
+            var l = this.list.run(scope,decType,consoleT);
             var aux = new Variable(this.line,this.column,decType,this.id,this.deflast,null);
             l.push(aux);
             return l;
@@ -5569,9 +5569,9 @@ class doWhile {
         this.stmt = stmt;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
         
-        var auxCond = this.cond.run(scope,console);
+        var auxCond = this.cond.run(scope,consoleT);
         if(auxCond.type == 'BOOLEAN') {
 
             auxCond = Boolean(auxCond.value);
@@ -5580,7 +5580,7 @@ class doWhile {
             do {
 
                 var newScope = new Scope(actualScope);
-                var r = this.statement(newScope,console)
+                var r = this.statement(newScope,consoleT)
 
                 if(r != null && r != undefined) {
                     if(r.type == 'RETURN') {
@@ -5591,7 +5591,7 @@ class doWhile {
                     }
                 }
 
-                auxCond = this.cond.run(scope,console);
+                auxCond = this.cond.run(scope,consoleT);
                 auxCond = Boolean(auxCond.value);
 
             } while(auxCond);
@@ -5603,11 +5603,11 @@ class doWhile {
 
     }
 
-    statement(scope,console) {
+    statement(scope,consoleT) {
         if(this.stmt!= null) {
             for(var i = 0;i<this.stmt.length;i++) {
                 var element = this.stmt[i];
-                var aux = element.run(scope,console);
+                var aux = element.run(scope,consoleT);
                 if(aux != null) {
     
                     if(aux.type == 'RETURN') {
@@ -5633,17 +5633,17 @@ class idList {
         this.auxp = auxp;
     }
     //para funciones
-    run(scope,console) {
+    run(scope,consoleT) {
 
         var aux = null;
 
         if(this.auxp != null) {
-            aux = this.auxp.run(scope,console);
+            aux = this.auxp.run(scope,consoleT);
         }
 
         if(this.isArray) {
 
-            let exp = this.expOrID.run(scope,console);
+            let exp = this.expOrID.run(scope,consoleT);
             
 
         } else {
@@ -5653,17 +5653,17 @@ class idList {
         }
     }
 
-    get(scope,console) {
+    get(scope,consoleT) {
         if(this.isArray) {
 
-            let exp = this.expOrID.run(scope,console);
+            let exp = this.expOrID.run(scope,consoleT);
             
             if(exp.type != "NULL") {
                 
                 var aux = null;
 
                 if(this.auxp != null) {
-                    aux = this.auxp.get(scope,console);
+                    aux = this.auxp.get(scope,consoleT);
                     let r = [];
                     r.push({isArray:true,exp:exp,id:null });
                     aux.forEach(element => {
@@ -5681,7 +5681,7 @@ class idList {
         } else {
             var aux = null;
             if(this.auxp != null) {
-                aux = this.auxp.get(scope,console);
+                aux = this.auxp.get(scope,consoleT);
                 let r = [];
                 r.push({isArray:false,exp:null,id:this.expOrID });
                 aux.forEach(element => {
@@ -5704,7 +5704,7 @@ class idVarlast {
         this.varlast = varlast;
     }
 
-    get(scope,l,console) {
+    get(scope,l,consoleT) {
         if(scope.findVariable(this.id) != null) {
 
             let vl = l;
@@ -5758,11 +5758,11 @@ class idVarlast {
         }
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
 
         if(scope.findVariable(this.id) != null) {
 
-            let vl = this.varlast.get(scope,console);
+            let vl = this.varlast.get(scope,consoleT);
             /*console.log("VARLAST")
             console.log(vl);
             console.log("Fin VarLAST")*/
@@ -5790,7 +5790,7 @@ class idVarlast {
                         var r = vobj.value.length;
                         
                         var length = new TObject(0,0,r,"NUMBER");
-                        return length.run(scope,console);
+                        return length.run(scope,consoleT);
                         
                     }
                 }
@@ -5866,12 +5866,12 @@ class objList {
         this.key = key;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
 
         if(this.list != null) {
 
-            var e = this.key.run(scope,console);
-            var l = this.list.run(scope,console);
+            var e = this.key.run(scope,consoleT);
+            var l = this.list.run(scope,consoleT);
 
             e.forEach((value, key) => l.set(key, value));
 
@@ -5879,7 +5879,7 @@ class objList {
 
         }
 
-        return this.key.run(scope,console);
+        return this.key.run(scope,consoleT);
     }
 }
 module.exports = objList;
@@ -5891,9 +5891,9 @@ class objProperty {
         this.exp = exp;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
 
-        var e = this.exp.run(scope,console);
+        var e = this.exp.run(scope,consoleT);
         var obj = new Map();
         obj.set(this.id,e);
         return obj;
@@ -5909,18 +5909,18 @@ class objType {
         this.keyvalue = keyvalue;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
 
         if(this.list != null) {
 
-            var l = this.list.run(scope,console);
-            var kv = this.keyvalue.run(scope,console);
+            var l = this.list.run(scope,consoleT);
+            var kv = this.keyvalue.run(scope,consoleT);
 
             l.push(kv[0]);
             return l;
         }
 
-        return this.keyvalue.run(scope,console);
+        return this.keyvalue.run(scope,consoleT);
     }
 }
 
@@ -5934,16 +5934,16 @@ class ternaryOp {
         this.fexp = fexp;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
         //comproba el tipo
-        var c = this.cond.run(scope,console);
+        var c = this.cond.run(scope,consoleT);
         if(c.type == 'BOOLEAN') {
             
             var boolCond = Boolean(c.value);
             if(boolCond) {
-                return this.texp.run(scope,console);
+                return this.texp.run(scope,consoleT);
             } else {
-                return this.fexp.run(scope,console);
+                return this.fexp.run(scope,consoleT);
             }
 
         } else {
@@ -5963,9 +5963,9 @@ class typeKeyValue {
         this.type = type;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
 
-        var t = this.type.run(scope,console);
+        var t = this.type.run(scope,consoleT);
         
         if(t == null) {
             //error
@@ -5988,10 +5988,10 @@ class typeList extends Nodo{
         this.contador = 1;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
 
         if(this.list != null) {
-            return this.list.run(scope,console) + this.contador;
+            return this.list.run(scope,consoleT) + this.contador;
         }
 
         return this.contador;
