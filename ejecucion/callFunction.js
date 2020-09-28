@@ -209,7 +209,8 @@ class callFunction extends Nodo{
 
         } else {
             //error
-            console.log("Error 7 en callFunction.js")
+            console.log(scope)
+            console.log("Error 7 en callFunction.js no existe la funcion:" + this.id +";")
             /*console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             console.log(this.id)
             console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");*/

@@ -237,7 +237,7 @@ ast.forEach(element => {
 })
 
 ast.forEach(element => {
-    if(element.constructor.name == "Variable" ||element.constructor.name == "asignVariable" ) {
+    if(element.constructor.name == "Variable" /*||element.constructor.name == "asignVariable"*/ ) {
         element.run(scope,consoleT);
     }
 })

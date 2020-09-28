@@ -196,7 +196,10 @@ class Scope {
                 return sc.functionTable.has(id)
             }
         }
-        return false;
+
+        sc = getGlobalScope();
+
+        return sc.functionTable.has(id);
         //return this.functionTable.has(id);
     }
 

@@ -4009,6 +4009,7 @@ class Id {
             return r.value;
         } else {
             //ERROR
+            consoleT.value += "Error el Id: " + this.id+" no existe\n";
             console.log("ERROR en Id.js")
             
         }
@@ -4470,7 +4471,10 @@ class Scope {
                 return sc.functionTable.has(id)
             }
         }
-        return false;
+
+        sc = getGlobalScope();
+
+        return sc.functionTable.has(id);
         //return this.functionTable.has(id);
     }
 
@@ -5275,7 +5279,8 @@ class callFunction extends Nodo{
 
         } else {
             //error
-            console.log("Error 7 en callFunction.js")
+            console.log(scope)
+            console.log("Error 7 en callFunction.js no existe la funcion:" + this.id +";")
             /*console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             console.log(this.id)
             console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");*/
@@ -10131,7 +10136,7 @@ ast.forEach(element => {
 })
 
 ast.forEach(element => {
-    if(element.constructor.name == "Variable" ||element.constructor.name == "asignVariable" ) {
+    if(element.constructor.name == "Variable" /*||element.constructor.name == "asignVariable"*/ ) {
         element.run(scope,consoleT);
     }
 })
