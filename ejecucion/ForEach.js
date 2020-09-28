@@ -15,15 +15,15 @@ class ForEach{
         this.stmt = stmt;
     }
     
-    run(scope,console) {
+    run(scope,consoleT) {
 
-        var obj = this.arr.run(scope,console);
+        var obj = this.arr.run(scope,consoleT);
         if(obj.isArray || !this.isPrimitive(obj)) {
 
             if(this.forOp == 'in') {
-                return this.forIn(obj,scope,console);
+                return this.forIn(obj,scope,consoleT);
             } else {
-                return this.forOf(obj,scope,console)
+                return this.forOf(obj,scope,consoleT)
             }
 
         } else {
@@ -33,7 +33,7 @@ class ForEach{
         }
     }
 
-    forIn(obj,scope,console) {
+    forIn(obj,scope,consoleT) {
 
         if(this.isDec) {
 
@@ -42,8 +42,8 @@ class ForEach{
             
             var actualScope = new Scope(scope);
             
-            asgn.run(actualScope,console);
-            var array = this.arr.run(scope,console);
+            asgn.run(actualScope,consoleT);
+            var array = this.arr.run(scope,consoleT);
 
             if(array.constructor.name == "Map") {
 
@@ -52,8 +52,8 @@ class ForEach{
                     var newScope = new Scope(actualScope);
 
                     var rasign = new asignVariable(id,new asignLast(null,new asignLastF(null,new TObject(0,0,key.toString(),"STRING"))));
-                    rasign.run(newScope,console)
-                    var aux = this.statement(newScope,console);
+                    rasign.run(newScope,consoleT)
+                    var aux = this.statement(newScope,consoleT);
                     if(aux != null) {
     
                         if(aux.type == 'RETURN') {
@@ -71,8 +71,8 @@ class ForEach{
                     var newScope = new Scope(actualScope);
 
                     var rasign = new asignVariable(id,new asignLast(null,new asignLastF(null,new TObject(0,0,key.toString(),"NUMBER"))));
-                    rasign.run(newScope,console)
-                    var aux = this.statement(newScope,console);
+                    rasign.run(newScope,consoleT)
+                    var aux = this.statement(newScope,consoleT);
                     if(aux != null) {
     
                         if(aux.type == 'RETURN') {
@@ -93,7 +93,7 @@ class ForEach{
 
                     var actualScope = new Scope(scope);
 
-                    var array = this.arr.run(scope,console);
+                    var array = this.arr.run(scope,consoleT);
                     if(array.constructor.name == "Map") {
 
                         for (const key of array.keys()) {
@@ -101,8 +101,8 @@ class ForEach{
                             var newScope = new Scope(actualScope);
 
                             var rasign = new asignVariable(id,new asignLast(null,new asignLastF(null,new TObject(0,0,key.toString(),"STRING"))));
-                            rasign.run(newScope,console)
-                            var aux = this.statement(newScope,console);
+                            rasign.run(newScope,consoleT)
+                            var aux = this.statement(newScope,consoleT);
                             if(aux != null) {
             
                                 if(aux.type == 'RETURN') {
@@ -121,8 +121,8 @@ class ForEach{
                             var newScope = new Scope(actualScope);
                             
                             var rasign = new asignVariable(id,new asignLast(null,new asignLastF(null,new TObject(0,0,key.toString(),"NUMBER"))));
-                            rasign.run(newScope,console)
-                            var aux = this.statement(newScope,console);
+                            rasign.run(newScope,consoleT)
+                            var aux = this.statement(newScope,consoleT);
                             if(aux != null) {
             
                                 if(aux.type == 'RETURN') {
@@ -151,15 +151,15 @@ class ForEach{
         return null;
     }
 
-    forOf(obj,scope,console) {
+    forOf(obj,scope,consoleT) {
 
         if(this.isDec) {
 
             var id = this.id;
             var asgn = new Variable(0,0,'let',id,new defLast(0,0,null,new TObject(0,0,"null",'NULL')),null);
             var actualScope = new Scope(scope);
-            asgn.run(actualScope,console);
-            var array = this.arr.run(scope,console);
+            asgn.run(actualScope,consoleT);
+            var array = this.arr.run(scope,consoleT);
             if(array.constructor.name == "Map") {
 
                 console.log("Error 4 en ForEach.js")
@@ -172,8 +172,8 @@ class ForEach{
                     var newScope = new Scope(actualScope);
 
                     var rasign = new asignVariable(id,new asignLast(null,new asignLastF(null,value)));
-                    rasign.run(newScope,console)
-                    var aux = this.statement(newScope,console);
+                    rasign.run(newScope,consoleT)
+                    var aux = this.statement(newScope,consoleT);
                     if(aux != null) {
     
                         if(aux.type == 'RETURN') {
@@ -193,7 +193,7 @@ class ForEach{
 
                     var actualScope = new Scope(scope);
 
-                    var array = this.arr.run(scope,console);
+                    var array = this.arr.run(scope,consoleT);
                     if(array.constructor.name == "Map") {
                         //ERROR
                         console.log("Error 5 en ForEach.js")
@@ -206,8 +206,8 @@ class ForEach{
                             var newScope = new Scope(actualScope);
 
                             var rasign = new asignVariable(id,new asignLast(null,new asignLastF(null,key)));
-                            rasign.run(newScope,console)
-                            var aux = this.statement(newScope,console);
+                            rasign.run(newScope,consoleT)
+                            var aux = this.statement(newScope,consoleT);
                             if(aux != null) {
             
                                 if(aux.type == 'RETURN') {
@@ -235,11 +235,11 @@ class ForEach{
         return null;
     }
     
-    statement(scope,console) {
+    statement(scope,consoleT) {
         if(this.stmt!= null) {
             for(var i = 0;i<this.stmt.length;i++) {
                 var element = this.stmt[i];
-                var aux = element.run(scope,console);
+                var aux = element.run(scope,consoleT);
                 if(aux != null) {
     
                     if(aux.type == 'RETURN') {

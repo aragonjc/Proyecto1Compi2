@@ -9,15 +9,15 @@ class ForNormal {
         this.stmt = stmt;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
 
-        var exp = this.expAsign.run(scope,console);
+        var exp = this.expAsign.run(scope,consoleT);
         var actualScope = new Scope(scope);
         
         var objAsgn = {value:exp,type:exp.type,isArray:exp.isArray,dim:exp.dim,dectype:'let'}
         actualScope.insertVariable(this.id,objAsgn);
 
-        var condition = this.cond.run(actualScope,console);
+        var condition = this.cond.run(actualScope,consoleT);
 
         if(condition.type == 'BOOLEAN') {
             condition = Boolean(condition.value);
@@ -25,7 +25,7 @@ class ForNormal {
 
                 var newScope = new Scope(actualScope);
 
-                var aux = this.statement(newScope,console);
+                var aux = this.statement(newScope,consoleT);
                 
                 if(aux != null) {
     
@@ -36,8 +36,8 @@ class ForNormal {
                     } 
                 }
                 
-                this.inc.run(newScope,console);
-                condition = this.cond.run(newScope,console);
+                this.inc.run(newScope,consoleT);
+                condition = this.cond.run(newScope,consoleT);
                 condition = Boolean(condition.value);
                 
             }
@@ -49,11 +49,11 @@ class ForNormal {
         
     }
 
-    statement(scope,console) {
+    statement(scope,consoleT) {
         if(this.stmt!= null) {
             for(var i = 0;i<this.stmt.length;i++) {
                 var element = this.stmt[i];
-                var aux = element.run(scope,console);
+                var aux = element.run(scope,consoleT);
                 if(aux != null) {
     
                     if(aux.type == 'RETURN') {

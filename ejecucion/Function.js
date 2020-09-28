@@ -7,8 +7,8 @@ class Function {
         this.funcDec = funcDec;
     }
 
-    run(scope,console) {
-        var obj = this.funcDec.run(scope,console);
+    run(scope,consoleT) {
+        var obj = this.funcDec.run(scope,consoleT);
         var func;
         if(obj.type)
             func = obj.type;

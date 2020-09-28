@@ -4,8 +4,8 @@ class defVarLast {
         this.defVarLastP = defVarLastP;
     }
 
-    run(scope,decType) {
-        return this.defVarLastP.run(scope,decType,console);
+    run(scope,decType,consoleT) {
+        return this.defVarLastP.run(scope,decType,consoleT);
     }
 
 }

@@ -8,7 +8,7 @@ class defLast extends Nodo{
         this.exp = exp;
     }
 
-    run(scope,decType,console) {
+    run(scope,decType,consoleT) {
         /*falta validar que si no tiene :type la variable
           no se puede asignar un objeto
         */
@@ -18,7 +18,7 @@ class defLast extends Nodo{
         let dimention = 0;
     
         if(this.exp) {
-            e = this.exp.run(scope,console);
+            e = this.exp.run(scope,consoleT);
             if(e){
                /* console.log("---------------")
                 console.log(this.exp)
@@ -36,7 +36,7 @@ class defLast extends Nodo{
 
         if(this.type != null) {
             
-            let tType = this.type.run(scope,console);
+            let tType = this.type.run(scope,consoleT);
             //comprobar si exp == tType
 
             if(e.type != 'NULL') {

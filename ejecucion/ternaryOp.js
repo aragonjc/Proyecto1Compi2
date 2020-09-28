@@ -6,16 +6,16 @@ class ternaryOp {
         this.fexp = fexp;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
         //comproba el tipo
-        var c = this.cond.run(scope,console);
+        var c = this.cond.run(scope,consoleT);
         if(c.type == 'BOOLEAN') {
             
             var boolCond = Boolean(c.value);
             if(boolCond) {
-                return this.texp.run(scope,console);
+                return this.texp.run(scope,consoleT);
             } else {
-                return this.fexp.run(scope,console);
+                return this.fexp.run(scope,consoleT);
             }
 
         } else {

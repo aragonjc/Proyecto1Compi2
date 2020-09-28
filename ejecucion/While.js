@@ -6,8 +6,8 @@ class While {
         this.stmt = stmt;
     }
     
-    run(scope,console) {
-        var auxCond = this.cond.run(scope,console);
+    run(scope,consoleT) {
+        var auxCond = this.cond.run(scope,consoleT);
         if(auxCond.type == 'BOOLEAN') {
 
             auxCond = Boolean(auxCond.value);
@@ -20,7 +20,7 @@ class While {
                 if(this.stmt!= null) {
                     for(var i = 0;i<this.stmt.length;i++) {
                         var element = this.stmt[i];
-                        var aux = element.run(newScope,console);
+                        var aux = element.run(newScope,consoleT);
                         if(aux != null) {
             
                             if(aux.type == 'RETURN') {
@@ -45,7 +45,7 @@ class While {
                     }
                 }
 
-                auxCond = this.cond.run(scope,console);
+                auxCond = this.cond.run(scope,consoleT);
                 auxCond = Boolean(auxCond.value);
             }
 
@@ -55,11 +55,11 @@ class While {
         }
     }
 
-    statement(scope,console) {
+    statement(scope,consoleT) {
         if(this.stmt!= null) {
             for(var i = 0;i<this.stmt.length;i++) {
                 var element = this.stmt[i];
-                var aux = element.run(scope,console);
+                var aux = element.run(scope,consoleT);
                 if(aux != null) {
     
                     if(aux.type == 'RETURN') {

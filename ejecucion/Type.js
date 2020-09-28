@@ -7,12 +7,12 @@ class Type {
         this.list = list;
     }
 
-    run(scope,console) {
+    run(scope,consoleT) {
         
         if(this.checkType(this.type)) {
             
             if(this.list != null) {
-                let dim = this.list.run(scope,console);
+                let dim = this.list.run(scope,consoleT);
                 let isArray = dim==0?false:true;
 
                 return {type:this.type,isArray:isArray,dim:dim}
@@ -25,7 +25,7 @@ class Type {
                 //***EJECUTAR this.list
                 //***validar this.list
                 if(this.list != null) {
-                    let dim = this.list.run(scope,console);
+                    let dim = this.list.run(scope,consoleT);
                     let isArray = dim==0?false:true;
     
                     return {type:this.type,isArray:isArray,dim:dim}

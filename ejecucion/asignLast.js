@@ -6,11 +6,11 @@ class asignLast {
         this.asignLastF = asignLastF;
     }
 
-    run(scope,obj, console) {
+    run(scope,obj, consoleT) {
 
         if(this.list != null) {
 
-            var l = this.list.get(scope,console);
+            var l = this.list.get(scope,consoleT);
             //comprobar tipos y si es arreglo tamaños
             var fobj=obj.value;
             
@@ -72,7 +72,7 @@ class asignLast {
                     fobj = {value:fobj}
                 }
 
-                var auxR = this.asignLastF.run(scope,null,console);
+                var auxR = this.asignLastF.run(scope,null,consoleT);
                 //verificar errores aqui
                 fobj=obj.value;
                 if(obj instanceof Map) {
@@ -126,11 +126,11 @@ class asignLast {
             //console.log(obj);
             if(this.isPrimitive(obj)) {
                 var a = new TObject(0,0,obj.value.value,obj.type)
-                var obr = this.asignLastF.run(scope,{value:a},console);
+                var obr = this.asignLastF.run(scope,{value:a},consoleT);
                 return {value:obr,type:obr.type,isArray:obr.isArray,dim:obr.dimentions,dectype:dectype}
         
             } 
-            var obr = this.asignLastF.run(scope,obj,console);
+            var obr = this.asignLastF.run(scope,obj,consoleT);
             //console.log(obr)
             obr.dectype = dectype;
             obr.type = obj.type;

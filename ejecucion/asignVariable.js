@@ -5,14 +5,14 @@ class asignVariable {
         this.asignLast = asignLast;
     }
 
-    run(scope, console) {
+    run(scope, consoleT) {
 
         var objId = scope.findVariable(this.id);
         if(objId != null) {
             
             
 
-            var res = this.asignLast.run(scope,objId,console);
+            var res = this.asignLast.run(scope,objId,consoleT);
             if(this.id == 'pivot'){
                 console.log(objId);
                 console.log("&&&&&&&&&&&")
@@ -33,7 +33,7 @@ class asignVariable {
         }
     }
 
-    get(scope,globalScope, console) {
+    get(scope,globalScope, consoleT) {
 
         var objId = scope.findVariable(this.id);
         if(objId != null) {
@@ -41,7 +41,7 @@ class asignVariable {
             /*console.log(this.id)
             console.log(objId)
             console.log("%%%%%%%%%%")*/
-            var res = this.asignLast.run(globalScope,objId, console);
+            var res = this.asignLast.run(globalScope,objId, consoleT);
             //console.log("/**********Aqui estoy en get()************************/");
            // console.log("/**********************************/");
          //console.log("/**********************************/");

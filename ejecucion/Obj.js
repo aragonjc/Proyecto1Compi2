@@ -4,8 +4,8 @@ class Obj {
         this.obj = obj;
     }
 
-    run(scope,console) {
-        var ob = this.obj.run(scope,console);
+    run(scope,consoleT) {
+        var ob = this.obj.run(scope,consoleT);
         //console.log(ob)
         return { value:ob,type:"OBJ",isArray:false,dim:0 };
     }

@@ -5,12 +5,12 @@ class Defcase {
         this.stmt = stmt;
     }
 
-    run(scope,console){ 
+    run(scope,consoleT){ 
         var actualScope = new Scope(scope);
         if(this.stmt!= null) {
             for(var i = 0;i<this.stmt.length;i++) {
                 var element = this.stmt[i];
-                var aux = element.run(actualScope,console);
+                var aux = element.run(actualScope,consoleT);
                 if(aux != null) {
     
                     if(aux.type == 'RETURN') {
