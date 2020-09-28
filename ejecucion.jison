@@ -579,9 +579,9 @@ exp:  exp mas exp
 	| id varLast
 	{ $$ = new idVarlast(0,0,$1,$2); }
 	| id
-	{ $$ = new Id(0,0,$1); }
+	{ $$ = new Id(@1.first_line,@1.first_column,$1); }
 	| id PL bracketOpen paramFunc bracketClose
-	{ $$ = new callFunction(0,0,$1,$2,$4); }
+	{ $$ = new callFunction(@1.first_line,@1.first_column,$1,$2,$4); }
 	| sqBracketOpen arrParam sqBracketClose /*sqBCKFIN*/
 	{ $$ = new ArrList($2); }
 ;

@@ -2318,10 +2318,10 @@ case 135:
  this.$ = new idVarlast(0,0,$$[$0-1],$$[$0]); 
 break;
 case 136:
- this.$ = new Id(0,0,$$[$0]); 
+ this.$ = new Id(_$[$0].first_line,_$[$0].first_column,$$[$0]); 
 break;
 case 137:
- this.$ = new callFunction(0,0,$$[$0-4],$$[$0-3],$$[$0-1]); 
+ this.$ = new callFunction(_$[$0-4].first_line,_$[$0-4].first_column,$$[$0-4],$$[$0-3],$$[$0-1]); 
 break;
 case 138:
  this.$ = new ArrList($$[$0-1]); 
@@ -4009,7 +4009,7 @@ class Id {
             return r.value;
         } else {
             //ERROR
-            consoleT.value += "Error el Id: " + this.id+" no existe\n";
+            consoleT.value += "Error el Id: " + this.id+" no existe LINEA: " +this.line + " COLUMNA: " + this.column + "\n";
             console.log("ERROR en Id.js")
             
         }
@@ -5079,9 +5079,11 @@ const asignVariable = require('./asignVariable.js');
 const asignLast = require("./asignLast");
 const asignLastF = require("./asignLastF");
 
-class callFunction extends Nodo{
+class callFunction{
     constructor(line, column,id,idList,params) {
-        super(line,column,null);
+        //super(line,column,null);
+        this.line = line;
+        this.column = column;
         this.id = id;
         this.idList = idList;
         this.params = params;
@@ -5279,8 +5281,9 @@ class callFunction extends Nodo{
 
         } else {
             //error
-            console.log(scope)
+            
             console.log("Error 7 en callFunction.js no existe la funcion:" + this.id +";")
+            consoleT.value += "Error no existe la funcion:" + this.id + " LINEA: " + this.line + " COLUMNA: " + this.column + "\n";
             /*console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             console.log(this.id)
             console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");*/

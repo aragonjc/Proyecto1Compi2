@@ -20,7 +20,7 @@ class Id {
             return r.value;
         } else {
             //ERROR
-            consoleT.value += "Error el Id: " + this.id+" no existe\n";
+            consoleT.value += "Error el Id: " + this.id+" no existe LINEA: " +this.line + " COLUMNA: " + this.column + "\n";
             console.log("ERROR en Id.js")
             
         }

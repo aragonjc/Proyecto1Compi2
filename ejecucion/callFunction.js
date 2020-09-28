@@ -9,9 +9,11 @@ const asignVariable = require('./asignVariable.js');
 const asignLast = require("./asignLast");
 const asignLastF = require("./asignLastF");
 
-class callFunction extends Nodo{
+class callFunction{
     constructor(line, column,id,idList,params) {
-        super(line,column,null);
+        //super(line,column,null);
+        this.line = line;
+        this.column = column;
         this.id = id;
         this.idList = idList;
         this.params = params;
@@ -209,8 +211,9 @@ class callFunction extends Nodo{
 
         } else {
             //error
-            console.log(scope)
+            
             console.log("Error 7 en callFunction.js no existe la funcion:" + this.id +";")
+            consoleT.value += "Error no existe la funcion:" + this.id + " LINEA: " + this.line + " COLUMNA: " + this.column + "\n";
             /*console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             console.log(this.id)
             console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");*/

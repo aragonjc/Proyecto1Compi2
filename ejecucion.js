@@ -489,10 +489,10 @@ case 135:
  this.$ = new idVarlast(0,0,$$[$0-1],$$[$0]); 
 break;
 case 136:
- this.$ = new Id(0,0,$$[$0]); 
+ this.$ = new Id(_$[$0].first_line,_$[$0].first_column,$$[$0]); 
 break;
 case 137:
- this.$ = new callFunction(0,0,$$[$0-4],$$[$0-3],$$[$0-1]); 
+ this.$ = new callFunction(_$[$0-4].first_line,_$[$0-4].first_column,$$[$0-4],$$[$0-3],$$[$0-1]); 
 break;
 case 138:
  this.$ = new ArrList($$[$0-1]); 
